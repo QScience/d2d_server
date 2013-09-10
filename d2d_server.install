@@ -1,0 +1,75 @@
+<?php
+/**
+ * @file
+ * d2d server 
+ */
+
+/**
+* Implements hook_schema().
+*/
+function d2d_server_schema() {
+  $schema['d2d_entity'] = array(
+    'description' => 'server for d2d instances',
+    'fields' => array(
+      'did' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique id',
+      ),
+      'd2did' => array(
+        'type' => 'int',
+        'length' => 50,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the instance id in d2d module\'s table.',
+      ),
+      'title' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'website title.',
+      ),
+      'description' => array(
+        'type' => 'text',
+        'description' => 'Description of website.',
+      ),
+      'category' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Category of the website.',
+      ),
+      'users_number' => array(
+        'type' => 'int',
+        'length' => 50,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the number of the website\'s user.',
+      ),
+     'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'unsigned' => TRUE,
+        'description' => 'The Unix timestamp indicating when the webiste was created.',
+      ),
+    ),
+    'primary key' => array('did'),
+    'unique keys' => array('d2did' => array('d2did')),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ */
+function d2d_server_uninstall() {
+  //clean all attached field.
+  //field_attach_delete_bundle('d2d_server', 'd2d_server');
+
+  drupal_uninstall_schema('d2d_entity');
+  //delete the role.
+  //user_role_delete('patterns_server_user');
+}

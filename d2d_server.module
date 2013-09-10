@@ -1,9 +1,70 @@
 <?php
 /**
  * @file 
+ *
  */
 
 /**
+ * Implements hook_entity_info().
  */
-function d2dserver_menu() {
+function d2d_server_entity_info() {
+  $return['d2d_entity'] = array(
+    'label' => t('D2D EntIty'),
+    'base table' => 'd2d_entity',
+    'entity keys' => array(
+      'id' => 'did',
+      'label' => 'title',
+    ),
+    'entity class' => 'D2DEntity',
+    'uri callback' => 'entity_class_uri',
+    'controller class' => 'D2DServerEntityController',
+    'admin ui' => array(
+      'path' => 'admin/d2d_server',
+      'controller class' => 'D2DServerEntityUIController',
+      'file' => 'includes/d2d_server.admin.inc',
+    ),
+    'module' => 'd2d_server',
+    'access callback' => 'd2d_server_admin_access',
+    'fieldable' => TRUE,
+    'bundles' => array(
+      'd2d_entity' => array(
+        'label' => t('d2d entity bundle'),
+        'admin' => array(
+          'path' => 'admin/d2d_server',
+          'access arguments' => array('administer d2d server'),
+        ),
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * accesss callback function for hook_entity_info().
+ */
+function d2d_server_admin_access($op, $profile = NULL, $account = NULL) {
+  if (user_access('administer d2d server', $account)) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function d2d_server_permission() {
+  return array(
+    'administer d2d server' => array(
+      'title' => t('Administer Patterns Server'),
+    ),
+    'view d2d server' => array(
+      'title' => t('View Patterns Server list and page'),
+    ),
+  );
+}
+
+/**
+ */
+function d2d_server_menu() {
 }
