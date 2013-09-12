@@ -6,7 +6,7 @@
 /**
  * class entity UI controller.
  */
-class D2DServerEntityUIController extends EntityDefaultUIController {
+class D2DEntityUIController extends EntityDefaultUIController {
 
   /**
    * Generates the render array for a overview table for arbitrary entities
@@ -162,97 +162,97 @@ class D2DServerEntityUIController extends EntityDefaultUIController {
 //  }
 //
 //
-//  /**
-//   * Provides definitions for implementing hook_menu().
-//   */
-//  public function hook_menu() {
-//    $items = array();
-//    $id_count = count(explode('/', $this->path));
-//    $wildcard = isset($this->entityInfo['admin ui']['menu wildcard']) ? $this->entityInfo['admin ui']['menu wildcard'] : '%entity_object';
-//    $plural_label = isset($this->entityInfo['plural label']) ? $this->entityInfo['plural label'] : $this->entityInfo['label'];
-//    //$plural_label = isset($this->entityInfo['plural label']) ? $this->entityInfo['plural label'] : $this->entityInfo['label'] . 's';
-//
-//    $items[$this->path] = array(
-//      'title' => $plural_label,
-//      'page callback' => 'drupal_get_form',
-//      'page arguments' => array($this->entityType . '_overview_form', $this->entityType),
-//      'description' => 'Manage ' . $plural_label . '.',
-//      'access callback' => 'entity_access',
-//      'access arguments' => array('view', $this->entityType),
-//      'file' => 'includes/entity.ui.inc',
-//    );
-//    $items[$this->path . '/list'] = array(
-//      'title' => 'List',
-//      'type' => MENU_DEFAULT_LOCAL_TASK,
-//      'weight' => -10,
-//    );
-//    $items[$this->path . '/add'] = array(
-//      'title' => 'Upload pattern file',
-//      //'title arguments' => array('add', $this->entityType),
-//      'page callback' => 'entity_ui_get_form',
-//      'page arguments' => array($this->entityType, NULL, 'add'),
-//      'access callback' => 'entity_access',
-//      'access arguments' => array('create', $this->entityType),
-//      'type' => MENU_LOCAL_ACTION,
-//    );
-//    $items[$this->path . '/manage/' . $wildcard] = array(
-//      'title' => 'Edit',
-//      'title callback' => 'entity_label',
-//      'title arguments' => array($this->entityType, $id_count + 1),
-//      'page callback' => 'entity_ui_get_form',
-//      'page arguments' => array($this->entityType, $id_count + 1),
-//      'load arguments' => array($this->entityType),
-//      'access callback' => 'entity_access',
-//      'access arguments' => array('update', $this->entityType, $id_count + 1),
-//    );
-//    $items[$this->path . '/manage/' . $wildcard . '/edit'] = array(
-//      'title' => 'Edit',
-//      'load arguments' => array($this->entityType),
-//      'type' => MENU_DEFAULT_LOCAL_TASK,
-//    );
-//
-//    // Clone form, a special case for the edit form.
-//    $items[$this->path . '/manage/' . $wildcard . '/clone'] = array(
-//      'title' => 'Clone',
-//      'page callback' => 'entity_ui_get_form',
-//      'page arguments' => array($this->entityType, $id_count + 1, 'clone'),
-//      'load arguments' => array($this->entityType),
-//      'access callback' => 'entity_access',
-//      'access arguments' => array('create', $this->entityType),
-//    );
-//    // Menu item for operations like revert and delete.
-//    $items[$this->path . '/manage/' . $wildcard . '/%'] = array(
-//      'page callback' => 'drupal_get_form',
-//      'page arguments' => array($this->entityType . '_operation_form', $this->entityType, $id_count + 1, $id_count + 2),
-//      'load arguments' => array($this->entityType),
-//      'access callback' => 'entity_access',
-//      'access arguments' => array('delete', $this->entityType, $id_count + 1),
-//      'file' => 'includes/entity.ui.inc',
-//    );
-//
-//    if (!empty($this->entityInfo['exportable'])) {
-//      // Menu item for importing an entity.
-//      $items[$this->path . '/import'] = array(
-//        'title callback' => 'entity_ui_get_action_title',
-//        'title arguments' => array('import', $this->entityType),
-//        'page callback' => 'drupal_get_form',
-//        'page arguments' => array($this->entityType . '_operation_form', $this->entityType, NULL, 'import'),
-//        'access callback' => 'entity_access',
-//        'access arguments' => array('create', $this->entityType),
-//        'file' => 'includes/entity.ui.inc',
-//        'type' => MENU_LOCAL_ACTION,
-//      );
-//    }
-//
-//    if (!empty($this->entityInfo['admin ui']['file'])) {
-//      // Add in the include file for the entity form.
-//      foreach (array("/manage/$wildcard", "/manage/$wildcard/clone", '/add') as $path_end) {
-//        $items[$this->path . $path_end]['file'] = $this->entityInfo['admin ui']['file'];
-//        $items[$this->path . $path_end]['file path'] = isset($this->entityInfo['admin ui']['file path']) ? $this->entityInfo['admin ui']['file path'] : drupal_get_path('module', $this->entityInfo['module']);
-//      }
-//    }
-//    return $items;
-//  }
-//
-//
+  /**
+   * Provides definitions for implementing hook_menu().
+   */
+  public function hook_menu() {
+    $items = array();
+    $id_count = count(explode('/', $this->path));
+    $wildcard = isset($this->entityInfo['admin ui']['menu wildcard']) ? $this->entityInfo['admin ui']['menu wildcard'] : '%entity_object';
+    $plural_label = isset($this->entityInfo['plural label']) ? $this->entityInfo['plural label'] : $this->entityInfo['label'];
+    //$plural_label = isset($this->entityInfo['plural label']) ? $this->entityInfo['plural label'] : $this->entityInfo['label'] . 's';
+
+    $items[$this->path] = array(
+      'title' => $plural_label,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array($this->entityType . '_overview_form', $this->entityType),
+      'description' => 'Manage ' . $plural_label . '.',
+      'access callback' => 'entity_access',
+      'access arguments' => array('view', $this->entityType),
+      'file' => 'includes/entity.ui.inc',
+    );
+    $items[$this->path . '/list'] = array(
+      'title' => 'List',
+      'type' => MENU_DEFAULT_LOCAL_TASK,
+      'weight' => -10,
+    );
+    $items[$this->path . '/add'] = array(
+      'title' => 'Upload pattern file',
+      //'title arguments' => array('add', $this->entityType),
+      'page callback' => 'entity_ui_get_form',
+      'page arguments' => array($this->entityType, NULL, 'add'),
+      'access callback' => 'entity_access',
+      'access arguments' => array('create', $this->entityType),
+      'type' => MENU_LOCAL_ACTION,
+    );
+    $items[$this->path . '/manage/' . $wildcard] = array(
+      'title' => 'Edit',
+      'title callback' => 'entity_label',
+      'title arguments' => array($this->entityType, $id_count + 1),
+      'page callback' => 'entity_ui_get_form',
+      'page arguments' => array($this->entityType, $id_count + 1),
+      'load arguments' => array($this->entityType),
+      'access callback' => 'entity_access',
+      'access arguments' => array('update', $this->entityType, $id_count + 1),
+    );
+    $items[$this->path . '/manage/' . $wildcard . '/edit'] = array(
+      'title' => 'Edit',
+      'load arguments' => array($this->entityType),
+      'type' => MENU_DEFAULT_LOCAL_TASK,
+    );
+
+    // Clone form, a special case for the edit form.
+    $items[$this->path . '/manage/' . $wildcard . '/clone'] = array(
+      'title' => 'Clone',
+      'page callback' => 'entity_ui_get_form',
+      'page arguments' => array($this->entityType, $id_count + 1, 'clone'),
+      'load arguments' => array($this->entityType),
+      'access callback' => 'entity_access',
+      'access arguments' => array('create', $this->entityType),
+    );
+    // Menu item for operations like revert and delete.
+    $items[$this->path . '/manage/' . $wildcard . '/%'] = array(
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array($this->entityType . '_operation_form', $this->entityType, $id_count + 1, $id_count + 2),
+      'load arguments' => array($this->entityType),
+      'access callback' => 'entity_access',
+      'access arguments' => array('delete', $this->entityType, $id_count + 1),
+      'file' => 'includes/entity.ui.inc',
+    );
+
+    if (!empty($this->entityInfo['exportable'])) {
+      // Menu item for importing an entity.
+      $items[$this->path . '/import'] = array(
+        'title callback' => 'entity_ui_get_action_title',
+        'title arguments' => array('import', $this->entityType),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array($this->entityType . '_operation_form', $this->entityType, NULL, 'import'),
+        'access callback' => 'entity_access',
+        'access arguments' => array('create', $this->entityType),
+        'file' => 'includes/entity.ui.inc',
+        'type' => MENU_LOCAL_ACTION,
+      );
+    }
+
+    if (!empty($this->entityInfo['admin ui']['file'])) {
+      // Add in the include file for the entity form.
+      foreach (array("/manage/$wildcard", "/manage/$wildcard/clone", '/add') as $path_end) {
+        $items[$this->path . $path_end]['file'] = $this->entityInfo['admin ui']['file'];
+        $items[$this->path . $path_end]['file path'] = isset($this->entityInfo['admin ui']['file path']) ? $this->entityInfo['admin ui']['file path'] : drupal_get_path('module', $this->entityInfo['module']);
+      }
+    }
+    return $items;
+  }
+
+
 }

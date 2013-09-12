@@ -9,7 +9,7 @@
  */
 function d2d_server_entity_info() {
   $return['d2d_entity'] = array(
-    'label' => t('D2D EntIty'),
+    'label' => t('D2D Server'),
     'base table' => 'd2d_entity',
     'entity keys' => array(
       'id' => 'did',
@@ -17,11 +17,11 @@ function d2d_server_entity_info() {
     ),
     'entity class' => 'D2DEntity',
     'uri callback' => 'entity_class_uri',
-    'controller class' => 'D2DServerEntityController',
+    'controller class' => 'D2DEntityController',
     'admin ui' => array(
       'path' => 'admin/d2d_server',
-      'controller class' => 'D2DServerEntityUIController',
-      'file' => 'includes/d2d_server.admin.inc',
+      'controller class' => 'D2DEntityUIController',
+      'file' => 'includes/d2d_entity.admin.inc',
     ),
     'module' => 'd2d_server',
     'access callback' => 'd2d_server_admin_access',
@@ -67,4 +67,21 @@ function d2d_server_permission() {
 /**
  */
 function d2d_server_menu() {
+  $items = array();
+
+  //main page.
+  //use the $property pid of _patterns_server_list().
+  $items['d2d_server_homepage'] = array(
+    'title' => 'List of all d2d instances',
+    'description' => 'the list of all d2d instances',
+    'page callback' => '_d2d_server_all_list_page',
+    'page arguments' => array(),
+    'access arguments' => array('view d2d server'),
+  );
+
+  return $items;
+}
+
+function _d2d_server_all_list_page() {
+  return "hello world!";
 }

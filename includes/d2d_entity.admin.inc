@@ -6,7 +6,7 @@
 /**
  * Implements ENTITY_TYPE_form for admin UI.
  */
-function d2d_server_form($form, &$form_state, $d2d_entity) {
+function d2d_entity_form($form, &$form_state, $d2d_entity) {
   $form['d2d_file'] = array(
     '#type' => 'file',
     '#title' => t('Choose a d2d file'),
@@ -28,11 +28,11 @@ function d2d_server_form($form, &$form_state, $d2d_entity) {
 /**
  * validate function for ENTITY_TYPE_form
  */
-function d2d_server_form_validate(&$form, &$form_state) {
+function d2d_entity_form_validate(&$form, &$form_state) {
 }
 
 /**
  * submit function for ENTITY_TYPE_form.
  */
-function d2d_server_form_submit(&$form, &$form_state) {
+function d2d_entity_form_submit(&$form, &$form_state) {
 }

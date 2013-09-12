@@ -6,7 +6,7 @@
 /**
  * customise entity controller class.
  */
-class D2DServerEntityController extends EntityAPIController {
+class D2DEntityController extends EntityAPIController {
 
   /**
    * Implements EntityAPIControllerInterface.

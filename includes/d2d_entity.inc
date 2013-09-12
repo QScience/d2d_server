@@ -6,7 +6,7 @@
 /**
  * Implements entity class.
  */
-class D2DServerEntity extends Entity {
+class D2DEntity extends Entity {
 
   /**
    * Override this in order to implement a custom default URI and specify

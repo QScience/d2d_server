@@ -5,3 +5,8 @@ core = 7.x
 php = 5.3
 
 dependencies[] = d2d
+dependencies[] = entity
+
+files[] = includes/d2d_entity.inc
+files[] = includes/d2d_entity.controller.inc
+files[] = includes/d2d_entity.ui.inc
