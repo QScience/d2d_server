@@ -18,7 +18,7 @@ function d2d_server_schema() {
         'description' => 'Primary Key: Unique id',
       ),
       'd2did' => array(
-        'type' => 'int',
+        'type' => 'varchar',
         'length' => 50,
         'default' => 0,
         'nut null' => TRUE,

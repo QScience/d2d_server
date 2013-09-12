@@ -4,6 +4,8 @@
  *
  */
 
+module_load_include('inc', 'd2d_server', 'includes/db');
+
 /**
  * Implements hook_entity_info().
  */
@@ -83,5 +85,6 @@ function d2d_server_menu() {
 }
 
 function _d2d_server_all_list_page() {
+  $newfriends = d2d_server_get_instances_newfriends();
   return "hello world!";
 }
