@@ -187,8 +187,8 @@ class D2DEntityUIController extends EntityDefaultUIController {
       'weight' => -10,
     );
     $items[$this->path . '/add'] = array(
-      'title' => 'Upload pattern file',
-      //'title arguments' => array('add', $this->entityType),
+      'title' => 'Import available d2d instances',
+      'title arguments' => array('add', $this->entityType),
       'page callback' => 'entity_ui_get_form',
       'page arguments' => array($this->entityType, NULL, 'add'),
       'access callback' => 'entity_access',
