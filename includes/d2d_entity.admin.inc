@@ -42,9 +42,9 @@ function d2d_entity_form_submit(&$form, &$form_state) {
   //dsm($op);
   foreach ($op as $key => $value) {
     //dsm($value);
-    if ($value === 0) {
+    if ($value == 0) { 
       continue;
     }
-    d2d_server_get_instance_byd2did($key);
+    d2d_server_import_instance_byd2did($key);
   }
 }
