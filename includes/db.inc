@@ -43,23 +43,17 @@ function d2d_server_get_instance_by_d2did($d2did) {
 }
 
 /**
- * import instance
+ * update instance
  */
-function d2d_server_import_instance_byd2did($d2did) {
-  $q = db_select("d2d_instances", "di")
-    ->fields("di", array())
-    ->condition("d2d_id", $d2did)
-    ->execute()
-    ->fetchObject();
-  //dsm($q);
-  db_insert("d2d_entity")
+function d2d_server_update_instance($en) {
+  db_update("d2d_entity")
     ->fields( array(
-        'd2did' => $q->d2d_id,
-        'title' => $q->name,
-        'description' => $q->description,
-        'category' => 'test',
+        'title' => $en['title'],
+        'description' => $en['description'],
+        'category' => $en['category'],
         'users_number' => -1,
-        'created' => REQUEST_TIME,
+        'updated' => REQUEST_TIME,
       ))
+    ->condition('d2did', $en['d2did'])
     ->execute();
 }

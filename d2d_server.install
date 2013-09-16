@@ -54,6 +54,13 @@ function d2d_server_schema() {
         'unsigned' => TRUE,
         'description' => 'The Unix timestamp indicating when the webiste was created.',
       ),
+     'updated' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'unsigned' => TRUE,
+        'description' => 'The Unix timestamp indicating when the webiste was updated.',
+      ),
     ),
     'primary key' => array('did'),
     'unique keys' => array('d2did' => array('d2did')),
@@ -67,7 +74,7 @@ function d2d_server_schema() {
  */
 function d2d_server_uninstall() {
   //clean all attached field.
-  //field_attach_delete_bundle('d2d_server', 'd2d_server');
+  field_attach_delete_bundle('d2d_entity', 'd2d_entity');
 
   drupal_uninstall_schema('d2d_entity');
   //delete the role.

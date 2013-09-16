@@ -18,6 +18,7 @@ class D2DEntityController extends EntityAPIController {
   public function save($entity, DatabaseTransaction $transaction = NULL) {
 
     $entity->created = REQUEST_TIME;
+    $entity->updated = REQUEST_TIME;
 
     return parent::save($entity, $transaction);
   }
@@ -70,7 +71,4 @@ class D2DEntityController extends EntityAPIController {
     }
     return $view;
   }
-
-
-
 }
