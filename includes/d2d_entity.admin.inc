@@ -9,21 +9,33 @@ module_load_include('inc', 'd2d_server', 'includes/db');
  */
 function d2d_entity_form($form, &$form_state, $d2d_entity) {
   $newfriends = d2d_server_get_instances_newfriends();
+
+  $header = array(
+    'd2did' => t('D2D ID'),
+    'title' => t('TITLE'),
+    'description' => t('DESCRIPTION'),
+    'url' => t('URL'),
+  );
+
   $options = array();
   foreach ($newfriends as $key => $value) {
-    $options[$key] = $key;
+    $instance = d2d_server_get_instance_by_d2did($key);
+    $options[$key] = array(
+      'd2did' => $instance->d2d_id,
+      'title' => $instance->name,
+      'description' => $instance->description,
+      'url' => $instance->url,
+    );
   }
-
-  $form['check'] = array(
-    '#type' => 'checkboxes',
+  $form['table'] = array(
+    '#type' => 'tableselect',
+    '#header' => $header,
     '#options' => $options,
-    '#title' => t('import what?'),
   );
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Import'),
   );
-  //field_attach_form('d2d_entity', $d2d_entity, $form, $form_state);
 
   return $form;
 }
@@ -38,13 +50,9 @@ function d2d_entity_form_validate(&$form, &$form_state) {
  * submit function for ENTITY_TYPE_form.
  */
 function d2d_entity_form_submit(&$form, &$form_state) {
-  $op = $form_state['values']['check'];
-  //dsm($op);
+  $op = $form_state['values']['table'];
+  $op = array_filter($op);
   foreach ($op as $key => $value) {
-    //dsm($value);
-    if ($value == 0) { 
-      continue;
-    }
     d2d_server_import_instance_byd2did($key);
   }
 }

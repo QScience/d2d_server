@@ -33,6 +33,18 @@ function d2d_server_get_instances_newfriends() {
 /**
  * get a instances from d2d id
  */
+function d2d_server_get_instance_by_d2did($d2did) {
+  $q = db_select("d2d_instances", "di")
+    ->fields("di", array())
+    ->condition("d2d_id", $d2did)
+    ->execute()
+    ->fetchObject();
+  return $q;
+}
+
+/**
+ * import instance
+ */
 function d2d_server_import_instance_byd2did($d2did) {
   $q = db_select("d2d_instances", "di")
     ->fields("di", array())
