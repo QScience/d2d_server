@@ -8,106 +8,104 @@ module_load_include('inc', 'd2d_server', 'includes/db');
  * Implements ENTITY_TYPE_form for admin UI.
  */
 function d2d_entity_form($form, &$form_state, $d2d_entity) {
-  $newfriends = d2d_server_get_instances_newfriends();
-  //dsm($newfriend);
-  //dsm($d2d_entity);
   $form = array();
 
-  $header = array(
-    'd2did' => t('D2D ID'),
-    'title' => t('TITLE'),
-    'description' => t('DESCRIPTION'),
-    'url' => t('URL'),
-  );
-
-  $options = array();
-  $default_v = array();
-  $i = 1;
-  foreach ($newfriends as $key => $value) {
-    $instance = d2d_server_get_instance_by_d2did($key);
-    $options[$key] = array(
-      'd2did' => $instance->d2d_id,
-      'title' => $instance->name,
-      'description' => $instance->description,
-      'url' => $instance->url,
-    );
-    if ($i == 1) {
-      $defualt_v[$key] = TRUE;
-      $i++;
+  if (isset($d2d_entity->is_new) && $d2d_entity->is_new) {
+    $newfriends = d2d_server_get_instances_newfriends();
+    if (!count($newfriends)) {
+      $form['noavaild2d'] = array(
+        '#markup' => "no available new friend d2d instance.",
+      );
+      return $form;
     }
     else {
-      $default_v[$key] = FALSE;
+      $header = array(
+        'd2did' => t('D2D ID'),
+        'title' => t('TITLE'),
+        'description' => t('DESCRIPTION'),
+        'url' => t('URL'),
+      );
+
+      $options = array();
+      $default_v = 1;
+      $i = 1;
+      foreach ($newfriends as $key => $value) {
+        $instance = d2d_server_get_instance_by_d2did($key);
+        $options[$key] = array(
+          'd2did' => $instance->d2d_id,
+          'title' => $instance->name,
+          'description' => $instance->description,
+          'url' => $instance->url,
+        );
+        if ($i == 1) {
+          $default_v = $key;
+          $i++;
+        }
+      }
+
+      $form['table'] = array(
+        '#type' => 'tableselect',
+        '#header' => $header,
+        '#options' => $options,
+        '#multiple' => FALSE,
+        '#js_select' => FALSE,
+        '#default_value' => $default_v,
+      );
+      $d2d_entity = new stdClass;
+      $newfriend = array_shift($newfriends);
+      $d2d_entity->d2did = $newfriend->d2d_id;
+      $d2d_entity->title= $newfriend->name;
+      $d2d_entity->description = $newfriend->description;
+      $d2d_entity->category ='xxx';
+      $d2d_entity->users_number = -1;
     }
-
   }
 
-  $form['table'] = array(
-    '#type' => 'tableselect',
-    '#header' => $header,
-    '#options' => $options,
-    //'#multiple' => FALSE,
-    //'#js_select' => FALSE,
-    '#default_value' => $default_v,
+  $form['d2dinstance'] = array(
+    '#type' => 'fieldset',
+    '#title' => "d2d Instance:",
   );
-
-
-  if ($d2d_entity->is_new && !count($newfriends)) {
-   return $form;
-  }
-  elseif ($d2d_entity->is_new) {
-    $d2d_entity = new stdClass;
-    $newfriend = array_shift($newfriends);
-    $d2d_entity->d2did = $newfriend->d2d_id;
-    $d2d_entity->title= $newfriend->name;
-    $d2d_entity->description = $newfriend->description;
-    $d2d_entity->category ='xxx';
-    $d2d_entity->users_number = -1;
-
-  }
-  $form['d2did'] = array(
+  $form['d2dinstance']['d2did'] = array(
     '#type' => 'textfield',
     '#title' => 'D2D ID',
     '#default_value' => $d2d_entity->d2did,
     '#disabled' => TRUE,
   );
   
-  $form['title'] = array(
+  $form['d2dinstance']['title'] = array(
     '#type' => 'textfield',
     '#title' => 'WEBSITE TITLE',
     '#default_value' => $d2d_entity->title,
   );
 
-  $form['description'] = array(
+  $form['d2dinstance']['description'] = array(
     '#type' => 'textfield',
     '#title' => 'WEBSITE DESCRIPTION',
     '#default_value' => $d2d_entity->description,
   );
 
-  $form['category'] = array(
+  $form['d2dinstance']['category'] = array(
     '#type' => 'textfield',
     '#title' => 'CATEGORY',
     '#default_value' => $d2d_entity->category,
   );
 
-  $form['users_number'] = array(
+  $form['d2dinstance']['users_number'] = array(
     '#type' => 'textfield',
     '#title' => 'USERS NUMBER',
     '#default_value' => $d2d_entity->users_number,
     '#disabled' => TRUE,
   );
 
-  field_attach_form('d2d_entity', $d2d_entity, $form, $form_state);
+  field_attach_form('d2d_entity', $d2d_entity, $form['d2dinstance'], $form_state);
 
-  $form['submit'] = array(
+  $form['d2dinstance']['submit'] = array(
     '#type' => 'submit',
     '#value' => 'SAVE',
     '#weight' => 20,
   );
   return $form;
 
-  
-//
-//  return $form;
 }
 
 /**
@@ -149,82 +147,82 @@ function d2d_entity_form_submit(&$form, &$form_state) {
 //
 }
 
-/**
- * for edit button.
- */
-function d2d_entity_edit_form($form, &$form_state, $d2d_entity) {
-  dsm($d2d_entity);
-  $form['d2did'] = array(
-    '#type' => 'textfield',
-    '#title' => 'D2D ID',
-    '#default_value' => $d2d_entity->d2did,
-    '#disabled' => TRUE,
-  );
-  
-  $form['title'] = array(
-    '#type' => 'textfield',
-    '#title' => 'WEBSITE TITLE',
-    '#default_value' => $d2d_entity->title,
-  );
-
-  $form['description'] = array(
-    '#type' => 'textfield',
-    '#title' => 'WEBSITE DESCRIPTION',
-    '#default_value' => $d2d_entity->description,
-  );
-
-  $form['category'] = array(
-    '#type' => 'textfield',
-    '#title' => 'CATEGORY',
-    '#default_value' => $d2d_entity->category,
-  );
-
-  $form['users_number'] = array(
-    '#type' => 'textfield',
-    '#title' => 'USERS NUMBER',
-    '#default_value' => $d2d_entity->users_number,
-    '#disabled' => TRUE,
-  );
-
-  field_attach_form('d2d_entity', $d2d_entity, $form, $form_state);
-
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => 'SAVE',
-    '#weight' => 20,
-  );
-  return $form;
-}
-
-/**
- * validate for form d2d_entity_edit_form.
- */
-function d2d_entity_edit_form_validate($form, &$form_state) {
-}
-
-/**
- * submit for form d2d_entity_edit_form.
- */
-function d2d_entity_edit_form_submit($form, &$form_state) {
-  $op = $form_state['values'];
-  dsm($op);
-  $en = array();
-  foreach ($op as $key => $value) {
-    $en['d2did'] = $op['d2did'];
-    $en['title'] = $op['title'];
-    $en['description'] = $op['description'];
-    $en['category'] = $op['category'];
-    $en['users_number'] = $op['users_number'];
-
-    d2d_server_update_instance($en);
-  }
-
-  $entity = array('bundle' => 'd2d_entity', 'id' => 4);
-
-  //$fields = field_info_instances('d2d_entity', 'd2d_entity');
-  //foreach ($fields as $key => $value) {
-  //  $p = $value['und'];
-  //}
-  field_attach_submit('d2d_server', $entity, $form, $form_state);
-
-}
+///**
+// * for edit button.
+// */
+//function d2d_entity_edit_form($form, &$form_state, $d2d_entity) {
+//  dsm($d2d_entity);
+//  $form['d2did'] = array(
+//    '#type' => 'textfield',
+//    '#title' => 'D2D ID',
+//    '#default_value' => $d2d_entity->d2did,
+//    '#disabled' => TRUE,
+//  );
+//  
+//  $form['title'] = array(
+//    '#type' => 'textfield',
+//    '#title' => 'WEBSITE TITLE',
+//    '#default_value' => $d2d_entity->title,
+//  );
+//
+//  $form['description'] = array(
+//    '#type' => 'textfield',
+//    '#title' => 'WEBSITE DESCRIPTION',
+//    '#default_value' => $d2d_entity->description,
+//  );
+//
+//  $form['category'] = array(
+//    '#type' => 'textfield',
+//    '#title' => 'CATEGORY',
+//    '#default_value' => $d2d_entity->category,
+//  );
+//
+//  $form['users_number'] = array(
+//    '#type' => 'textfield',
+//    '#title' => 'USERS NUMBER',
+//    '#default_value' => $d2d_entity->users_number,
+//    '#disabled' => TRUE,
+//  );
+//
+//  field_attach_form('d2d_entity', $d2d_entity, $form, $form_state);
+//
+//  $form['submit'] = array(
+//    '#type' => 'submit',
+//    '#value' => 'SAVE',
+//    '#weight' => 20,
+//  );
+//  return $form;
+//}
+//
+///**
+// * validate for form d2d_entity_edit_form.
+// */
+//function d2d_entity_edit_form_validate($form, &$form_state) {
+//}
+//
+///**
+// * submit for form d2d_entity_edit_form.
+// */
+//function d2d_entity_edit_form_submit($form, &$form_state) {
+//  $op = $form_state['values'];
+//  dsm($op);
+//  $en = array();
+//  foreach ($op as $key => $value) {
+//    $en['d2did'] = $op['d2did'];
+//    $en['title'] = $op['title'];
+//    $en['description'] = $op['description'];
+//    $en['category'] = $op['category'];
+//    $en['users_number'] = $op['users_number'];
+//
+//    d2d_server_update_instance($en);
+//  }
+//
+//  $entity = array('bundle' => 'd2d_entity', 'id' => 4);
+//
+//  //$fields = field_info_instances('d2d_entity', 'd2d_entity');
+//  //foreach ($fields as $key => $value) {
+//  //  $p = $value['und'];
+//  //}
+//  field_attach_submit('d2d_server', $entity, $form, $form_state);
+//
+//}

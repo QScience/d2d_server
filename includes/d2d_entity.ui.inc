@@ -195,26 +195,26 @@ class D2DEntityUIController extends EntityDefaultUIController {
       'access arguments' => array('create', $this->entityType),
       'type' => MENU_LOCAL_ACTION,
     );
-    //$items[$this->path . '/manage/' . $wildcard] = array(
-    //  'title' => 'Edit',
-    //  'title callback' => 'entity_label',
-    //  'title arguments' => array($this->entityType, $id_count + 1),
-    //  'page callback' => 'entity_ui_get_form',
-    //  'page arguments' => array($this->entityType, $id_count + 1),
-    //  'load arguments' => array($this->entityType),
-    //  'access callback' => 'entity_access',
-    //  'access arguments' => array('update', $this->entityType, $id_count + 1),
-    //);
     $items[$this->path . '/manage/' . $wildcard] = array(
       'title' => 'Edit',
       'title callback' => 'entity_label',
       'title arguments' => array($this->entityType, $id_count + 1),
       'page callback' => 'entity_ui_get_form',
-      'page arguments' => array($this->entityType . '_edit', $id_count + 1),
+      'page arguments' => array($this->entityType, $id_count + 1),
       'load arguments' => array($this->entityType),
       'access callback' => 'entity_access',
       'access arguments' => array('update', $this->entityType, $id_count + 1),
     );
+    //$items[$this->path . '/manage/' . $wildcard] = array(
+    //  'title' => 'Edit',
+    //  'title callback' => 'entity_label',
+    //  'title arguments' => array($this->entityType, $id_count + 1),
+    //  'page callback' => 'entity_ui_get_form',
+    //  'page arguments' => array($this->entityType . '_edit', $id_count + 1),
+    //  'load arguments' => array($this->entityType),
+    //  'access callback' => 'entity_access',
+    //  'access arguments' => array('update', $this->entityType, $id_count + 1),
+    //);
     //dsm($items[$this->path . '/manage/' . $wildcard]);
     $items[$this->path . '/manage/' . $wildcard . '/edit'] = array(
       'title' => 'Edit',
