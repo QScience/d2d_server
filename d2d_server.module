@@ -183,7 +183,7 @@ function _d2d_server_all_list_page() {
 function _d2d_instance_view_page($did) {
   $de = entity_object_load($did, 'd2d_entity');
   if (!$de) {
-    drupal_set_message(t("The d2d instance doesn't exist.", "error"));
+    drupal_set_message(t("The d2d instance doesn't exist."), "error");
     drupal_goto('d2d_server_homepage');
   }
   drupal_set_title($de->title);
