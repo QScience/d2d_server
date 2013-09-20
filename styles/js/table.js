@@ -39,6 +39,34 @@ $(document).ready(function() {
   });
 
 
+  //use moment.js to format upload time.
+  $(".d2d-server-list-table .import-time").text(function(){
+    return moment.unix($(this).attr("value")).fromNow();
+  });
+
+  //pager ajax functionality.
+  $('body').delegate( '.d2d-server-list-table-wrap ul li a', 'click', function(e) {
+    var url = $(this).attr('href');
+    var current_table = $(this).closest('.d2d-server-list-table-wrap');
+    var index = $(current_table).index('.d2d-server-list-table-wrap');
+    $.ajax({
+      url: url,
+      success: function(data) {
+        var current_table_new = $('.d2d-server-list-table-wrap', data).eq(index);
+        var current_table_new_fieldset_wrap = $(current_table_new).find('.fieldset-wrapper');
+        var current_table_fieldset_wrap = $(current_table).find('.fieldset-wrapper');
+        $(current_table_fieldset_wrap).hide();
+        $(current_table_fieldset_wrap).html($(current_table_new_fieldset_wrap).html()).show('slow');
+
+        $(".d2d-server-list-table .import-time").text(function(){
+          return moment.unix($(this).attr("value")).fromNow();
+        });
+
+      }
+    });
+    return false;
+  }); 
+
 
 });
 })(jQuery)

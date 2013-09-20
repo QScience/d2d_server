@@ -135,7 +135,6 @@ function d2d_server_menu() {
 }
 
 function _d2d_server_all_list_page() {
-  //drupal_add_js(drupal_get_path('module', 'd2d_server') . '/styles/js/patterns_server.search.js');
   $searchform = drupal_get_form('d2d_server_search');
   $list = drupal_render($searchform);
 
@@ -156,9 +155,8 @@ function _d2d_server_all_list_page() {
     $list .= _d2d_server_list_page($query, $fieldset_title);
 
     //Most Liked Patterns.
-    /*
     foreach ($ordered_results_backup as $key => $value) {
-      $vscore[$key] = _patterns_server_get_voting_score($value->entity_id);
+      $vscore[$key] = _d2d_server_get_voting_score($value->entity_id);
     }
     arsort($vscore);
     $new_ordered_results = array();
@@ -167,17 +165,15 @@ function _d2d_server_all_list_page() {
     }
     $query->ordered_results = array_slice($new_ordered_results, 0, 10, TRUE);
     $fieldset_title = 'Most Liked Patterns:';
-    $list .= _patterns_server_list_page($query, $fieldset_title);
-    */
+    $list .= _d2d_server_list_page($query, $fieldset_title);
   }
   else {
     //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.firstpage.js');
     $list .= "<div class='d2d-server-list-table-wrap'>";
-    $list .= "There is no d2d instances in database.</br>Go to check whether there are some friends:";
-    //$list .= _patterns_server_upload_button();
-    //$list .= " ?";
-    //$list .= '<div id="d2d-server-upload-form-js" class="hero-unit"></div>';
-    $list .= '</div>';
+    $list .= "There is no d2d instances in database.</br>Go to check whether there are some ";
+    $url = 'admin/d2d_server/add';
+    $list .= l(t('friends'), $url, array('attributes' => array('class' => array('add-button-link'))));
+    $list .= '?</div>';
   }
 
   $list .= '</div>';

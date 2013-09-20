@@ -29,15 +29,15 @@ function _d2d_instance_view_page_description($de) {
  * theme d2d instances list page.
  */
 function _d2d_server_list_page($query, $fieldset_title) {
-  //drupal_add_css(drupal_get_path('module', 'patterns_server') . '/styles/css/patterns_server.table.css');
+  drupal_add_css(drupal_get_path('module', 'd2d_server') . '/styles/css/table.css');
   drupal_add_js("misc/autocomplete.js");
-  //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.table.js');
+  drupal_add_js(drupal_get_path('module', 'd2d_server') . '/styles/js/table.js');
 
   $header = array(
     t('Category'),
     t('Title'),
     t('D2DID'),
-    t('Created'),
+    t('Updated'),
     t('Score'),
     t('Like'),
   );
