@@ -5,6 +5,7 @@
  */
 
 module_load_include('inc', 'd2d_server', 'includes/db');
+module_load_include('inc', 'd2d_server', 'includes/search');
 module_load_include('inc', 'd2d_server', 'includes/theme');
 
 /**
@@ -145,7 +146,7 @@ function _d2d_instance_view_page($did) {
   //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.viewpage.js');
 
   //$backtoserver_voting_link = _patterns_server_back_like_button($pid);
-  $content = "<div id='one_pattern_div'><fieldset><legend>$fieldset_title</legend><div class='fieldset-wrapper'>";
+  $content = "<div id='one_d2d_instance'><fieldset><legend>$fieldset_title</legend><div class='fieldset-wrapper'>";
   //$content = "<div id='one_pattern_div'><fieldset><legend>$fieldset_title$backtoserver_voting_link</legend><div class='fieldset-wrapper'>";
 
   $content .= _d2d_instance_view_page_description($de);
@@ -159,9 +160,72 @@ function _d2d_instance_view_page($did) {
 }
 
 
-function _d2d_server_list_basicpage($type, $value) {
+function _d2d_server_list_basicpage($property, $arg) {
+  drupal_set_title($property . ': ' . $arg);
+
+  //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.search.js');
+  $searchform = drupal_get_form('d2d_server_search');
+  $searchform = drupal_render($searchform);
+
+  $list = _d2d_server_list($property, $arg);
+  if ($list === FALSE) {
+    drupal_set_message(t("The d2d instances list doesn't exist."), "error");
+    drupal_goto('d2d_server_homepage');
+  }
+  else {
+    return $searchform . "<div id='d2d-server-all-table-wrap'>" . $list . "</div>";
+  }
 
 }
 
-function _d2d_server_search($selected, $value) {
+/**
+ * this function return a html table.
+ * style: <div class='d2d-server-list-table-wrap'>a table</div>
+ * this is core function.
+ * if it get a list table, it return the table. if not, it return FALSE.
+ * it can handle menus:
+ *    d2d/tags/$field_tags_name/$tid ====> $property: field_tags_name, $arg: $tid.
+ *    d2d/category/[System] ====> $property: category, $arg: [System].
+ * if can hanndle another pid $property and $pid $arg.
+ * all five kinds of property: four menus and the special pid $property.
+ *
+ * these two are the basic table, a page can contain several tables. that
+ * means this function can be called any times. the output is a <div>table</div>.
+ *
+ */
+function _d2d_server_list($property, $arg, $operate = '=', $showupload = TRUE) {
+
+  $pos = strpos($property, 'field');
+  $property_sign = $property;
+  if ($pos !== FALSE) {
+    $property_sign = 'tag';
+  }
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'd2d_entity');
+
+  switch ($property_sign) {
+    case 'tag':
+      $tax = taxonomy_term_load($arg);
+      $fieldset_title = "tag: " . $tax->name . " in $property field";
+      $query->fieldCondition($property, 'tid', $arg, '=');
+      break;
+
+    default:
+      $fieldset_title = $property . ': ' . $arg;
+      $query->propertyCondition($property, $arg, $operate);
+  }
+
+  $query->propertyOrderBy('created', 'DESC')
+    ->pager(10)
+    ->execute();
+  if (isset($query->ordered_results) && count($query->ordered_results)) {
+    $list = _d2d_server_list_page($query, $fieldset_title);
+    return $list;
+  }
+  else {
+    return FALSE;
+  }
 }
+
+
