@@ -3,6 +3,8 @@
  * @file
  */
 
+define("NOSEARCHRESULT", " <div class='patterns-server-list-table-wrap'>nothing found.</div>");
+
 /**
  * Implement search function form for patterns_server.
  */
@@ -63,7 +65,6 @@ function d2d_server_search_submit($form, &$form_state) {
  *
  */
 function _d2d_server_search($selected, $value) {
-/*
   drupal_set_title(t('search :'));
   //drupal_add_js(drupal_get_path('module', 'd2d_server') . '/styles/js/search.js');
   $form = drupal_get_form('d2d_server_search', $selected, $value);
@@ -94,12 +95,12 @@ function _d2d_server_search($selected, $value) {
       break;
 
     case 1:
-      drupal_set_title(t('patterns with category: ' . $value));
+      drupal_set_title(t('d2d instances with category: ' . $value));
       $split_strings = preg_split('/[\,]+/', $value);
       $sign_has_table = FALSE;
-      $list .= '<div id="patterns-server-all-table-wrap">';
+      $list .= '<div id="d2d-server-all-table-wrap">';
       foreach ($split_strings as $category_name) {
-        $a_table = _patterns_server_list('category', trim($category_name));
+        $a_table = _d2d_server_list('category', trim($category_name));
         if ($a_table) {
           $sign_has_table = TRUE;
           $list .= $a_table;
@@ -113,18 +114,19 @@ function _d2d_server_search($selected, $value) {
       break;
 
     case 2:
-      drupal_set_title(t('patterns created by: ' . $value));
-      $split_strings = preg_split('/[\,]+/', $value);
-      $sign_has_table = FALSE;
-      $list .= '<div id="patterns-server-all-table-wrap">';
-      foreach ($split_strings as $author_name) {
-        $a_table = _patterns_server_list('author', trim($author_name));
-        if ($a_table) {
-          $sign_has_table = TRUE;
-          $list .= $a_table;
-        }
+      drupal_set_title(t('d2d instances with: ' . $value));
+      $fieldset_title = "d2d instances with d2did: $value";
+      $query = new EntityFieldQuery();
+      $query->entityCondition('entity_type', 'd2d_entity')
+        ->propertyCondition('d2did', $value)
+        ->propertyOrderBy('created', 'DESC')
+        ->pager(10)
+        ->execute();
+      $list .= '<div id="d2d-server-all-table-wrap">';
+      if (isset($query->ordered_results) && count($query->ordered_results)) {
+        $list .= _d2d_server_list_page($query, $fieldset_title);
       }
-      if (!$sign_has_table) {
+      else {
         $list .= NOSEARCHRESULT;
       }
       $list .= '</div>';
@@ -132,46 +134,8 @@ function _d2d_server_search($selected, $value) {
       break;
 
     case 3:
-      drupal_set_title(t('pattern with: ' . $value));
-      $fieldset_title = "pattern with uuuid: $value";
-      $query = new EntityFieldQuery();
-      $query->entityCondition('entity_type', 'patterns_server')
-        ->propertyCondition('uuuid', $value)
-        ->propertyOrderBy('created', 'DESC')
-        ->pager(10)
-        ->execute();
-      $list .= '<div id="patterns-server-all-table-wrap">';
-      if (isset($query->ordered_results) && count($query->ordered_results)) {
-        $list .= _patterns_server_list_page($query, $fieldset_title);
-      }
-      else {
-        $list .= NOSEARCHRESULT;
-      }
-      $list .= '</div>';
-      return $list;
-      break;
-
-    case 4:
-      $fieldset_title = "pattern with pid: $value";
-      $query = new EntityFieldQuery();
-      $query->entityCondition('entity_type', 'patterns_server')
-        ->propertyCondition('pid', $value, '=')
-        ->propertyOrderBy('created', 'DESC')
-        ->pager(10)
-        ->execute();
-      $list .= '<div id="patterns-server-all-table-wrap">';
-      if (isset($query->ordered_results) && count($query->ordered_results)) {
-        $list .= _patterns_server_list_page($query, $fieldset_title);
-      }
-      else {
-        $list .= NOSEARCHRESULT;
-      }
-      $list .= '</div>';
-      return $list;
-      break;
-
-    case 5:
-      drupal_set_title(t('patterns with tags: ' . $value));
+      drupal_set_title(t('d2d instances with tags: ' . $value));
+      /*
       $tagtids = _patterns_server_findtagtid_by_tagname($value);
       $tags_table_db = _patterns_server_get_all_taxonomyfields_name('patterns_server');
       $list .= '<div id="patterns-server-all-table-wrap">';
@@ -186,12 +150,12 @@ function _d2d_server_search($selected, $value) {
         $list .= NOSEARCHRESULT;
       }
       $list .= '</div>';
+      */
       return $list;
       break;
 
     default:
-      drupal_set_message(t("The pattern list doesn't exist."), "error");
-      drupal_goto('patterns_server_homepage');
+      drupal_set_message(t("The d2d instances list doesn't exist."), "error");
+      drupal_goto('d2d_server_homepage');
   }
-*/
 }

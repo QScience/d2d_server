@@ -227,5 +227,3 @@ function _d2d_server_list($property, $arg, $operate = '=', $showupload = TRUE) {
     return FALSE;
   }
 }
-
-
