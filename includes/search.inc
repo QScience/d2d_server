@@ -4,6 +4,7 @@
  */
 
 define("NOSEARCHRESULT", " <div class='patterns-server-list-table-wrap'>nothing found.</div>");
+module_load_include('inc', 'd2d_server', 'includes/tags');
 
 /**
  * Implement search function form for patterns_server.
@@ -40,7 +41,7 @@ function d2d_server_search($form, &$form_state, $search_type='', $search_value='
   $button_url = url('d2d/search/');
   $form['d2d_server_search']['actions'] = array('#type' => 'actions');
   $form['d2d_server_search']['actions']['submit'] = array('#type' => 'submit', '#value' => t('Search'), '#attributes' => array('name' => $button_url));
-  $form['d2d_server_search']['#submit'][] = 'patterns_server_search_submit';
+  $form['d2d_server_search']['#submit'][] = 'd2d_server_search_submit';
 
   return $form;
 }
@@ -138,14 +139,13 @@ function _d2d_server_search($selected, $value) {
 
     case 3:
       drupal_set_title(t('d2d instances with tags: ' . $value));
-      /*
-      $tagtids = _patterns_server_findtagtid_by_tagname($value);
-      $tags_table_db = _patterns_server_get_all_taxonomyfields_name('patterns_server');
-      $list .= '<div id="patterns-server-all-table-wrap">';
+      $tagtids = _d2d_server_findtagtid_by_tagname($value);
+      $tags_table_db = _d2d_server_get_all_taxonomyfields_name('d2d_entity');
+      $list .= '<div id="d2d-server-all-table-wrap">';
       if (count($tags_table_db) && count($tagtids)) {
         foreach ($tags_table_db as $field_name) {
           foreach ($tagtids as $tid => $_temp) {
-            $list .= _patterns_server_list($field_name, $tid);
+            $list .= _d2d_server_list($field_name, $tid);
           }
         }
       }
@@ -153,7 +153,6 @@ function _d2d_server_search($selected, $value) {
         $list .= NOSEARCHRESULT;
       }
       $list .= '</div>';
-      */
       return $list;
       break;
 

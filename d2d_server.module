@@ -209,7 +209,6 @@ function _d2d_instance_view_page($did) {
 function _d2d_server_list_basicpage($property, $arg) {
   drupal_set_title($property . ': ' . $arg);
 
-  //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.search.js');
   $searchform = drupal_get_form('d2d_server_search');
   $searchform = drupal_render($searchform);
 
