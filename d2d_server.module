@@ -5,6 +5,7 @@
  */
 
 module_load_include('inc', 'd2d_server', 'includes/db');
+module_load_include('inc', 'd2d_server', 'includes/theme');
 
 /**
  * Implements hook_entity_info().
@@ -81,6 +82,43 @@ function d2d_server_menu() {
     'access arguments' => array('view d2d server'),
   );
 
+  //d2d instance's view page. "d2d/$did"
+  //if success, go to d2d/$did page.
+  //if not(the $pid is wrong), go to the main page.
+  $items['d2d/%'] = array(
+    'title' => 'd2d instance view',
+    'description' => 'd2d instance view page',
+    'page callback' => '_d2d_instance_view_page',
+    'page arguments' => array(1),
+    'access arguments' => array('view d2d server'),
+  );
+
+  $items['d2d/category/%'] = array(
+    'title' => 'all d2d instances in % category',
+    'description' => 'all d2d instances in % category',
+    'page callback' => '_d2d_server_list_basicpage',
+    'page arguments' => array(1, 2),
+    'access arguments' => array('view d2d server'),
+  );
+
+  $items['d2d/tags/%/%'] = array(
+    'title' => 'all d2d instances with the tag %',
+    'description' => 'all d2d instances with the tag %',
+    'page callback' => '_d2d_server_list_basicpage',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('view d2d server'),
+  );
+
+  //this is search function. search text & search type.
+  //actually its result is composed by the above four basic kinds of table.
+  $items['d2d/search/%/%'] = array(
+    'title' => 'search d2d instances',
+    'description' => 'search d2d instances with value/category, and so on',
+    'page callback' => '_d2d_server_search',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('view d2d server'),
+  );
+
   return $items;
 }
 
@@ -92,4 +130,37 @@ function _d2d_server_all_list_page() {
   }
   dsm($entity);
   return "hello world!";
+}
+
+function _d2d_instance_view_page($did) {
+  $de = entity_object_load($did, 'd2d_entity');
+  if (!$de) {
+    drupal_set_message(t("The d2d instance doesn't exist.", "error"));
+    drupal_goto('d2d_server_homepage');
+  }
+  drupal_set_title($de->title);
+  $fieldset_title = $de->title;
+
+  //drupal_add_css(drupal_get_path('module', 'patterns_server') . '/styles/css/patterns_server.viewpage.css');
+  //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.viewpage.js');
+
+  //$backtoserver_voting_link = _patterns_server_back_like_button($pid);
+  $content = "<div id='one_pattern_div'><fieldset><legend>$fieldset_title</legend><div class='fieldset-wrapper'>";
+  //$content = "<div id='one_pattern_div'><fieldset><legend>$fieldset_title$backtoserver_voting_link</legend><div class='fieldset-wrapper'>";
+
+  $content .= _d2d_instance_view_page_description($de);
+
+  $content .= '</div></fieldset></div>';
+  $field_view = entity_view('d2d_entity', array($did => $de));
+  $content .= drupal_render($field_view);
+
+  return $content;
+
+}
+
+
+function _d2d_server_list_basicpage($type, $value) {
+}
+
+function _d2d_server_search($type, $value) {
 }
