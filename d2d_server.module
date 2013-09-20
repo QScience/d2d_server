@@ -189,7 +189,7 @@ function _d2d_instance_view_page($did) {
   drupal_set_title($de->title);
   $fieldset_title = $de->title;
 
-  //drupal_add_css(drupal_get_path('module', 'patterns_server') . '/styles/css/patterns_server.viewpage.css');
+  drupal_add_css(drupal_get_path('module', 'd2d_server') . '/styles/css/viewpage.css');
   //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.viewpage.js');
 
   $backtoserver_voting_link = _d2d_server_back_like_button($did);
