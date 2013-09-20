@@ -11,3 +11,6 @@ dependencies[] = votingapi
 files[] = includes/d2d_entity.inc
 files[] = includes/d2d_entity.controller.inc
 files[] = includes/d2d_entity.ui.inc
+
+scripts[] = styles/js/jquery.autofill.min.js
+scripts[] = styles/js/moment.min.js

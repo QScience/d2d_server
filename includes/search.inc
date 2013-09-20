@@ -9,6 +9,9 @@ define("NOSEARCHRESULT", " <div class='patterns-server-list-table-wrap'>nothing 
  * Implement search function form for patterns_server.
  */
 function d2d_server_search($form, &$form_state, $search_type='', $search_value='') {
+  $form['#attached']['js'] = array(
+    drupal_get_path('module', 'd2d_server') . '/styles/js/search.js',
+  );
   $form['d2d_server_search']= array(
     '#type' => 'container',
     '#attributes' => array('class' => array('container-inline')),

@@ -75,7 +75,7 @@ function _d2d_server_list_table_row($ety_obj) {
   $row[] = l($ety_obj->category, 'd2d/category/' . $ety_obj->category);
   $row[] = l($ety_obj->title, 'd2d/' . $ety_obj->did);
   $row[] = $ety_obj->d2did;
-  $row[] = '<i value="' . $ety_obj->updated . '" ' . 'class="upload-time">' . date('j-m-Y H:i:s (P)', $ety_obj->updated) . '</i>';
+  $row[] = '<i value="' . $ety_obj->updated . '" ' . 'class="import-time">' . date('j-m-Y H:i:s (P)', $ety_obj->updated) . '</i>';
   $row[] = _d2d_server_get_voting_score($ety_obj->did);
   $voted = _d2d_server_check_whether_voted($ety_obj->did);
   if ($voted) {
