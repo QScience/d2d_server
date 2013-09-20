@@ -10,6 +10,8 @@ module_load_include('inc', 'd2d_server', 'includes/db');
 function d2d_entity_form($form, &$form_state, $d2d_entity) {
   $form = array();
 
+  $newfriend;
+
   if (isset($d2d_entity->is_new) && $d2d_entity->is_new) {
     $newfriends = d2d_server_get_instances_newfriends();
     if (!count($newfriends)) {
@@ -50,50 +52,60 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
         '#multiple' => FALSE,
         '#js_select' => FALSE,
         '#default_value' => $default_v,
+        '#ajax' => array(
+          'callback' => 'd2d_entity_form_ajax_callback',
+          'wrapper' => 'd2d-entity-form-d2d-instance-fieldset',
+          'method' => 'replace',
+          'effect' => 'fade',
+        ),
       );
-      $d2d_entity = new stdClass;
-      $newfriend = array_shift($newfriends);
-      $d2d_entity->d2did = $newfriend->d2d_id;
-      $d2d_entity->title= $newfriend->name;
-      $d2d_entity->description = $newfriend->description;
-      $d2d_entity->category ='xxx';
-      $d2d_entity->users_number = -1;
+      if (!empty($form_state['values']['table'])) {
+        $newfriend = d2d_server_get_instance_by_d2did($form_state['values']['table']);
+      }
+      else {
+        $newfriend = array_shift($newfriends);
+      }
     }
   }
 
   $form['d2dinstance'] = array(
     '#type' => 'fieldset',
-    '#title' => "d2d Instance:",
+    '#title' => "d2d instance:",
+    '#attributes' => array('id' => array('d2d-entity-form-d2d-instance-fieldset')),
   );
   $form['d2dinstance']['d2did'] = array(
     '#type' => 'textfield',
     '#title' => 'D2D ID',
-    '#default_value' => $d2d_entity->d2did,
+    '#size' => 32,
+    '#value' => $newfriend->d2d_id,
     '#disabled' => TRUE,
   );
   
   $form['d2dinstance']['title'] = array(
     '#type' => 'textfield',
     '#title' => 'WEBSITE TITLE',
-    '#default_value' => $d2d_entity->title,
+    '#value' => $newfriend->name,
+    '#maxlength' => 100,
   );
 
   $form['d2dinstance']['description'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => 'WEBSITE DESCRIPTION',
-    '#default_value' => $d2d_entity->description,
+    '#value' => $newfriend->description,
   );
 
   $form['d2dinstance']['category'] = array(
     '#type' => 'textfield',
     '#title' => 'CATEGORY',
-    '#default_value' => $d2d_entity->category,
+    '#size' => 32,
+    '#value' => "default",
   );
 
   $form['d2dinstance']['users_number'] = array(
     '#type' => 'textfield',
     '#title' => 'USERS NUMBER',
-    '#default_value' => $d2d_entity->users_number,
+    '#size' => 32,
+    '#value' => -1,
     '#disabled' => TRUE,
   );
 
@@ -104,14 +116,25 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
     '#value' => 'SAVE',
     '#weight' => 20,
   );
-  return $form;
 
+  return $form;
+}
+
+/**
+ * d2d entity form ajax callback
+ */
+function d2d_entity_form_ajax_callback(&$form, &$form_state) {
+  return $form['d2dinstance'];
 }
 
 /**
  * validate function for ENTITY_TYPE_form
  */
 function d2d_entity_form_validate(&$form, &$form_state) {
+  //dsm($form_state);
+  $form_state['values']['title'] = $form_state['input']['title'];
+  $form_state['values']['description'] = $form_state['input']['description'];
+  $form_state['values']['category'] = $form_state['input']['category'];
 }
 
 /**
