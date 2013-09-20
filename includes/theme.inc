@@ -20,6 +20,7 @@ function _d2d_instance_view_page_description($de) {
 
   $score = _d2d_server_get_voting_score($de->did);
   $content .= '<dt>score</dt><dd id="d2d-server-view-page-score">' . $score . '</dd>';
+  $content .= '<dt>users number</dt><dd>' . $de->users_number . '</dd>';
 
   $content .= '</dl></div>';
   return $content;
