@@ -124,13 +124,53 @@ function d2d_server_menu() {
 }
 
 function _d2d_server_all_list_page() {
-  $entity = field_info_instances('d2d_entity', 'd2d_entity');
-  foreach ($entity as $key => $value) {
-    $p = field_info_field($key);
-    dsm($p);
+  //drupal_add_js(drupal_get_path('module', 'd2d_server') . '/styles/js/patterns_server.search.js');
+  $searchform = drupal_get_form('d2d_server_search');
+  $list = drupal_render($searchform);
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'd2d_entity')
+    ->propertyOrderBy('created', 'DESC')
+    ->execute();
+
+  $list .= "<div id='d2d-server-all-table-wrap'>";
+  $vscore = array();
+  if (isset($query->ordered_results) && count($query->ordered_results)) {
+
+    $ordered_results_backup = $query->ordered_results;
+
+    //Most Recent Patterns.
+    $query->ordered_results = array_slice($ordered_results_backup, 0, 10, TRUE);
+    $fieldset_title = 'Most Recent Patterns:';
+    $list .= _d2d_server_list_page($query, $fieldset_title);
+
+    //Most Liked Patterns.
+    /*
+    foreach ($ordered_results_backup as $key => $value) {
+      $vscore[$key] = _patterns_server_get_voting_score($value->entity_id);
+    }
+    arsort($vscore);
+    $new_ordered_results = array();
+    foreach ($vscore as $key => $value) {
+      $new_ordered_results[] = $ordered_results_backup[$key];
+    }
+    $query->ordered_results = array_slice($new_ordered_results, 0, 10, TRUE);
+    $fieldset_title = 'Most Liked Patterns:';
+    $list .= _patterns_server_list_page($query, $fieldset_title);
+    */
   }
-  dsm($entity);
-  return "hello world!";
+  else {
+    //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.firstpage.js');
+    $list .= "<div class='d2d-server-list-table-wrap'>";
+    $list .= "There is no d2d instances in database.</br>Go to check whether there are some friends:";
+    //$list .= _patterns_server_upload_button();
+    //$list .= " ?";
+    //$list .= '<div id="d2d-server-upload-form-js" class="hero-unit"></div>';
+    $list .= '</div>';
+  }
+
+  $list .= '</div>';
+  return $list;
 }
 
 function _d2d_instance_view_page($did) {
