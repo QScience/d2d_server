@@ -160,7 +160,8 @@ function _d2d_instance_view_page($did) {
 
 
 function _d2d_server_list_basicpage($type, $value) {
+
 }
 
-function _d2d_server_search($type, $value) {
+function _d2d_server_search($selected, $value) {
 }
