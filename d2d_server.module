@@ -196,9 +196,8 @@ function _d2d_instance_view_page($did) {
   //drupal_add_css(drupal_get_path('module', 'patterns_server') . '/styles/css/patterns_server.viewpage.css');
   //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.viewpage.js');
 
-  //$backtoserver_voting_link = _patterns_server_back_like_button($pid);
-  $content = "<div id='one_d2d_instance'><fieldset><legend>$fieldset_title</legend><div class='fieldset-wrapper'>";
-  //$content = "<div id='one_pattern_div'><fieldset><legend>$fieldset_title$backtoserver_voting_link</legend><div class='fieldset-wrapper'>";
+  $backtoserver_voting_link = _d2d_server_back_like_button($did);
+  $content = "<div id='one_d2d_instance'><fieldset><legend>$fieldset_title$backtoserver_voting_link</legend><div class='fieldset-wrapper'>";
 
   $content .= _d2d_instance_view_page_description($de);
 

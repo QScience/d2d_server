@@ -59,9 +59,7 @@ function _d2d_server_list_page($query, $fieldset_title) {
   }
   $html .= theme('pager', array('tags' => array(), 'element' => $static_pager_element++));
 
-  //$upload_button = _patterns_server_upload_button();
   $div_b = "<div class='d2d-server-list-table-wrap'><fieldset><legend>$fieldset_title</legend><div class='fieldset-wrapper'>";
-  //$div_b = "<div class='patterns-server-list-table-wrap'><fieldset><legend>$fieldset_title$upload_button</legend><div class='fieldset-wrapper'>";
   $div_e = '</div></fieldset></div>';
 
   return $div_b . $html . $div_e;
@@ -88,3 +86,25 @@ function _d2d_server_list_table_row($ety_obj) {
   }
   return $row;
 }
+
+/**
+ * backtoserver button link and like lint in the view page.
+ */
+function _d2d_server_back_like_button($did) {
+  $url = 'd2d_server_homepage';
+  $backtoserver_link = l(t('Back To Server'), $url, array('attributes' => array('class' => array('backtoserver-button-link'))));
+  $backtoserver_link = "<strong>$backtoserver_link</strong>";
+
+  $voted = _d2d_server_check_whether_voted($did);
+  if ($voted) {
+    $vote_s = '<strong class="voted-sign" id="d2d-server-view-page-vote">voted</strong>';
+  }
+  else {
+    $url = 'd2d/' . $did . '/voting';
+    $vote_s = l(t('voting'), $url, array('attributes' => array('class' => array('voting-link', "voting-link-$did"), 'title' => "voting-link-$did", 'id' => array('d2d-server-view-page-vote'))));
+  }
+
+  return $backtoserver_link . $vote_s;
+}
+
+
