@@ -61,9 +61,21 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
       );
       if (!empty($form_state['values']['table'])) {
         $newfriend = d2d_server_get_instance_by_d2did($form_state['values']['table']);
+        $d2d_entity = new stdClass;
+        $d2d_entity->d2did = $newfriend->d2d_id;
+        $d2d_entity->title= $newfriend->name;
+        $d2d_entity->description = $newfriend->description;
+        $d2d_entity->category ='default';
+        $d2d_entity->users_number = -1;
       }
       else {
         $newfriend = array_shift($newfriends);
+        $d2d_entity = new stdClass;
+        $d2d_entity->d2did = $newfriend->d2d_id;
+        $d2d_entity->title= $newfriend->name;
+        $d2d_entity->description = $newfriend->description;
+        $d2d_entity->category ='default';
+        $d2d_entity->users_number = -1;
       }
     }
   }
@@ -77,35 +89,35 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
     '#type' => 'textfield',
     '#title' => 'D2D ID',
     '#size' => 32,
-    '#value' => $newfriend->d2d_id,
+    '#value' => $d2d_entity->d2did,
     '#disabled' => TRUE,
   );
   
   $form['d2dinstance']['title'] = array(
     '#type' => 'textfield',
     '#title' => 'WEBSITE TITLE',
-    '#value' => $newfriend->name,
+    '#value' => $d2d_entity->title,
     '#maxlength' => 100,
   );
 
   $form['d2dinstance']['description'] = array(
     '#type' => 'textarea',
     '#title' => 'WEBSITE DESCRIPTION',
-    '#value' => $newfriend->description,
+    '#value' => $d2d_entity->description,
   );
 
   $form['d2dinstance']['category'] = array(
     '#type' => 'textfield',
     '#title' => 'CATEGORY',
     '#size' => 32,
-    '#value' => "default",
+    '#value' => $d2d_entity->category,
   );
 
   $form['d2dinstance']['users_number'] = array(
     '#type' => 'textfield',
     '#title' => 'USERS NUMBER',
     '#size' => 32,
-    '#value' => -1,
+    '#value' => $d2d_entity->users_number,
     '#disabled' => TRUE,
   );
 
