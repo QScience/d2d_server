@@ -7,6 +7,7 @@
 module_load_include('inc', 'd2d_server', 'includes/db');
 module_load_include('inc', 'd2d_server', 'includes/search');
 module_load_include('inc', 'd2d_server', 'includes/theme');
+module_load_include('inc', 'd2d_server', 'includes/votingapi');
 
 /**
  * Implements hook_entity_info().
@@ -74,7 +75,6 @@ function d2d_server_menu() {
   $items = array();
 
   //main page.
-  //use the $property pid of _patterns_server_list().
   $items['d2d_server_homepage'] = array(
     'title' => 'List of all d2d instances',
     'description' => 'the list of all d2d instances',
@@ -90,6 +90,17 @@ function d2d_server_menu() {
     'title' => 'd2d instance view',
     'description' => 'd2d instance view page',
     'page callback' => '_d2d_instance_view_page',
+    'page arguments' => array(1),
+    'access arguments' => array('view d2d server'),
+  );
+
+  //this one is d2d instance's voting function.
+  //voting: if success, go to d2d/$did page.
+  //        if not, go back to main page.(wrong d2d/$did will redirect to the main page.)
+  $items['d2d/%/voting'] = array(
+    'title' => 'd2d instance voting link',
+    'description' => 'd2d instance voting link',
+    'page callback' => '_d2d_server_voting',
     'page arguments' => array(1),
     'access arguments' => array('view d2d server'),
   );

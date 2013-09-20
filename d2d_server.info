@@ -6,6 +6,7 @@ php = 5.3
 
 dependencies[] = d2d
 dependencies[] = entity
+dependencies[] = votingapi
 
 files[] = includes/d2d_entity.inc
 files[] = includes/d2d_entity.controller.inc

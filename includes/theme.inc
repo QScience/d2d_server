@@ -3,6 +3,8 @@
  * @file
  */
 
+module_load_include('inc', 'd2d_server', 'includes/votingapi');
+
 /**
  * theme d2d instance description part
  */
@@ -10,12 +12,14 @@ function _d2d_instance_view_page_description($de) {
   $content = '<div id="d2d-instance-view-page-description"><dl class="dl-horizontal">';
 
   $content .= '<dt>title</dt><dd>' . $de->title . '</dd>';
+  $content .= '<dt>d2d id</dt><dd>' . $de->d2did. '</dd>';
   $content .= '<dt>description</dt><dd>' . $de->description . '</dd>';
 
   $category_s = l($de->category, 'd2d/category/' . $de->category);
   $content .= '<dt>category</dt><dd>' . $category_s . '</dd>';
 
-  $content .= '<dt>d2d id</dt><dd>' . $de->d2did. '</dd>';
+  $score = _d2d_server_get_voting_score($de->did);
+  $content .= '<dt>score</dt><dd id="d2d-server-view-page-score">' . $score . '</dd>';
 
   $content .= '</dl></div>';
   return $content;
@@ -34,6 +38,8 @@ function _d2d_server_list_page($query, $fieldset_title) {
     t('Title'),
     t('D2DID'),
     t('Created'),
+    t('Score'),
+    t('Like'),
   );
   $ids = array();
   foreach ($query->ordered_results as $value) {
@@ -72,5 +78,13 @@ function _d2d_server_list_table_row($ety_obj) {
   $row[] = l($ety_obj->title, 'd2d/' . $ety_obj->did);
   $row[] = $ety_obj->d2did;
   $row[] = '<i value="' . $ety_obj->updated . '" ' . 'class="upload-time">' . date('j-m-Y H:i:s (P)', $ety_obj->updated) . '</i>';
+  $row[] = _d2d_server_get_voting_score($ety_obj->did);
+  $voted = _d2d_server_check_whether_voted($ety_obj->did);
+  if ($voted) {
+    $row['voting_link'] = '<strong class="voted-sign">voted</strong>';
+  }
+  else {
+    $row['voting_link'] = l(t('voting'), 'd2d/' . $ety_obj->did . '/voting', array('attributes' => array('class' => "voting-link voting-link-$ety_obj->did", 'title' => "voting-link-$ety_obj->did")));
+  }
   return $row;
 }
