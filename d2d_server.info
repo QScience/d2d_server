@@ -1,6 +1,6 @@
 name = D2D Server
 description = "A Server on which you can get all registered d2d instances' all kinds of information"
-package = u_d
+package = d2d
 core = 7.x
 php = 5.3
 
