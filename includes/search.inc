@@ -3,7 +3,7 @@
  * @file
  */
 
-define("NOSEARCHRESULT", " <div class='patterns-server-list-table-wrap'>nothing found.</div>");
+define("D2DSERVER_NOSEARCHRESULT", " <div class='patterns-server-list-table-wrap'>nothing found.</div>");
 module_load_include('inc', 'd2d_server', 'includes/tags');
 
 /**
@@ -92,7 +92,7 @@ function _d2d_server_search($selected, $value) {
         $list .= _d2d_server_list_page($query, $fieldset_title);
       }
       else {
-        $list .= NOSEARCHRESULT;
+        $list .= D2DSERVER_NOSEARCHRESULT;
       }
       $list .= '</div>';
       return $list;
@@ -111,7 +111,7 @@ function _d2d_server_search($selected, $value) {
         }
       }
       if (!$sign_has_table) {
-        $list .= NOSEARCHRESULT;
+        $list .= D2DSERVER_NOSEARCHRESULT;
       }
       $list .= '</div>';
       return $list;
@@ -131,7 +131,7 @@ function _d2d_server_search($selected, $value) {
         $list .= _d2d_server_list_page($query, $fieldset_title);
       }
       else {
-        $list .= NOSEARCHRESULT;
+        $list .= D2DSERVER_NOSEARCHRESULT;
       }
       $list .= '</div>';
       return $list;
@@ -150,7 +150,7 @@ function _d2d_server_search($selected, $value) {
         }
       }
       else {
-        $list .= NOSEARCHRESULT;
+        $list .= D2DSERVER_NOSEARCHRESULT;
       }
       $list .= '</div>';
       return $list;
