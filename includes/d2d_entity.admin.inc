@@ -16,7 +16,9 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
     $newfriends = d2d_server_get_instances_newfriends();
     if (!count($newfriends)) {
       $form['noavaild2d'] = array(
-        '#markup' => "no available new friend d2d instance.",
+        '#prefix' => "All friend instances already added.<br>Go back to the ",
+        '#markup' => l(t('list page'), 'admin/d2d_server'),
+        '#suffix' => '.',
       );
       return $form;
     }

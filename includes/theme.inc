@@ -11,7 +11,7 @@ module_load_include('inc', 'd2d_server', 'includes/votingapi');
 function _d2d_instance_view_page_description($de) {
   $content = '<div id="d2d-instance-view-page-description"><dl class="dl-horizontal">';
 
-  $content .= '<dt>title</dt><dd>' . $de->title . '</dd>';
+  $content .= '<dt>name</dt><dd>' . $de->title . '</dd>';
   $content .= '<dt>d2d id</dt><dd>' . $de->d2did. '</dd>';
   $content .= '<dt>description</dt><dd>' . $de->description . '</dd>';
 
@@ -36,7 +36,7 @@ function _d2d_server_list_page($query, $fieldset_title) {
 
   $header = array(
     t('Category'),
-    t('Title'),
+    t('Name'),
     t('D2DID'),
     t('Updated'),
     t('Score'),
