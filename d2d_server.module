@@ -135,8 +135,10 @@ function d2d_server_menu() {
 }
 
 function _d2d_server_all_list_page() {
+  drupal_add_css(drupal_get_path('module', 'd2d_server') . '/styles/css/mainpage.css');
+  $list = "<div id='d2d-server-world-usage-map'></div>";
   $searchform = drupal_get_form('d2d_server_search');
-  $list = drupal_render($searchform);
+  $list .= drupal_render($searchform);
 
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'd2d_entity')
