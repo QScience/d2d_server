@@ -3,89 +3,51 @@
  * @file
  */
 
+
 /**
+ * 
+ * Performs a remote call to the Patterns Server using D2D in order
+ * to retrieve the pattern file and its type, and returns a Pattern object.
+ *
+ * @param int $limit
+ * @return array List of patterns currently stored in the server
  */
-function d2d_fetchClientInfo_form($form, &$form_state) {
+function _d2d_server_fetch_users_number($d2did)  {
+
+  global $user;
   
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'd2d_entity');
-  $query->propertyOrderBy('created', 'DESC')
-    ->pager(10)
-    ->execute();
+  // Get the current server
+  //$url = variable_get('patterns_client_server', PATTERNS_CLIENT_SERVER);
+  $url = d2d_server_get_url_by_d2did($d2did);
+  dsm($url);
+  $friend = d2d_api_friend_get_by_url($url->url);
+  dsm($friend);
 
-  $entities;
-  if (isset($query->ordered_results) && count($query->ordered_results)) {
-    $ids = array();
-    foreach ($query->ordered_results as $value) {
-      $ids[] = $value->entity_id;
-    }
-    $entities = entity_load('d2d_entity', $ids);
-  }
-  else {
-    $form['noavaild2d'] = array(
-      '#prefix' => "No friend instances been added.<br>Go check whether there are any ",
-      '#markup' => l(t('new friends'), 'admin/d2d_server/add'),
-      '#suffix' => '.',
-    );
-    return $form;
-  }
+  // Prepare arguments for the call. In this case just the maximum number of patterns expected
+  $post = array();
 
-  $header = array(
-    'd2did' => t('D2D ID'),
-    'title' => t('TITLE'),
-    'description' => t('DESCRIPTION'),
-    'infofetched' => t('LAST FETCH TIME'),
-  );
+  // Send the request. We explode the result in two different steps
+  $error_string = '';
+  $result = d2d_call_secure_rpc($friend, 'd2d_client_get_users_number', $post, $error_string);
+  $result = d2d_explode($result);
 
-  $options = array();
-  $default_v = array();
-  $i = 1;
-  foreach ($entities as $entity) {
-    $options[$entity->d2did] = array(
-      'd2did' => $entity->d2did,
-      'title' => $entity->title,
-      'description' => $entity->description,
-      'infofetched' => $entity->infofetched,
-    );
-    if ($i == 1) {
-      $default_v[$entity->d2did] = $entity->d2did;
-      $i++;
-    }
-  }
+  dsm($result);
 
-  $form['table'] = array(
-    '#type' => 'tableselect',
-    '#header' => $header,
-    '#options' => $options,
-    '#default_value' => $default_v,
-    //'#ajax' => array(
-    //  'callback' => 'd2d_entity_form_ajax_callback',
-    //  'wrapper' => 'd2d-entity-form-d2d-instance-fieldset',
-    //  'method' => 'replace',
-    //  'effect' => 'fade',
-    //),
-  );
-
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => 'Fetch Informations',
-    '#weight' => 20,
-  );
-
-  return $form;
+  // Display communication errors if any
+  //if (!$result) {
+  //  // Unknown error
+  //  drupal_set_message(check_plain($url) . ' - ' . t('Unknown error. Please ensure your Peer instance has provided you permisssions to perform this operation.'), 'error');
+  //}else if (!is_null($result['error'])) {
+  //  drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
+  //  return $result['error'];
+  //}else{
+  //  // Exploded the value and parse it to work with an object
+  //  $pattern_info = d2d_explode($result['return']);
+  //  $pattern = patterns_parser_parse($pattern_info['file'], $pattern_info['format']);
+  //  //Add history header including all the pulled pattern as ancestor
+  //  $pattern = patterns_history_add_header($pattern, 'pull', $url, $friend['d2d_id'], array($pattern_info['uuuid']));
+  //  return _patterns_io_save_pattern($pattern, 'clone_' . $pattern_info['uuuid'], $pattern_info['format'], NULL, NULL, $user->name, $pattern_info['uuuid']);
+  //}
 }
 
-/**
- */
-function d2d_fetchClientInfo_form_validate(&$form, &$form_state) {
-}
 
-/**
- */
-function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
-  //dsm($form_state);
-  $ids = array();
-  foreach ($form_state['values']['table'] as $key => $value) {
-    dsm('h' . $value . 'h');
-  }
-}

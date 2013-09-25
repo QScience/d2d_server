@@ -57,3 +57,15 @@ function d2d_server_update_instance($en) {
     ->condition('d2did', $en['d2did'])
     ->execute();
 }
+
+/**
+ * get url field by d2did.
+ */
+function d2d_server_get_url_by_d2did($d2did) {
+  $q = db_select("d2d_entity", 'de') 
+    ->fields('de', array('url'))
+    ->condition('d2did', $d2did)
+    ->execute()
+    ->fetchObject();
+  return $q;
+}

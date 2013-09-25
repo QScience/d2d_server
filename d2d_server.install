@@ -34,6 +34,12 @@ function d2d_server_schema() {
         'type' => 'text',
         'description' => 'Description of website.',
       ),
+      'url' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'xmlrpc url.',
+      ),
       'category' => array(
         'type' => 'varchar',
         'length' => 255,

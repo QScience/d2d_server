@@ -67,7 +67,8 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
         $d2d_entity->d2did = $newfriend->d2d_id;
         $d2d_entity->title= $newfriend->name;
         $d2d_entity->description = $newfriend->description;
-        $d2d_entity->category ='default';
+        $d2d_entity->url = $newfriend->url;
+        $d2d_entity->category = 'default';
         $d2d_entity->users_number = -1;
       }
       else {
@@ -76,6 +77,7 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
         $d2d_entity->d2did = $newfriend->d2d_id;
         $d2d_entity->title= $newfriend->name;
         $d2d_entity->description = $newfriend->description;
+        $d2d_entity->url = $newfriend->url;
         $d2d_entity->category ='default';
         $d2d_entity->users_number = -1;
       }
@@ -106,6 +108,14 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
     '#type' => 'textarea',
     '#title' => 'WEBSITE DESCRIPTION',
     '#value' => $d2d_entity->description,
+  );
+
+  $form['d2dinstance']['url'] = array(
+    '#type' => 'textfield',
+    '#title' => 'URL',
+    '#value' => $d2d_entity->url,
+    '#disabled' => TRUE,
+    '#size' => 100,
   );
 
   $form['d2dinstance']['category'] = array(
