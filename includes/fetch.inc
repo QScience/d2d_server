@@ -87,8 +87,15 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
   //dsm($form_state);
 
   $ids = array();
+  $s = 0;
+  $s2 = 0;
   foreach ($form_state['values']['table'] as $key => $value) {
-    _d2d_server_fetch_users_number($value);
+    $s = _d2d_server_fetch_users_number($value);
+    if ($s !== -1) {
+      $s2=1;
+    }
   }
-  //return "hel";
+  if (!$s2) {
+    drupal_set_message("Please choose at least one.", 'error');
+  }
 }

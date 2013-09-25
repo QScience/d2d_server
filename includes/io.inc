@@ -20,8 +20,7 @@ function _d2d_server_fetch_users_number($d2did)  {
   //$url = variable_get('patterns_client_server', PATTERNS_CLIENT_SERVER);
   $url = d2d_server_get_url_by_d2did($d2did);
   if (!$url) {
-    drupal_set_message("Please choose at least one.", 'error');
-    return;
+    return -1;
   }
   $friend = d2d_api_friend_get_by_url($url->url);
 
@@ -45,6 +44,5 @@ function _d2d_server_fetch_users_number($d2did)  {
   }else{
     d2d_server_set_users_number_by_d2did($d2did, $result['return']);
   }
+
 }
-
-
