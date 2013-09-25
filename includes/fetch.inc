@@ -98,4 +98,7 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
   if (!$s2) {
     drupal_set_message("Please choose at least one.", 'error');
   }
+  else {
+    drupal_set_message("Fetch Information Success.");
+  }
 }
