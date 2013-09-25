@@ -61,6 +61,13 @@ function d2d_server_schema() {
         'unsigned' => TRUE,
         'description' => 'The Unix timestamp indicating when the webiste was updated.',
       ),
+      'infofetched' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'unsigned' => TRUE,
+        'description' => 'The Unix timestamp indicating when the information of clients was fetched.',
+      ),
     ),
     'primary key' => array('did'),
     'unique keys' => array('d2did' => array('d2did')),
