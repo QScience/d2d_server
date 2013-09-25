@@ -11,9 +11,12 @@ module_load_include('inc', 'd2d_server', 'includes/votingapi');
 function _d2d_instance_view_page_description($de) {
   $content = '<div id="d2d-instance-view-page-description"><dl class="dl-horizontal">';
 
-  $content .= '<dt>name</dt><dd>' . $de->title . '</dd>';
+  $url = substr($de->url, 0, -10);
+  $title = l($de->title, $url);
+  $content .= '<dt>name</dt><dd>' . $title . '</dd>';
   $content .= '<dt>d2d id</dt><dd>' . $de->d2did. '</dd>';
   $content .= '<dt>description</dt><dd>' . $de->description . '</dd>';
+
 
   $category_s = l($de->category, 'd2d/category/' . $de->category);
   $content .= '<dt>category</dt><dd>' . $category_s . '</dd>';

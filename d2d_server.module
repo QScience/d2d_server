@@ -219,7 +219,8 @@ function _d2d_instance_view_page($did) {
 
 }
 
-
+/**
+ */
 function _d2d_server_list_basicpage($property, $arg) {
   drupal_set_title($property . ': ' . $arg);
 
