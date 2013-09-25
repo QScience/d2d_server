@@ -41,11 +41,12 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
   $default_v = array();
   $i = 1;
   foreach ($entities as $entity) {
+    $fetchtime = date('j-m-Y H:i:s (P)', $entity->infofetched);
     $options[$entity->d2did] = array(
       'd2did' => $entity->d2did,
       'title' => $entity->title,
       'description' => $entity->description,
-      'infofetched' => $entity->infofetched,
+      'infofetched' => $fetchtime,
     );
     if ($i == 1) {
       $default_v[$entity->d2did] = $entity->d2did;
@@ -57,7 +58,7 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
     '#type' => 'tableselect',
     '#header' => $header,
     '#options' => $options,
-    '#default_value' => $default_v,
+    //'#default_value' => $default_v,
     //'#ajax' => array(
     //  'callback' => 'd2d_entity_form_ajax_callback',
     //  'wrapper' => 'd2d-entity-form-d2d-instance-fieldset',
@@ -84,8 +85,10 @@ function d2d_fetchClientInfo_form_validate(&$form, &$form_state) {
  */
 function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
   //dsm($form_state);
+
   $ids = array();
   foreach ($form_state['values']['table'] as $key => $value) {
-    dsm('h' . $value . 'h');
+    _d2d_server_fetch_users_number($value);
   }
+  //return "hel";
 }

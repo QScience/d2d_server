@@ -69,3 +69,16 @@ function d2d_server_get_url_by_d2did($d2did) {
     ->fetchObject();
   return $q;
 }
+
+/**
+ * set users_number by d2did.
+ */
+function d2d_server_set_users_number_by_d2did($d2did, $users_number) {
+  db_update("d2d_entity")
+    ->fields( array(
+      'users_number' => $users_number,
+      'infofetched' => REQUEST_TIME,
+      ))
+    ->condition('d2did', $d2did)
+    ->execute();
+}
