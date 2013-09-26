@@ -92,6 +92,7 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
   foreach ($form_state['values']['table'] as $key => $value) {
     $s = _d2d_server_fetch_users_number($value);
     _d2d_server_fetch_site_information($value);
+    _d2d_server_fetch_nodes_number($value);
     if ($s !== -1) {
       $s2=1;
     }

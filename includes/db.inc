@@ -84,13 +84,26 @@ function d2d_server_set_users_number_by_d2did($d2did, $users_number) {
 }
 
 /**
- * set users_number by d2did.
+ * set site title and site slogan by d2did.
  */
 function d2d_server_set_site_info_by_d2did($d2did, $site_info) {
   db_update("d2d_entity")
     ->fields( array(
       'site_name' => $site_info['name'],
       'site_slogan' => $site_info['slogan'],
+      'infofetched' => REQUEST_TIME,
+      ))
+    ->condition('d2did', $d2did)
+    ->execute();
+}
+
+/**
+ * set nodes number by d2did.
+ */
+function d2d_server_set_nodes_number_by_d2did($d2did, $nodes_number) {
+  db_update("d2d_entity")
+    ->fields( array(
+      'nodes_number' => $nodes_number,
       'infofetched' => REQUEST_TIME,
       ))
     ->condition('d2did', $d2did)
