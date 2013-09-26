@@ -13,7 +13,12 @@ function _d2d_instance_view_page_description($de) {
 
   $url = substr($de->url, 0, -10);
   $title = l($de->title, $url);
-  $content .= '<dt>name</dt><dd>' . $title . '</dd>';
+  $content .= '<dt>d2d instance name</dt><dd>' . $title . '</dd>';
+  //$name = l($de->site_name, $url);
+  $content .= '<dt>website name</dt><dd>' . $de->site_name . '</dd>';
+  if (!empty($de->site_slogan)) {
+    $content .= '<dt>website slogan</dt><dd>' . $de->site_slogan . '</dd>';
+  }
   $content .= '<dt>d2d id</dt><dd>' . $de->d2did. '</dd>';
   $content .= '<dt>description</dt><dd>' . $de->description . '</dd>';
 
@@ -24,6 +29,7 @@ function _d2d_instance_view_page_description($de) {
   $score = _d2d_server_get_voting_score($de->did);
   $content .= '<dt>score</dt><dd id="d2d-server-view-page-score">' . $score . '</dd>';
   $content .= '<dt>users number</dt><dd>' . $de->users_number . '</dd>';
+  $content .= '<dt>nodes number</dt><dd>' . $de->nodes_number . '</dd>';
 
   $content .= '</dl></div>';
   return $content;
