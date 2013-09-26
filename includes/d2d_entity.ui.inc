@@ -57,7 +57,7 @@ class D2DEntityUIController extends EntityDefaultUIController {
    */
   protected function overviewTableHeaders($conditions, $rows, $additional_header = array()) {
     $header = $additional_header;
-    array_unshift($header, t('Name'));
+    array_unshift($header, t('D2D Instance Name'));
     array_unshift($header, t('Did'));
     if (!empty($this->entityInfo['exportable'])) {
       $header[] = t('Status');
@@ -65,7 +65,10 @@ class D2DEntityUIController extends EntityDefaultUIController {
     // Add operations with the right colspan.
     $header[] = t('D2D ID');
     $header[] = t('Category');
+    $header[] = t('Site Name');
+    $header[] = t('Site Slogan');
     $header[] = t('Users Number');
+    $header[] = t('Nodes Number');
     $header[] = array('data' => t('Operations'), 'colspan' => $this->operationCount());
     return $header;
   }
@@ -99,7 +102,11 @@ class D2DEntityUIController extends EntityDefaultUIController {
 
     $row[] = $ety_obj->d2did;
     $row[] = l($ety_obj->category, '/d2d/category/' . $ety_obj->category);
+
+    $row[] = $ety_obj->site_name;
+    $row[] = $ety_obj->site_slogan;
     $row[] = $ety_obj->users_number;
+    $row[] = $ety_obj->nodes_number;
 
     // Add a row for the exportable status.
     if (!empty($this->entityInfo['exportable'])) {
