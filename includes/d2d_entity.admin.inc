@@ -68,8 +68,11 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
         $d2d_entity->title= $newfriend->name;
         $d2d_entity->description = $newfriend->description;
         $d2d_entity->url = $newfriend->url;
+        $d2d_entity->site_name = "not fetched yet";
+        $d2d_entity->site_slogan = "not fetched yet";
         $d2d_entity->category = 'default';
         $d2d_entity->users_number = -1;
+        $d2d_entity->nodes_number= -1;
       }
       else {
         $newfriend = array_shift($newfriends);
@@ -78,8 +81,11 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
         $d2d_entity->title= $newfriend->name;
         $d2d_entity->description = $newfriend->description;
         $d2d_entity->url = $newfriend->url;
+        $d2d_entity->site_name = "not fetched yet";
+        $d2d_entity->site_slogan = "not fetched yet";
         $d2d_entity->category ='default';
         $d2d_entity->users_number = -1;
+        $d2d_entity->nodes_number= -1;
       }
     }
   }
@@ -99,14 +105,14 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
   
   $form['d2dinstance']['title'] = array(
     '#type' => 'textfield',
-    '#title' => 'WEBSITE TITLE',
+    '#title' => 'D2D INSTANCE TITLE',
     '#value' => $d2d_entity->title,
     '#maxlength' => 100,
   );
 
   $form['d2dinstance']['description'] = array(
     '#type' => 'textarea',
-    '#title' => 'WEBSITE DESCRIPTION',
+    '#title' => 'D2D INSTANCE DESCRIPTION',
     '#value' => $d2d_entity->description,
   );
 
@@ -125,6 +131,22 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
     '#value' => $d2d_entity->category,
   );
 
+  $form['d2dinstance']['site_name'] = array(
+    '#type' => 'textfield',
+    '#title' => 'WEBSITE NAME',
+    '#value' => $d2d_entity->site_name,
+    '#maxlength' => 100,
+    '#disabled' => TRUE,
+  );
+
+  $form['d2dinstance']['site_slogan'] = array(
+    '#type' => 'textfield',
+    '#title' => 'WEBSITE SLOGAN',
+    '#value' => $d2d_entity->site_slogan,
+    '#maxlength' => 100,
+    '#disabled' => TRUE,
+  );
+
   $form['d2dinstance']['users_number'] = array(
     '#type' => 'textfield',
     '#title' => 'USERS NUMBER',
@@ -132,6 +154,15 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
     '#value' => $d2d_entity->users_number,
     '#disabled' => TRUE,
   );
+
+  $form['d2dinstance']['nodes_number'] = array(
+    '#type' => 'textfield',
+    '#title' => 'NODES NUMBER',
+    '#size' => 32,
+    '#value' => $d2d_entity->nodes_number,
+    '#disabled' => TRUE,
+  );
+
 
   field_attach_form('d2d_entity', $d2d_entity, $form['d2dinstance'], $form_state);
 

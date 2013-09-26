@@ -28,11 +28,11 @@ function d2d_server_schema() {
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
-        'description' => 'website title.',
+        'description' => 'd2d instance title.',
       ),
       'description' => array(
         'type' => 'text',
-        'description' => 'Description of website.',
+        'description' => 'Description of d2d instance.',
       ),
       'url' => array(
         'type' => 'varchar',
@@ -46,12 +46,31 @@ function d2d_server_schema() {
         'not null' => TRUE,
         'description' => 'Category of the website.',
       ),
+      'site_name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'website name.',
+      ),
+      'site_slogan' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'website slogan.',
+      ),
       'users_number' => array(
         'type' => 'int',
         'length' => 50,
         'default' => 0,
         'nut null' => TRUE,
         'description' => 'the number of the website\'s user.',
+      ),
+      'nodes_number' => array(
+        'type' => 'int',
+        'length' => 50,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the number of the website\'s node.',
       ),
      'created' => array(
         'type' => 'int',

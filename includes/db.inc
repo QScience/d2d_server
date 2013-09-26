@@ -82,3 +82,17 @@ function d2d_server_set_users_number_by_d2did($d2did, $users_number) {
     ->condition('d2did', $d2did)
     ->execute();
 }
+
+/**
+ * set users_number by d2did.
+ */
+function d2d_server_set_site_info_by_d2did($d2did, $site_info) {
+  db_update("d2d_entity")
+    ->fields( array(
+      'site_name' => $site_info['name'],
+      'site_slogan' => $site_info['slogan'],
+      'infofetched' => REQUEST_TIME,
+      ))
+    ->condition('d2did', $d2did)
+    ->execute();
+}
