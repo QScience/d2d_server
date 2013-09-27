@@ -109,3 +109,10 @@ function d2d_server_set_nodes_number_by_d2did($d2did, $nodes_number) {
     ->condition('d2did', $d2did)
     ->execute();
 }
+
+/**
+ * set tags by d2did.
+ */
+function d2d_server_set_tags_by_d2did($d2did, $nodes_number) {
+
+}
