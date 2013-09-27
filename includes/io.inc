@@ -139,7 +139,6 @@ function _d2d_server_fetch_tags($d2did)  {
   $error_string = '';
   $result = d2d_call_secure_rpc($friend, 'd2d_client_get_tags', $post, $error_string);
   $result = d2d_explode($result);
-  dsm ($result);
 
   //dsm($result);
 

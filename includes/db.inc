@@ -71,6 +71,18 @@ function d2d_server_get_url_by_d2did($d2did) {
 }
 
 /**
+ */
+function d2d_server_get_d2dentity_by_d2did($d2did) {
+  $q = db_select("d2d_entity", 'de') 
+    ->fields('de', array('did'))
+    ->condition('d2did', $d2did)
+    ->execute()
+    ->fetchObject();
+  $de = entity_load('d2d_entity', array($q->did));
+  return $de[$q->did];
+}
+
+/**
  * set users_number by d2did.
  */
 function d2d_server_set_users_number_by_d2did($d2did, $users_number) {
@@ -113,6 +125,76 @@ function d2d_server_set_nodes_number_by_d2did($d2did, $nodes_number) {
 /**
  * set tags by d2did.
  */
-function d2d_server_set_tags_by_d2did($d2did, $nodes_number) {
+function d2d_server_set_tags_by_d2did($d2did, $tags) {
 
+  //get the first taxonomy field of d2d_entity and the vocabulary used by the field.
+  $has_tags_field = FALSE;
+  $f_name;
+  $fields_info = field_info_instances('d2d_entity');
+  if (isset($fields_info['d2d_entity']) && count($fields_info['d2d_entity'])) {
+    $fields_info = $fields_info['d2d_entity'];
+    foreach ($fields_info as $field_name => $_value) {
+      $field_info = field_info_field($field_name);
+      if ($field_info['type'] == 'taxonomy_term_reference') {
+        $f_name = $field_name;
+        $has_tags_field = TRUE;
+        break;
+      }
+    }
+  }
+  if (!$has_tags_field) {
+    drupal_set_message("there is no tags field in d2d_entity, so the tags fetch from the client '$tags' is not stored for now.", "warning");
+    return;
+  }
+  $field_info = field_info_field($f_name);
+  $vocabulary = $field_info['settings']['allowed_values'][0]['vocabulary'];
+  $v_obj = taxonomy_vocabulary_machine_name_load($vocabulary);
+  $terms = d2d_server_get_taxonomy_terms_byvid($v_obj->vid);
+  //$terms = array_keys($terms);
+  dsm($f_name);
+  dsm($terms);
+
+  //get the tags of client.
+  $split_strings = preg_split('/[\,]+/', $tags);
+  $tags_clean = array();
+  foreach ($split_strings as $value) {
+    $value = trim($value);
+    if (!empty($value)) {
+      $tags_clean[] = $value; 
+    }
+  }
+  dsm($tags_clean);
+
+  $de = d2d_server_get_d2dentity_by_d2did($d2did);
+  dsm($de);
+  return;
+
+  foreach ($tags_clean as $tag) {
+    foreach ($terms as $obj) {
+      if ($tag == $obj->name) {
+        //check whether existed or not.
+        foreach($de->$f_name[und] as $key => $value) {
+          if ($value['tid'] == $tag) {
+            break;
+          }
+        }
+        break;
+      }
+    }
+    //store new items.
+    
+  }
+
+}
+
+
+/**
+ */
+function d2d_server_get_taxonomy_terms_byvid($vid) {
+  $q = db_select("taxonomy_term_data", 't')
+    ->fields('t', array('tid', 'name'))
+    ->condition('vid', $vid)
+    ->execute()
+    ->fetchAll();
+  return $q;
 }
