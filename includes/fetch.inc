@@ -67,10 +67,34 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
     //),
   );
 
-  $form['submit'] = array(
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+  $form['actions']['fetchall'] = array(
     '#type' => 'submit',
-    '#value' => 'Fetch Informations',
+    '#value' => 'Fetch All Informations',
+    '#submit' => array('d2d_fetchClientInfo_form_submit'),
     '#weight' => 20,
+  );
+  $form['actions']['fetchusers'] = array(
+    '#type' => 'submit',
+    '#value' => t('Fetch Users Number'),
+    '#submit' => array('d2d_fetchClientInfo_form_submit_user'),
+  );
+  $form['actions']['fetchnodes'] = array(
+    '#type' => 'submit',
+    '#value' => t('Fetch Nodes Number'),
+    '#submit' => array('d2d_fetchClientInfo_form_submit_node'),
+  );
+  $form['actions']['fetchtags'] = array(
+    '#type' => 'submit',
+    '#value' => t('Fetch Tags'),
+    '#submit' => array('d2d_fetchClientInfo_form_submit_tags'),
+  );
+  $form['actions']['fetchsiteinfo'] = array(
+    '#type' => 'submit',
+    '#value' => t('Fetch Site Informations'),
+    '#submit' => array('d2d_fetchClientInfo_form_submit_siteinfo'),
   );
 
   return $form;
@@ -94,6 +118,82 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
     _d2d_server_fetch_site_information($value);
     _d2d_server_fetch_nodes_number($value);
     _d2d_server_fetch_tags($value);
+    if ($s !== -1) {
+      $s2=1;
+    }
+  }
+  if (!$s2) {
+    drupal_set_message("Please choose at least one.", 'error');
+  }
+  else {
+    drupal_set_message("Fetch Information Success.");
+  }
+}
+
+function d2d_fetchClientInfo_form_submit_user(&$form, &$form_state) {
+
+  $ids = array();
+  $s = 0;
+  $s2 = 0;
+  foreach ($form_state['values']['table'] as $key => $value) {
+    $s = _d2d_server_fetch_users_number($value);
+    if ($s !== -1) {
+      $s2=1;
+    }
+  }
+  if (!$s2) {
+    drupal_set_message("Please choose at least one.", 'error');
+  }
+  else {
+    drupal_set_message("Fetch Information Success.");
+  }
+}
+
+function d2d_fetchClientInfo_form_submit_node(&$form, &$form_state) {
+
+  $ids = array();
+  $s = 0;
+  $s2 = 0;
+  foreach ($form_state['values']['table'] as $key => $value) {
+    $s = _d2d_server_fetch_nodes_number($value);
+    if ($s !== -1) {
+      $s2=1;
+    }
+  }
+  if (!$s2) {
+    drupal_set_message("Please choose at least one.", 'error');
+  }
+  else {
+    drupal_set_message("Fetch Information Success.");
+  }
+}
+
+function d2d_fetchClientInfo_form_submit_tags(&$form, &$form_state) {
+
+  $ids = array();
+  $s = 0;
+  $s2 = 0;
+  foreach ($form_state['values']['table'] as $key => $value) {
+    $s = _d2d_server_fetch_tags($value);
+    if ($s !== -1) {
+      $s2=1;
+    }
+  }
+  if (!$s2) {
+    drupal_set_message("Please choose at least one.", 'error');
+  }
+  else {
+    drupal_set_message("Fetch Information Success.");
+  }
+}
+
+function d2d_fetchClientInfo_form_submit_siteinfo(&$form, &$form_state) {
+
+  $ids = array();
+  $s = 0;
+  $s2 = 0;
+  foreach ($form_state['values']['table'] as $key => $value) {
+    $s = _d2d_server_fetch_site_information($value);
     if ($s !== -1) {
       $s2=1;
     }
