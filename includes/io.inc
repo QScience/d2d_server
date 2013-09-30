@@ -80,6 +80,7 @@ function _d2d_server_fetch_site_information($d2did)  {
     return $result['error'];
   }else{
     d2d_server_set_site_info_by_d2did($d2did, d2d_explode($result['return']));
+    return 0;
   }
 }
 
@@ -118,6 +119,7 @@ function _d2d_server_fetch_nodes_number($d2did)  {
     return $result['error'];
   }else{
     d2d_server_set_nodes_number_by_d2did($d2did, $result['return']);
+    return 0;
   }
 }
 
@@ -156,5 +158,6 @@ function _d2d_server_fetch_tags($d2did)  {
     return $result['error'];
   }else{
     d2d_server_set_tags_by_d2did($d2did, $result['return']);
+    return 0;
   }
 }
