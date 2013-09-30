@@ -34,11 +34,13 @@ function _d2d_server_fetch_users_number($d2did)  {
   if (!$result) {
     // Unknown error
     drupal_set_message(check_plain($url) . ' - ' . t('Unknown error. Please ensure your Peer instance has provided you permisssions to perform this operation.'), 'error');
+    return -1;
   }else if (!is_null($result['error'])) {
     drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
     return $result['error'];
   }else{
     d2d_server_set_users_number_by_d2did($d2did, $result['return']);
+    return 0;
   }
 
 }
