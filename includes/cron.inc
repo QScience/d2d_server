@@ -26,6 +26,18 @@ function d2d_server_cron() {
   foreach ($entities as $entity) {
     $queue->createItem($entity->d2did);
   }
+  $queue = DrupalQueue::get("get_nodes_number");
+  foreach ($entities as $entity) {
+    $queue->createItem($entity->d2did);
+  }
+  $queue = DrupalQueue::get("get_site_info");
+  foreach ($entities as $entity) {
+    $queue->createItem($entity->d2did);
+  }
+  $queue = DrupalQueue::get("get_tags");
+  foreach ($entities as $entity) {
+    $queue->createItem($entity->d2did);
+  }
 }
 
 /**
@@ -34,6 +46,18 @@ function d2d_server_cron() {
 function d2d_server_cron_queue_info() {
   $queues['get_users_number'] = array(
     'worker callback' => '_d2d_server_fetch_users_number',
+    'time' => 20,
+  );
+  $queues['get_nodes_number'] = array(
+    'worker callback' => '_d2d_server_fetch_nodes_number',
+    'time' => 20,
+  );
+  $queues['get_site_info'] = array(
+    'worker callback' => '_d2d_server_fetch_site_information',
+    'time' => 20,
+  );
+  $queues['get_tags'] = array(
+    'worker callback' => '_d2d_server_fetch_tags',
     'time' => 20,
   );
   return $queues;
