@@ -13,7 +13,6 @@ function d2d_server_get_instances_newfriends() {
     ->condition("friendship_state", 3)
     ->execute()
     ->fetchAllAssoc('d2d_id');
-  //dsm($q);
 
   $p = db_select("d2d_entity", 'de')
     ->fields('de', array('d2did'))
@@ -26,7 +25,6 @@ function d2d_server_get_instances_newfriends() {
       $results[$key] = $value;
     }
   }
-  //dsm($results);
   return $results;
 }
 
@@ -129,14 +127,13 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
 
   //get the first taxonomy field of d2d_entity and the vocabulary used by the field.
   $has_tags_field = FALSE;
-  $f_name;
+  $field_info;
   $fields_info = field_info_instances('d2d_entity');
   if (isset($fields_info['d2d_entity']) && count($fields_info['d2d_entity'])) {
     $fields_info = $fields_info['d2d_entity'];
     foreach ($fields_info as $field_name => $_value) {
       $field_info = field_info_field($field_name);
       if ($field_info['type'] == 'taxonomy_term_reference') {
-        $f_name = $field_name;
         $has_tags_field = TRUE;
         break;
       }
@@ -146,13 +143,10 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
     drupal_set_message("there is no tags field in d2d_entity, so the tags fetch from the client '$tags' is not stored for now.", "warning");
     return;
   }
-  $field_info = field_info_field($f_name);
   $vocabulary = $field_info['settings']['allowed_values'][0]['vocabulary'];
   $v_obj = taxonomy_vocabulary_machine_name_load($vocabulary);
   $terms = d2d_server_get_taxonomy_terms_byvid($v_obj->vid);
   //$terms = array_keys($terms);
-  dsm($f_name);
-  dsm($terms);
 
   //get the tags of client.
   $split_strings = preg_split('/[\,]+/', $tags);
@@ -163,27 +157,63 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
       $tags_clean[] = $value; 
     }
   }
-  dsm($tags_clean);
-
-  $de = d2d_server_get_d2dentity_by_d2did($d2did);
-  dsm($de);
-  return;
-
+  
+  $tids = array();
   foreach ($tags_clean as $tag) {
-    foreach ($terms as $obj) {
-      if ($tag == $obj->name) {
-        //check whether existed or not.
-        foreach($de->$f_name[und] as $key => $value) {
-          if ($value['tid'] == $tag) {
-            break;
-          }
-        }
+    $tag_exist = FALSE;
+    foreach($terms as $term) {
+      if ($tag == $term->name) {
+        $tids[] = $term->tid;
+        $tag_exist = TRUE;
         break;
       }
     }
-    //store new items.
-    
+    if (!$tag_exist) {
+      $tm = new stdclass;
+      $tm->vid = $v_obj->vid;
+      $tm->name = $tag;
+      taxonomy_term_save($tm);
+      $tids[] = $tm->tid;
+    }
   }
+
+  $de = d2d_server_get_d2dentity_by_d2did($d2did);
+
+  global $language;
+
+  $f_name = $field_info['field_name'];
+  $fields = array($field_info['id']);
+  $temp = $de->$f_name;
+  foreach ($temp['und'] as $key => $value) {
+    $index = array_search($value['tid'], $tids);
+    if ($index !== FALSE) {
+      unset($tids[$index]);
+    }
+  }
+
+  $cn = count($temp['und']);
+  
+  foreach ($tids as $tid) {
+    $temp['und'][$cn++]['tid'] = $tid;
+  }
+
+
+  $de->$f_name = $temp;
+  field_sql_storage_field_storage_write('d2d_entity', $de, 'update', $fields);
+  cache_clear_all("field:d2d_entity:$de->did", "cache_field");
+  
+
+  //foreach ($tags_clean as $tag) {
+  //  foreach ($terms as $obj) {
+  //    if ($tag == $obj->name) {
+  //      //check whether existed or not.
+  //      }
+  //      break;
+  //    }
+  //  }
+  //  //store new items.
+  //  
+  //}
 
 }
 
