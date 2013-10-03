@@ -5,7 +5,7 @@
 
 
 /**
- * Performs a remote call to the d2d_client using D2D in order
+ * Performs a remote call to the d2d_passport using D2D in order
  * to retrieve the users number.
  */
 function _d2d_server_fetch_users_number($d2did)  {
@@ -13,7 +13,7 @@ function _d2d_server_fetch_users_number($d2did)  {
   global $user;
   
   // Get the current server
-  //$url = variable_get('patterns_client_server', PATTERNS_CLIENT_SERVER);
+  //$url = variable_get('patterns_passport_server', PATTERNS_passport_SERVER);
   $url = d2d_server_get_url_by_d2did($d2did);
   if (!$url) {
     return -1;
@@ -25,7 +25,7 @@ function _d2d_server_fetch_users_number($d2did)  {
 
   // Send the request. We explode the result in two different steps
   $error_string = '';
-  $result = d2d_call_secure_rpc($friend, 'd2d_client_get_users_number', $post, $error_string);
+  $result = d2d_call_secure_rpc($friend, 'd2d_passport_get_users_number', $post, $error_string);
   $result = d2d_explode($result);
 
   //dsm($result);
@@ -46,7 +46,7 @@ function _d2d_server_fetch_users_number($d2did)  {
 }
 
 /**
- * Performs a remote call to the d2d_client using D2D in order
+ * Performs a remote call to the d2d_passport using D2D in order
  * to retrieve the site name and site slogan.
  */
 function _d2d_server_fetch_site_information($d2did)  {
@@ -65,7 +65,7 @@ function _d2d_server_fetch_site_information($d2did)  {
 
   // Send the request. We explode the result in two different steps
   $error_string = '';
-  $result = d2d_call_secure_rpc($friend, 'd2d_client_get_site_information', $post, $error_string);
+  $result = d2d_call_secure_rpc($friend, 'd2d_passport_get_site_information', $post, $error_string);
   $result = d2d_explode($result);
 
   //dsm($result);
@@ -85,7 +85,7 @@ function _d2d_server_fetch_site_information($d2did)  {
 }
 
 /**
- * Performs a remote call to the d2d_client using D2D in order
+ * Performs a remote call to the d2d_passport using D2D in order
  * to retrieve nodes number.
  */
 function _d2d_server_fetch_nodes_number($d2did)  {
@@ -104,7 +104,7 @@ function _d2d_server_fetch_nodes_number($d2did)  {
 
   // Send the request. We explode the result in two different steps
   $error_string = '';
-  $result = d2d_call_secure_rpc($friend, 'd2d_client_get_nodes_number', $post, $error_string);
+  $result = d2d_call_secure_rpc($friend, 'd2d_passport_get_nodes_number', $post, $error_string);
   $result = d2d_explode($result);
 
   //dsm($result);
@@ -124,8 +124,8 @@ function _d2d_server_fetch_nodes_number($d2did)  {
 }
 
 /**
- * Performs a remote call to the d2d_client using D2D in order
- * to retrieve tags set by d2d client.
+ * Performs a remote call to the d2d_passport using D2D in order
+ * to retrieve tags set by d2d passport.
  */
 function _d2d_server_fetch_tags($d2did)  {
 
@@ -143,7 +143,7 @@ function _d2d_server_fetch_tags($d2did)  {
 
   // Send the request. We explode the result in two different steps
   $error_string = '';
-  $result = d2d_call_secure_rpc($friend, 'd2d_client_get_tags', $post, $error_string);
+  $result = d2d_call_secure_rpc($friend, 'd2d_passport_get_tags', $post, $error_string);
   $result = d2d_explode($result);
 
   //dsm($result);

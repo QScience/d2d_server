@@ -6,11 +6,11 @@
 $(document).ready(function() {
 
   //voting link ajax.
-  $('body').delegate('.d2d-server-list-table a[class*="voting-link-"]', 'click', function () {
+  $('body').delegate('.d2d-server-list-table a[class*="d2d-server-voting-link-"]', 'click', function () {
     var class_pid = $(this).attr('title');
     var link = $('.' + class_pid);
     $(link).each(function() {
-      $(this).parent().children('.voting-link').addClass('voting-link-odd');
+      $(this).parent().children('.d2d-server-voting-link').addClass('d2d-server-voting-link-odd');
     });
 
     var url = $(this).attr('href');
@@ -28,7 +28,7 @@ $(document).ready(function() {
         $(link_parent).prev().html($score.text());
         if ($vote.text() == 'voted'){
           $(link_parent).html($vote.wrap("<div></div>").parent().html());
-          $(link_parent).children('.voted-sign').addClass('voting-link-odd');
+          $(link_parent).children('.d2d-server-voted-sign').addClass('d2d-server-voting-link-odd');
         }
         else {
           $(link_parent).html($vote.wrap("<div></div>").parent().html());

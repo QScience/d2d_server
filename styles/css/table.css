@@ -1,4 +1,4 @@
-.voting-link {
+.d2d-server-voting-link {
   background: url("../img/like_white.png") no-repeat scroll 0 0 transparent;
   display: block;
   height: 25px;
@@ -6,7 +6,7 @@
   width: 27px;
 }
 
-.voting-link-odd {
+.d2d-server-voting-link-odd {
   background: url("../img/like_black.png") no-repeat scroll 0 0 transparent;
   display: block;
   height: 25px;
@@ -14,7 +14,7 @@
   width: 27px;
 }
 
-.voted-sign{
+.d2d-server-voted-sign{
   background: url("../img/like_black.png") no-repeat scroll 0 0 transparent;
   display: block;
   height: 25px;

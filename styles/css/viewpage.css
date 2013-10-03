@@ -43,7 +43,7 @@ dl dd {
 	margin-left: 180px;
 }
 
-.voting-link {
+.d2d-server-voting-link {
   float: right;
   margin-top: 3px;
   background: url("../img/like_white.png") no-repeat scroll 0 0 transparent;
@@ -54,7 +54,7 @@ dl dd {
   margin-right: 6px;
 }
 
-.voted-sign{
+.d2d-server-voted-sign{
   float: right;
   margin-top: 3px;
   background: url("../img/like_black.png") no-repeat scroll 0 0 transparent;
