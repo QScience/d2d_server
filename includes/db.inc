@@ -183,20 +183,27 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
 
   $f_name = $field_info['field_name'];
   $fields = array($field_info['id']);
+  
   $temp = $de->$f_name;
-  foreach ($temp['und'] as $key => $value) {
-    $index = array_search($value['tid'], $tids);
-    if ($index !== FALSE) {
-      unset($tids[$index]);
+  $cn = 0;
+  if (isset($temp['und'])) {
+    foreach ($temp['und'] as $key => $value) {
+      $index = array_search($value['tid'], $tids);
+      if ($index !== FALSE) {
+        unset($tids[$index]);
+      }
     }
+    $cn = count($temp['und']);
   }
 
-  $cn = count($temp['und']);
-  
   foreach ($tids as $tid) {
     $temp['und'][$cn++]['tid'] = $tid;
   }
 
+  $tags_limit = $field_info['cardinality'];
+  if ($cn > $tags_limit) {
+    drupal_set_message(t("Only $tags_limit tags saved because of your tags field setting."), 'warning');
+  }
 
   $de->$f_name = $temp;
   field_sql_storage_field_storage_write('d2d_entity', $de, 'update', $fields);
