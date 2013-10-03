@@ -33,7 +33,7 @@ function _d2d_server_fetch_users_number($d2did)  {
   // Display communication errors if any
   if (!$result) {
     // Unknown error
-    drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please ensure your Peer instance has provided you permisssions to perform this operation.'), 'error');
+    drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
   }else if (!is_null($result['error'])) {
     drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
@@ -73,7 +73,7 @@ function _d2d_server_fetch_site_information($d2did)  {
   // Display communication errors if any
   if (!$result) {
     // Unknown error
-    drupal_set_message($d2did . ' - ' . t('Fetch site information Error. Please ensure your Peer instance has provided you permisssions to perform this operation.'), 'error');
+    drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
   }else if (!is_null($result['error'])) {
     drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
@@ -112,7 +112,7 @@ function _d2d_server_fetch_nodes_number($d2did)  {
   // Display communication errors if any
   if (!$result) {
     // Unknown error
-    drupal_set_message($d2did . ' - ' . t('Fetch nodes number Error. Please ensure your Peer instance has provided you permisssions to perform this operation.'), 'error');
+    drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
   }else if (!is_null($result['error'])) {
     drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
@@ -151,7 +151,7 @@ function _d2d_server_fetch_tags($d2did)  {
   // Display communication errors if any
   if (!$result) {
     // Unknown error
-    drupal_set_message($d2did . ' - ' . t('Fetch tags Error. Please ensure your Peer instance has provided you permisssions to perform this operation.'), 'error');
+    drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
   }else if (!is_null($result['error'])) {
     drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');

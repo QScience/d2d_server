@@ -23,8 +23,8 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
   }
   else {
     $form['noavaild2d'] = array(
-      '#prefix' => "No friend instances been added.<br>Go check whether there are any ",
-      '#markup' => l(t('new friends'), 'admin/d2d_server/add'),
+      '#prefix' => "No friend instances been added.<br>Check if you can already import ",
+      '#markup' => l(t('some friends'), 'admin/d2d_server/add'),
       '#suffix' => '.',
     );
     return $form;

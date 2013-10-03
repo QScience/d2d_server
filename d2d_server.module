@@ -64,10 +64,10 @@ function d2d_server_admin_access($op, $profile = NULL, $account = NULL) {
 function d2d_server_permission() {
   return array(
     'administer d2d server' => array(
-      'title' => t('Administer Patterns Server'),
+      'title' => t('Administer D2D Server'),
     ),
     'view d2d server' => array(
-      'title' => t('View Patterns Server list and page'),
+      'title' => t('View D2D Server list and page'),
     ),
   );
 }
@@ -164,12 +164,12 @@ function _d2d_server_all_list_page() {
 
     $ordered_results_backup = $query->ordered_results;
 
-    //Most Recent Patterns.
+    //Most Recent Web Sites.
     $query->ordered_results = array_slice($ordered_results_backup, 0, 10, TRUE);
-    $fieldset_title = 'Most Recent Patterns:';
+    $fieldset_title = 'Most Recent Web Sites:';
     $list .= _d2d_server_list_page($query, $fieldset_title);
 
-    //Most Liked Patterns.
+    //Most Liked Web Sites.
     foreach ($ordered_results_backup as $key => $value) {
       $vscore[$key] = _d2d_server_get_voting_score($value->entity_id);
     }
@@ -179,7 +179,7 @@ function _d2d_server_all_list_page() {
       $new_ordered_results[] = $ordered_results_backup[$key];
     }
     $query->ordered_results = array_slice($new_ordered_results, 0, 10, TRUE);
-    $fieldset_title = 'Most Liked Patterns:';
+    $fieldset_title = 'Most Liked Web Sites:';
     $list .= _d2d_server_list_page($query, $fieldset_title);
   }
   else {
