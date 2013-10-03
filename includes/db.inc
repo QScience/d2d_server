@@ -140,7 +140,7 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
     }
   }
   if (!$has_tags_field) {
-    drupal_set_message("There is no tags field in d2d_entity, so the tags fetch from the client '$tags' is not stored for now.", "warning");
+    drupal_set_message("Tags '$tags' has been fetched, but they cannot be stored because no tags field is currently associated with the d2d instance entity.", "warning");
     return;
   }
   $vocabulary = $field_info['settings']['allowed_values'][0]['vocabulary'];
