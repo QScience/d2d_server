@@ -161,3 +161,41 @@ function _d2d_server_fetch_tags($d2did)  {
     return 0;
   }
 }
+
+/**
+ * Implements hook_d2d_secure_rpc()
+ */
+function d2d_server_d2d_secure_rpc() {
+  $methods = array();
+  $methods['d2d_server_save_client_actions'] = array(
+    'arguments' => array('info' => 'is_string'),
+    'callback' => '_d2d_server_save_client_actions',
+    'description' => 'Save the informations of client actions.',
+  );
+  return $methods;
+}
+
+function _d2d_server_save_client_actions($arguments, $rpc_info) {
+  $return = FALSE;
+  $error;
+  if (empty($arguments) || !isset($arguments['info'])) {
+    $error = 'Error. Empty request received.';
+  }
+  else {
+    $info = d2d_explode($arguments['info']);
+    if (!isset($info['from']) || !isset($info['to']) || !isset($info['type']) || !isset($info['len'])) {
+      $error = 'Error. Information about Action is not complete.';
+    } 
+    else {
+      $q = d2d_server_get_d2dentity_by_d2did($info['from']);
+      if ($q === FALSE) {
+        $error = 'Error. The instance carrying out the action is not imported to d2d server yet.';
+      } 
+      else {
+        d2d_server_save_actions_form_clients($info);
+        $return = TRUE;
+      }
+    }
+  }
+  return d2d_implode(array('return' => $return, 'error' => $error));
+}

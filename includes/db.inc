@@ -76,6 +76,9 @@ function d2d_server_get_d2dentity_by_d2did($d2did) {
     ->condition('d2did', $d2did)
     ->execute()
     ->fetchObject();
+  if($q === FALSE) {
+    return FALSE;
+  }
   $de = entity_load('d2d_entity', array($q->did));
   return $de[$q->did];
 }
@@ -234,4 +237,18 @@ function d2d_server_get_taxonomy_terms_byvid($vid) {
     ->execute()
     ->fetchAll();
   return $q;
+}
+
+/**
+ */
+function d2d_server_save_actions_form_clients($action_a) {
+  db_insert('d2d_server_actions_from_clients')
+    ->fields(array(
+      'from_d2did' => $action_a['from'],
+      'to_d2did' => $action_a['to'],
+      'action_type' => $action_a['type'],
+      'action_length' => $action_a['len'],
+      'created' => REQUEST_TIME,
+      ))
+    ->execute();
 }

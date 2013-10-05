@@ -97,6 +97,53 @@ function d2d_server_schema() {
     'primary key' => array('did'),
     'unique keys' => array('d2did' => array('d2did')),
   );
+  $schema['d2d_server_actions_from_clients'] = array(
+    'description' => 'all d2d actions happens on clients.',
+    'fields' => array(
+      'aid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique id',
+      ),
+      'from_d2did' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the d2did of the instance from which the action is executed',
+      ),
+      'to_d2did' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the d2did of the instance to which the action is operateing',
+      ),
+      'action_type' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the type of the action',
+      ),
+      'action_length' => array(
+        'type' => 'int',
+        'length' => 50,
+        'default' => -1,
+        'nut null' => TRUE,
+        'description' => 'the length of the action infor.',
+      ),
+     'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'unsigned' => TRUE,
+        'description' => 'The Unix timestamp indicating when the action was carried out.',
+      ),
+    ),
+    'primary key' => array('aid'),
+  );
   return $schema;
 }
 
@@ -109,6 +156,7 @@ function d2d_server_uninstall() {
   field_attach_delete_bundle('d2d_entity', 'd2d_entity');
 
   drupal_uninstall_schema('d2d_entity');
+  drupal_uninstall_schema('d2d_server_actions_from_clients');
   //delete the role.
   //user_role_delete('patterns_server_user');
 }
