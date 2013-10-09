@@ -1,12 +1,12 @@
 <?php
 /**
  * @file
- * d2d server 
+ * d2d server
  */
 
 /**
-* Implements hook_schema().
-*/
+ * Implements hook_schema().
+ */
 function d2d_server_schema() {
   $schema['d2d_entity'] = array(
     'description' => 'server for d2d instances',

@@ -6,7 +6,7 @@
 /**
  */
 function d2d_fetchClientInfo_form($form, &$form_state) {
-  
+
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'd2d_entity');
   $query->propertyOrderBy('created', 'DESC')
@@ -113,7 +113,7 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
     if ($form_state['values']['infotype'][1] === '1') {
       $result = _d2d_server_fetch_users_number($value);
       if ($result !== 0) {
-        drupal_set_message("Some errors happen on remote function call.", 'error');
+        drupal_set_message(t("Some errors happen on remote function call."), 'error');
         return;
       }
       $choose_type = 1;
@@ -121,7 +121,7 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
     if ($form_state['values']['infotype'][2] === '2') {
       $result = _d2d_server_fetch_nodes_number($value);
       if ($result !== 0) {
-        drupal_set_message("Some errors happen on remote function call.", 'error');
+        drupal_set_message(t("Some errors happen on remote function call."), 'error');
         return;
       }
       $choose_type = 1;
@@ -129,7 +129,7 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
     if ($form_state['values']['infotype'][3] === '3') {
       $result = _d2d_server_fetch_site_information($value);
       if ($result !== 0) {
-        drupal_set_message("Some errors happen on remote function call.", 'error');
+        drupal_set_message(t("Some errors happen on remote function call."), 'error');
         return;
       }
       $choose_type = 1;
@@ -137,19 +137,19 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
     if ($form_state['values']['infotype'][4] === '4') {
       $result = _d2d_server_fetch_tags($value);
       if ($result !== 0) {
-        drupal_set_message("Some errors happen on remote function call.", 'error');
+        drupal_set_message(t("Some errors happen on remote function call."), 'error');
         return;
       }
       $choose_type = 1;
     }
   }
   if (!$choose_d2d) {
-    drupal_set_message("Please choose at least one d2d instance.", 'error');
+    drupal_set_message(t("Please choose at least one d2d instance."), 'error');
     return;
   }
   if (!$choose_type) {
-    drupal_set_message("Please choose at least one information type.", 'error');
+    drupal_set_message(t("Please choose at least one information type."), 'error');
     return;
   }
-  drupal_set_message("Fetch Information Success.");
+  drupal_set_message(t("Fetch Information Success."));
 }

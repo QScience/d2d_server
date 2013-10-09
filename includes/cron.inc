@@ -21,7 +21,7 @@ function d2d_server_cron() {
     }
     $entities = entity_load('d2d_entity', $ids);
   }
- 
+
   $queue = DrupalQueue::get("get_users_number");
   foreach ($entities as $entity) {
     $queue->createItem($entity->d2did);
@@ -41,7 +41,7 @@ function d2d_server_cron() {
 }
 
 /**
- * Implements hook_cron_queue_info()
+ * Implements hook_cron_queue_info().
  */
 function d2d_server_cron_queue_info() {
   $queues['get_users_number'] = array(

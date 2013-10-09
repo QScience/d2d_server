@@ -11,7 +11,7 @@
 function _d2d_server_fetch_users_number($d2did)  {
 
   global $user;
-  
+
   // Get the current server
   //$url = variable_get('patterns_passport_server', PATTERNS_passport_SERVER);
   $url = d2d_server_get_url_by_d2did($d2did);
@@ -35,10 +35,12 @@ function _d2d_server_fetch_users_number($d2did)  {
     // Unknown error
     drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
-  }else if (!is_null($result['error'])) {
+  }
+  elseif (!is_null($result['error'])) {
     drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
     return $result['error'];
-  }else{
+  }
+  else{
     d2d_server_set_users_number_by_d2did($d2did, $result['return']);
     return 0;
   }
@@ -52,7 +54,7 @@ function _d2d_server_fetch_users_number($d2did)  {
 function _d2d_server_fetch_site_information($d2did)  {
 
   global $user;
-  
+
   // Get the current server
   $url = d2d_server_get_url_by_d2did($d2did);
   if (!$url) {
@@ -75,10 +77,12 @@ function _d2d_server_fetch_site_information($d2did)  {
     // Unknown error
     drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
-  }else if (!is_null($result['error'])) {
+  }
+  elseif (!is_null($result['error'])) {
     drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
     return $result['error'];
-  }else{
+  }
+  else{
     d2d_server_set_site_info_by_d2did($d2did, d2d_explode($result['return']));
     return 0;
   }
@@ -91,7 +95,7 @@ function _d2d_server_fetch_site_information($d2did)  {
 function _d2d_server_fetch_nodes_number($d2did)  {
 
   global $user;
-  
+
   // Get the current server
   $url = d2d_server_get_url_by_d2did($d2did);
   if (!$url) {
@@ -114,10 +118,12 @@ function _d2d_server_fetch_nodes_number($d2did)  {
     // Unknown error
     drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
-  }else if (!is_null($result['error'])) {
+  }
+  elseif (!is_null($result['error'])) {
     drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
     return $result['error'];
-  }else{
+  }
+  else{
     d2d_server_set_nodes_number_by_d2did($d2did, $result['return']);
     return 0;
   }
@@ -130,7 +136,7 @@ function _d2d_server_fetch_nodes_number($d2did)  {
 function _d2d_server_fetch_tags($d2did)  {
 
   global $user;
-  
+
   // Get the current server
   $url = d2d_server_get_url_by_d2did($d2did);
   if (!$url) {
@@ -153,17 +159,19 @@ function _d2d_server_fetch_tags($d2did)  {
     // Unknown error
     drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
-  }else if (!is_null($result['error'])) {
+  }
+  elseif (!is_null($result['error'])) {
     drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
     return $result['error'];
-  }else{
+  }
+  else{
     d2d_server_set_tags_by_d2did($d2did, $result['return']);
     return 0;
   }
 }
 
 /**
- * Implements hook_d2d_secure_rpc()
+ * Implements hook_d2d_secure_rpc().
  */
 function d2d_server_d2d_secure_rpc() {
   $methods = array();
@@ -175,6 +183,8 @@ function d2d_server_d2d_secure_rpc() {
   return $methods;
 }
 
+/**
+ */
 function _d2d_server_save_client_actions($arguments, $rpc_info) {
   $return = FALSE;
   $error;
@@ -185,12 +195,12 @@ function _d2d_server_save_client_actions($arguments, $rpc_info) {
     $info = d2d_explode($arguments['info']);
     if (!isset($info['from']) || !isset($info['to']) || !isset($info['type']) || !isset($info['len'])) {
       $error = 'Error. Information about Action is not complete.';
-    } 
+    }
     else {
       $q = d2d_server_get_d2dentity_by_d2did($info['from']);
       if ($q === FALSE) {
         $error = 'Error. The instance carrying out the action is not imported to d2d server yet.';
-      } 
+      }
       else {
         d2d_server_save_actions_form_clients($info);
         $return = TRUE;

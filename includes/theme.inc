@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @file
  */
@@ -19,7 +19,7 @@ function _d2d_instance_view_page_description($de) {
   if (!empty($de->site_slogan)) {
     $content .= '<dt>website slogan</dt><dd>' . $de->site_slogan . '</dd>';
   }
-  $content .= '<dt>d2d id</dt><dd>' . $de->d2did. '</dd>';
+  $content .= '<dt>d2d id</dt><dd>' . $de->d2did . '</dd>';
   $content .= '<dt>description</dt><dd>' . $de->description . '</dd>';
 
 

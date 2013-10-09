@@ -102,7 +102,7 @@ function d2d_entity_form($form, &$form_state, $d2d_entity) {
     '#value' => $d2d_entity->d2did,
     '#disabled' => TRUE,
   );
-  
+
   $form['d2dinstance']['title'] = array(
     '#type' => 'textfield',
     '#title' => 'D2D INSTANCE TITLE',

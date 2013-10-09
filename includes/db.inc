@@ -60,7 +60,7 @@ function d2d_server_update_instance($en) {
  * get url field by d2did.
  */
 function d2d_server_get_url_by_d2did($d2did) {
-  $q = db_select("d2d_entity", 'de') 
+  $q = db_select("d2d_entity", 'de')
     ->fields('de', array('url'))
     ->condition('d2did', $d2did)
     ->execute()
@@ -71,12 +71,12 @@ function d2d_server_get_url_by_d2did($d2did) {
 /**
  */
 function d2d_server_get_d2dentity_by_d2did($d2did) {
-  $q = db_select("d2d_entity", 'de') 
+  $q = db_select("d2d_entity", 'de')
     ->fields('de', array('did'))
     ->condition('d2did', $d2did)
     ->execute()
     ->fetchObject();
-  if($q === FALSE) {
+  if ($q === FALSE) {
     return FALSE;
   }
   $de = entity_load('d2d_entity', array($q->did));
@@ -143,7 +143,7 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
     }
   }
   if (!$has_tags_field) {
-    drupal_set_message("Tags '$tags' has been fetched, but they cannot be stored because no tags field is currently associated with the d2d instance entity.", "warning");
+    drupal_set_message(t("Tags '%tags' has been fetched, but they cannot be stored because no tags field is currently associated with the d2d instance entity.", array('%tags' => $tags)), "warning");
     return;
   }
   $vocabulary = $field_info['settings']['allowed_values'][0]['vocabulary'];
@@ -157,14 +157,14 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
   foreach ($split_strings as $value) {
     $value = trim($value);
     if (!empty($value)) {
-      $tags_clean[] = $value; 
+      $tags_clean[] = $value;
     }
   }
-  
+
   $tids = array();
   foreach ($tags_clean as $tag) {
     $tag_exist = FALSE;
-    foreach($terms as $term) {
+    foreach ($terms as $term) {
       if ($tag == $term->name) {
         $tids[] = $term->tid;
         $tag_exist = TRUE;
@@ -186,7 +186,7 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
 
   $f_name = $field_info['field_name'];
   $fields = array($field_info['id']);
-  
+
   $temp = $de->$f_name;
   $cn = 0;
   if (isset($temp['und'])) {
@@ -205,13 +205,13 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
 
   $tags_limit = $field_info['cardinality'];
   if ($cn > $tags_limit) {
-    drupal_set_message(t("Only $tags_limit tags saved because of your tags field setting."), 'warning');
+    drupal_set_message(t("Only %tags_limit tags saved because of your tags field setting.", array('%tags_limit' => $tags_limit)), 'warning');
   }
 
   $de->$f_name = $temp;
   field_sql_storage_field_storage_write('d2d_entity', $de, 'update', $fields);
   cache_clear_all("field:d2d_entity:$de->did", "cache_field");
-  
+
 
   //foreach ($tags_clean as $tag) {
   //  foreach ($terms as $obj) {
@@ -222,7 +222,7 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
   //    }
   //  }
   //  //store new items.
-  //  
+  //
   //}
 
 }
