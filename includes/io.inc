@@ -178,7 +178,7 @@ function d2d_server_d2d_secure_rpc() {
   $methods['d2d_server_save_client_actions'] = array(
     'arguments' => array('info' => 'is_string'),
     'callback' => '_d2d_server_save_client_actions',
-    'description' => 'Save the informations of client actions.',
+    'description' => 'Save the informations about client actions.',
   );
   return $methods;
 }
