@@ -5,6 +5,19 @@
 
 
 /**
+ * Implements hook_d2d_secure_rpc().
+ */
+function d2d_server_d2d_secure_rpc() {
+  $methods = array();
+  $methods['d2d_server_save_client_actions'] = array(
+    'arguments' => array('info' => 'is_string'),
+    'callback' => '_d2d_server_save_client_actions',
+    'description' => 'Save the informations about client actions.',
+  );
+  return $methods;
+}
+
+/**
  * Performs a remote call to the d2d_passport using D2D in order
  * to retrieve the users number.
  */
@@ -171,19 +184,6 @@ function _d2d_server_fetch_tags($d2did)  {
 }
 
 /**
- * Implements hook_d2d_secure_rpc().
- */
-function d2d_server_d2d_secure_rpc() {
-  $methods = array();
-  $methods['d2d_server_save_client_actions'] = array(
-    'arguments' => array('info' => 'is_string'),
-    'callback' => '_d2d_server_save_client_actions',
-    'description' => 'Save the informations about client actions.',
-  );
-  return $methods;
-}
-
-/**
  */
 function _d2d_server_save_client_actions($arguments, $rpc_info) {
   $return = FALSE;
@@ -193,7 +193,8 @@ function _d2d_server_save_client_actions($arguments, $rpc_info) {
   }
   else {
     $info = d2d_explode($arguments['info']);
-    if (!isset($info['from']) || !isset($info['to']) || !isset($info['type']) || !isset($info['len'])) {
+    if (!isset($info['from']) || !isset($info['to']) ||
+      !isset($info['type']) || !isset($info['len'])) {
       $error = 'Error. Information about Action is not complete.';
     }
     else {
@@ -202,6 +203,14 @@ function _d2d_server_save_client_actions($arguments, $rpc_info) {
         $error = 'Error. The instance carrying out the action is not imported to d2d server yet.';
       }
       else {
+        if (function_exists('nodejs_enqueue_message')) {
+          $message = (object) array(
+            'data' => (object) $info,
+            'channel' => 'nodejs_user_' . 1, // to root
+            'callback' => 'displayRequest',
+          );
+          nodejs_enqueue_message($message);
+        }
         d2d_server_save_actions_form_clients($info);
         $return = TRUE;
       }
@@ -209,3 +218,51 @@ function _d2d_server_save_client_actions($arguments, $rpc_info) {
   }
   return d2d_implode(array('return' => $return, 'error' => $error));
 }
+
+
+
+/**
+ * Menu callback; outputs a JSON object with the actions from a certain date.
+ */
+function _d2d_server_get_actions_service() {
+
+  $from = FALSE;
+  if (isset($_POST['from'])) {
+    $from = check_plain($_POST['from']);
+  }
+
+  if ($from === FALSE) {
+    drupal_json_output(array(
+      'success' => FALSE,
+      'message' => 'Invalid or missing FROM',
+    ));
+  }
+
+  $actions = _d2d_server_get_actions_helper($from);
+
+  drupal_json_output(array(
+    'success' => TRUE,
+    'actions' => $actions,
+  ));
+}
+
+
+/**
+ * Returns all the actions more recent than a certain date.
+ *
+ * @param int $from
+ *   The reference timestamp.
+ *
+ * @return array
+ *   The array of actions more recent than $from
+ */
+function _d2d_server_get_actions_helper($from) {
+
+  $query = db_select('d2d_server_actions_from_clients', 'a')
+    ->fields('a')
+    ->condition('a.created', $from, '>')
+    ->orderBy('a.created', 'ASC');
+
+  return $query->execute()->FetchAll();
+}
+

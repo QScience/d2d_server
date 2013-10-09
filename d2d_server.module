@@ -75,8 +75,6 @@ function d2d_server_permission() {
 /**
  */
 function d2d_server_menu() {
-  $items = array();
-
   $items['admin/d2d_server/fetchClientInfo'] = array(
     'title' => 'Fetch data from Clients',
     'description' => 'Fetch the latest data from all d2d friend instances on which d2d_client is installed.',
@@ -108,7 +106,7 @@ function d2d_server_menu() {
 
   //this one is d2d instance's voting function.
   //voting: if success, go to d2d/$did page.
-  //        if not, go back to main page.(wrong d2d/$did will redirect to the main page.)
+  // if not, go back to main page.(wrong d2d/$did will redirect to the main page.)
   $items['d2d/%/voting'] = array(
     'title' => 'd2d instance voting link',
     'description' => 'd2d instance voting link',
@@ -143,22 +141,37 @@ function d2d_server_menu() {
     'access arguments' => array('view d2d server'),
   );
 
+  $items['d2d_server/get_actions'] = array(
+    'title' => 'D2D Server Get Actions',
+    'description' => 'Outputs information about the actions sent by clients using d2d_passport notifications.',
+    'page callback' => '_d2d_server_get_actions_service',
+    'access arguments' => array('view d2d server'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
 /**
  */
 function _d2d_server_all_list_page() {
+  $path = drupal_get_path('module', 'd2d_server');
 
-  drupal_add_css(drupal_get_path('module', 'd2d_server') . '/styles/css/mainpage.css');
+  drupal_add_js(array(
+    'clean_url' => variable_get('clean_url', 0),
+  ), 'setting');
+
+  drupal_add_js($path . '/visualization/js/main.js');
+  drupal_add_css($path . '/styles/css/mainpage.css');
+
   $list = "<div id='d2d-server-world-usage-map'></div>";
   $searchform = drupal_get_form('d2d_server_search');
   $list .= drupal_render($searchform);
 
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'd2d_entity')
-    ->propertyOrderBy('created', 'DESC')
-    ->execute();
+        ->propertyOrderBy('created', 'DESC')
+        ->execute();
 
   $list .= "<div id='d2d-server-all-table-wrap'>";
   $vscore = array();
@@ -185,7 +198,7 @@ function _d2d_server_all_list_page() {
     $list .= _d2d_server_list_page($query, $fieldset_title);
   }
   else {
-    //drupal_add_js(drupal_get_path('module', 'patterns_server') . '/styles/js/patterns_server.firstpage.js');
+    //drupal_add_js($path . '/styles/js/patterns_server.firstpage.js');
     $list .= "<div class='d2d-server-list-table-wrap'>";
     $list .= "There is no d2d instances in database.</br>Go to check whether there are some ";
     $url = 'admin/d2d_server/add';
@@ -281,8 +294,8 @@ function _d2d_server_list($property, $arg, $operate = '=', $showupload = TRUE) {
   }
 
   $query->propertyOrderBy('created', 'DESC')
-    ->pager(10)
-    ->execute();
+        ->pager(10)
+        ->execute();
   if (isset($query->ordered_results) && count($query->ordered_results)) {
     $list = _d2d_server_list_page($query, $fieldset_title);
     return $list;
