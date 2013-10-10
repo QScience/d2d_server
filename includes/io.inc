@@ -26,14 +26,12 @@ function _d2d_server_fetch_users_number($d2did)  {
   global $user;
 
   // Get the current server
-  //$url = variable_get('patterns_passport_server', PATTERNS_passport_SERVER);
   $url = d2d_server_get_url_by_d2did($d2did);
   if (!$url) {
     return -1;
   }
   $friend = d2d_api_friend_get_by_url($url->url);
 
-  // Prepare arguments for the call. In this case just the maximum number of patterns expected
   $post = array();
 
   // Send the request. We explode the result in two different steps
@@ -46,11 +44,11 @@ function _d2d_server_fetch_users_number($d2did)  {
   // Display communication errors if any
   if (!$result) {
     // Unknown error
-    drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
+    drupal_set_message($d2did . ' - ' . t('Fetch Users Number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
   }
   elseif (!is_null($result['error'])) {
-    drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
+    drupal_set_message(t('The d2d server returned this response: @response', array('@response' => $result['error'])), 'error');
     return $result['error'];
   }
   else{
@@ -75,7 +73,6 @@ function _d2d_server_fetch_site_information($d2did)  {
   }
   $friend = d2d_api_friend_get_by_url($url->url);
 
-  // Prepare arguments for the call. In this case just the maximum number of patterns expected
   $post = array();
 
   // Send the request. We explode the result in two different steps
@@ -88,11 +85,11 @@ function _d2d_server_fetch_site_information($d2did)  {
   // Display communication errors if any
   if (!$result) {
     // Unknown error
-    drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
+    drupal_set_message($d2did . ' - ' . t('Fetch Site Information Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
   }
   elseif (!is_null($result['error'])) {
-    drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
+    drupal_set_message(t('The d2d server returned this response: @response', array('@response' => $result['error'])), 'error');
     return $result['error'];
   }
   else{
@@ -116,7 +113,6 @@ function _d2d_server_fetch_nodes_number($d2did)  {
   }
   $friend = d2d_api_friend_get_by_url($url->url);
 
-  // Prepare arguments for the call. In this case just the maximum number of patterns expected
   $post = array();
 
   // Send the request. We explode the result in two different steps
@@ -129,11 +125,11 @@ function _d2d_server_fetch_nodes_number($d2did)  {
   // Display communication errors if any
   if (!$result) {
     // Unknown error
-    drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
+    drupal_set_message($d2did . ' - ' . t('Fetch Nodes Number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
   }
   elseif (!is_null($result['error'])) {
-    drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
+    drupal_set_message(t('The d2d server returned this response: @response', array('@response' => $result['error'])), 'error');
     return $result['error'];
   }
   else{
@@ -157,7 +153,6 @@ function _d2d_server_fetch_tags($d2did)  {
   }
   $friend = d2d_api_friend_get_by_url($url->url);
 
-  // Prepare arguments for the call. In this case just the maximum number of patterns expected
   $post = array();
 
   // Send the request. We explode the result in two different steps
@@ -170,11 +165,11 @@ function _d2d_server_fetch_tags($d2did)  {
   // Display communication errors if any
   if (!$result) {
     // Unknown error
-    drupal_set_message($d2did . ' - ' . t('Fetch users number Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
+    drupal_set_message($d2did . ' - ' . t('Fetch Tags Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
     return -1;
   }
   elseif (!is_null($result['error'])) {
-    drupal_set_message(t('The Patterns server returned this response: @response', array('@response' => $result['error'])), 'error');
+    drupal_set_message(t('The d2d server returned this response: @response', array('@response' => $result['error'])), 'error');
     return $result['error'];
   }
   else{

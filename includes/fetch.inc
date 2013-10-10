@@ -104,6 +104,8 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
   $ids = array();
   $choose_d2d = 0;
   $choose_type = 0;
+  $something_wrong = 0;
+  $something_right= 0;
 
   foreach ($form_state['values']['table'] as $key => $value) {
     if ($value === 0) {
@@ -113,34 +115,50 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
     if ($form_state['values']['infotype'][1] === '1') {
       $result = _d2d_server_fetch_users_number($value);
       if ($result !== 0) {
-        drupal_set_message(t("Some errors happen on remote function call."), 'error');
-        return;
+        //drupal_set_message(t("Some errors happen on remote function call."), 'error');
+        $something_wrong = 1;
+        //return;
       }
-      $choose_type = 1;
+      else {
+        $something_right = 1;
+        $choose_type = 1;
+      }
     }
     if ($form_state['values']['infotype'][2] === '2') {
       $result = _d2d_server_fetch_nodes_number($value);
       if ($result !== 0) {
-        drupal_set_message(t("Some errors happen on remote function call."), 'error');
-        return;
+        //drupal_set_message(t("Some errors happen on remote function call."), 'error');
+        $something_wrong = 1;
+        //return;
       }
-      $choose_type = 1;
+      else {
+        $something_right = 1;
+        $choose_type = 1;
+      }
     }
     if ($form_state['values']['infotype'][3] === '3') {
       $result = _d2d_server_fetch_site_information($value);
       if ($result !== 0) {
-        drupal_set_message(t("Some errors happen on remote function call."), 'error');
-        return;
+        //drupal_set_message(t("Some errors happen on remote function call."), 'error');
+        $something_wrong = 1;
+        //return;
       }
-      $choose_type = 1;
+      else {
+        $choose_type = 1;
+        $something_right = 1;
+      }
     }
     if ($form_state['values']['infotype'][4] === '4') {
       $result = _d2d_server_fetch_tags($value);
       if ($result !== 0) {
-        drupal_set_message(t("Some errors happen on remote function call."), 'error');
-        return;
+        //drupal_set_message(t("Some errors happen on remote function call."), 'error');
+        $something_wrong = 1;
+        //return;
       }
-      $choose_type = 1;
+      else {
+        $choose_type = 1;
+        $something_right = 1;
+      }
     }
   }
   if (!$choose_d2d) {
@@ -151,5 +169,10 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
     drupal_set_message(t("Please choose at least one information type."), 'error');
     return;
   }
-  drupal_set_message(t("Fetch Information Success."));
+  if ($something_wrong === 1 && $something_right === 1) {
+    drupal_set_message(t("Fetch Some Information Success."));
+  }
+  elseif ($something_right === 1) {
+    drupal_set_message(t("Fetch All Information Success."));
+  }
 }
