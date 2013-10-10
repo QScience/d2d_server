@@ -113,12 +113,26 @@ function d2d_server_schema() {
         'nut null' => TRUE,
         'description' => 'the d2did of the instance from which the action is executed',
       ),
+      'from_url' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the url of the instance from which the action is executed',
+      ),
       'to_d2did' => array(
         'type' => 'varchar',
         'length' => 50,
         'default' => 0,
         'nut null' => TRUE,
         'description' => 'the d2did of the instance to which the action is operateing',
+      ),
+      'to_url' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the url of the instance from which the action is executed',
       ),
       'action_type' => array(
         'type' => 'varchar',
@@ -134,7 +148,7 @@ function d2d_server_schema() {
         'nut null' => TRUE,
         'description' => 'the length of the action infor.',
       ),
-     'created' => array(
+      'created' => array(
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,

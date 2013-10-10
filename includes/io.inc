@@ -194,7 +194,8 @@ function _d2d_server_save_client_actions($arguments, $rpc_info) {
   else {
     $info = d2d_explode($arguments['info']);
     if (!isset($info['from']) || !isset($info['to']) ||
-      !isset($info['type']) || !isset($info['len'])) {
+      !isset($info['type']) || !isset($info['len'])
+      !isset($info['from_url']) || !isset($info['to_url'])) {
       $error = 'Error. Information about Action is not complete.';
     }
     else {

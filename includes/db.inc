@@ -245,7 +245,9 @@ function d2d_server_save_actions_form_clients($action_a) {
   db_insert('d2d_server_actions_from_clients')
     ->fields(array(
       'from_d2did' => $action_a['from'],
+      'from_url' => $action_a['from_url'],
       'to_d2did' => $action_a['to'],
+      'to_url' => $action_a['to_url'],
       'action_type' => $action_a['type'],
       'action_length' => $action_a['len'],
       'created' => REQUEST_TIME,
