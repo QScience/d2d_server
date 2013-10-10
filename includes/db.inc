@@ -204,7 +204,7 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
   }
 
   $tags_limit = $field_info['cardinality'];
-  if ($cn > $tags_limit) {
+  if ($cn > $tags_limit && $tags_limit != -1) {
     drupal_set_message(t("Only %tags_limit tags saved because of your tags field setting.", array('%tags_limit' => $tags_limit)), 'warning');
   }
 
