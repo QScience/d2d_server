@@ -6,7 +6,15 @@
   width: 27px;
 }
 
-.d2d-server-voting-link-odd {
+//.d2d-server-voting-link-odd {
+//  background: url("../img/like_black.png") no-repeat scroll 0 0 transparent;
+//  display: block;
+//  height: 25px;
+//  text-indent: -9999px;
+//  width: 27px;
+//}
+
+.d2d-server-undovote-link{
   background: url("../img/like_black.png") no-repeat scroll 0 0 transparent;
   display: block;
   height: 25px;
@@ -14,13 +22,14 @@
   width: 27px;
 }
 
-.d2d-server-voted-sign{
-  background: url("../img/like_black.png") no-repeat scroll 0 0 transparent;
+.d2d-server-vote-forbid-sign{
+  background: url("../img/forbidden_vote.png") no-repeat scroll 0 0 transparent;
   display: block;
-  height: 25px;
+  height: 22px;
   text-indent: -9999px;
-  width: 27px;
+  width: 22px;
 }
+
 
 .d2d-server-list-table-wrap {
 	    margin-bottom: 50px;
