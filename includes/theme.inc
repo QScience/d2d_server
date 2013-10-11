@@ -111,14 +111,16 @@ function _d2d_server_back_like_button($did) {
   $voted = _d2d_server_check_whether_voted($did);
   if ($voted === 1) {
     $url = 'd2d/' . $did . '/undovote';
-    $vote_s = l(t('undovote'), $url, array('attributes' => array('class' => array('d2d-server-undovote-link', "d2d-server-undovote-link-$did"), 'title' => "d2d-server-undovote-link-$did", 'id' => array('d2d-server-view-page-undovote'))));
+    $vote_s = l(t('undovote'), $url, array('attributes' => array('class' => array('d2d-server-undovote-link', "d2d-server-undovote-link-$did"), 'title' => "d2d-server-undovote-link-$did", 'id' => array('d2d-server-view-page-vote'))));
   }
   elseif ($voted === 0) {
     $url = 'd2d/' . $did . '/voting';
     $vote_s = l(t('voting'), $url, array('attributes' => array('class' => array('d2d-server-voting-link', "d2d-server-voting-link-$did"), 'title' => "d2d-server-voting-link-$did", 'id' => array('d2d-server-view-page-vote'))));
   }
   else {
-    $vote_s = '<strong class="d2d-server-vote-forbid-sign" id="d2d-server-view-page-vote">voted</strong>';
+    //$vote_s = '<strong class="d2d-server-vote-forbid-sign" id="d2d-server-view-page-vote" title="Login or Register to Vote">forbiden</strong>';
+    $url = 'user/register';
+    $vote_s = l(t('forbidden'), $url, array('attributes' => array('class' => array('d2d-server-vote-forbid-sign'), 'title' => "Login or Register to Vote", 'id' => array('d2d-server-view-page-vote'))));
   }
 
   return $backtoserver_link . $vote_s;
