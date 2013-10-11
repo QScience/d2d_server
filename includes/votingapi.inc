@@ -45,6 +45,9 @@ function _d2d_server_voting($did) {
  * check whether certain user can vote or not.
  */
 function _d2d_server_check_whether_voted($did) {
+  if (user_is_anonymous()) {
+    return 1;
+  }
   global $user;
   $criteria = array(
     'entity_type' => 'd2d_entity',
