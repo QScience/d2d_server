@@ -55,14 +55,17 @@ function _d2d_server_voting($did) {
  * use's all votes on the d2d instance.
  */
 function _d2d_server_undo_vote($did) {
-  $criteria = array(
-    'entity_type' => 'd2d_entity',
-    'entity_id' => $did,
-    'value_type' => 'points',
-  );
-  $q = votingapi_select_votes($criteria);
+  Global $user;
+  $votes = db_select('votingapi_vote')
+    ->fields('votingapi_vote')
+    ->condition('entity_type', 'd2d_entity')
+    ->condition('entity_id', $did)
+    ->condition('value_type', 'points')
+    ->condition('uid', $user->uid)
+    ->execute()
+    ->fetchAll(PDO::FETCH_ASSOC);
   $vids = array();
-  foreach ($q as $value) {
+  foreach ($votes as $value) {
     $vids[]['vote_id'] = $value['vote_id'];
   }
   votingapi_delete_votes($vids);
@@ -80,12 +83,15 @@ function _d2d_server_check_whether_voted($did) {
   if (user_is_anonymous()) {
     return -1;
   }
-  $criteria = array(
-    'entity_type' => 'd2d_entity',
-    'entity_id' => $did,
-    'value_type' => 'points',
-  );
-  $votes = votingapi_select_votes($criteria);
+  Global $user;
+  $votes = db_select('votingapi_vote')
+    ->fields('votingapi_vote')
+    ->condition('entity_type', 'd2d_entity')
+    ->condition('entity_id', $did)
+    ->condition('value_type', 'points')
+    ->condition('uid', $user->uid)
+    ->execute()
+    ->fetchAll(PDO::FETCH_ASSOC);
   if (count($votes) > 0) {
     return 1;
   }
