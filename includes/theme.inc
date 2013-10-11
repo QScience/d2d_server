@@ -56,9 +56,10 @@ function _d2d_server_list_page($query, $fieldset_title) {
     $ids[] = $value->entity_id;
   }
   $entities = entity_load('d2d_entity', $ids);
+  $field_names = _d2d_server_get_all_taxonomyfields_name('d2d_entity');
   $rows = array();
   foreach ($entities as $ety_obj) {
-    $rows[] = _d2d_server_list_table_row($ety_obj);
+    $rows[] = _d2d_server_list_table_row($ety_obj, $field_names);
   }
   $html = theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('class' => array('d2d-server-list-table'))));
   if (isset($query->pager['element'])) {
@@ -79,12 +80,25 @@ function _d2d_server_list_page($query, $fieldset_title) {
  * generate d2d instances list table row.
  * used by _d2d_server_list_page($query).
  */
-function _d2d_server_list_table_row($ety_obj) {
+function _d2d_server_list_table_row($ety_obj, $field_names) {
+  dsm($ety_obj);
+  dsm($field_names);
   $row = array();
 
   $row[] = l($ety_obj->category, 'd2d/category/' . $ety_obj->category);
   $row[] = l($ety_obj->title, 'd2d/' . $ety_obj->did);
+
+  foreach ($field_names as $field_name) {
+    $field = $ety_obj->$field_name;
+    $cn = count($field);
+    if ($cn > 0) {
+      foreach ($field['und'] as $key => $value) {
+
+      }
+    }
+  }
   $row[] = $ety_obj->d2did;
+
   $row[] = '<i value="' . $ety_obj->updated . '" ' . 'class="import-time">' . date('j-m-Y H:i:s (P)', $ety_obj->updated) . '</i>';
   $row[] = _d2d_server_get_voting_score($ety_obj->did);
   $voted = _d2d_server_check_whether_voted($ety_obj->did);
