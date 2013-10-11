@@ -88,16 +88,22 @@ function _d2d_server_list_table_row($ety_obj, $field_names) {
   $row[] = l($ety_obj->category, 'd2d/category/' . $ety_obj->category);
   $row[] = l($ety_obj->title, 'd2d/' . $ety_obj->did);
 
+  $tag_row = NULL;
   foreach ($field_names as $field_name) {
     $field = $ety_obj->$field_name;
     $cn = count($field);
     if ($cn > 0) {
       foreach ($field['und'] as $key => $value) {
-
+        $t_obj = taxonomy_term_load($value['tid']);
+        $tag_row .= l($t_obj->name, 'd2d/tags/' . $field_name . '/' . $value['tid']);
       }
     }
+    else {
+      $tag_row .= t("no valid tag");
+    }
   }
-  $row[] = $ety_obj->d2did;
+  $row[] = $tag_row;
+  //$row[] = $ety_obj->d2did;
 
   $row[] = '<i value="' . $ety_obj->updated . '" ' . 'class="import-time">' . date('j-m-Y H:i:s (P)', $ety_obj->updated) . '</i>';
   $row[] = _d2d_server_get_voting_score($ety_obj->did);
