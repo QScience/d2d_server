@@ -161,6 +161,7 @@ function _d2d_server_all_list_page() {
     'clean_url' => variable_get('clean_url', 0),
   ), 'setting');
 
+  drupal_add_js('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false');
   drupal_add_js($path . '/visualization/js/main.js');
   drupal_add_css($path . '/styles/css/mainpage.css');
 
