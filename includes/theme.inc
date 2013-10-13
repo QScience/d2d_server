@@ -46,7 +46,7 @@ function _d2d_server_list_page($query, $fieldset_title) {
   $header = array(
     t('Category'),
     t('Name'),
-    t('D2DID'),
+    t('Tags'),
     t('Updated'),
     t('Score'),
     t('Like'),
@@ -81,25 +81,28 @@ function _d2d_server_list_page($query, $fieldset_title) {
  * used by _d2d_server_list_page($query).
  */
 function _d2d_server_list_table_row($ety_obj, $field_names) {
-  dsm($ety_obj);
-  dsm($field_names);
   $row = array();
 
   $row[] = l($ety_obj->category, 'd2d/category/' . $ety_obj->category);
   $row[] = l($ety_obj->title, 'd2d/' . $ety_obj->did);
 
   $tag_row = NULL;
-  foreach ($field_names as $field_name) {
-    $field = $ety_obj->$field_name;
-    $cn = count($field);
-    if ($cn > 0) {
-      foreach ($field['und'] as $key => $value) {
-        $t_obj = taxonomy_term_load($value['tid']);
-        $tag_row .= l($t_obj->name, 'd2d/tags/' . $field_name . '/' . $value['tid']);
+  if ($field_names === FALSE) {
+    $tag_row .= t("no valid tag");
+  }
+  else { 
+    foreach ($field_names as $field_name) {
+      $field = $ety_obj->$field_name;
+      $cn = count($field);
+      if ($cn > 0) {
+        foreach ($field['und'] as $key => $value) {
+          $t_obj = taxonomy_term_load($value['tid']);
+          $tag_row .= l($t_obj->name, 'd2d/tags/' . $field_name . '/' . $value['tid']) . ' ';
+        }
       }
-    }
-    else {
-      $tag_row .= t("no valid tag");
+      else {
+        $tag_row .= t("no valid tag");
+      }
     }
   }
   $row[] = $tag_row;
