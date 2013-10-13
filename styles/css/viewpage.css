@@ -54,7 +54,7 @@ dl dd {
   margin-right: 6px;
 }
 
-.d2d-server-voted-sign{
+.d2d-server-undovote-link{
   float: right;
   margin-top: 3px;
   background: url("../img/like_black.png") no-repeat scroll 0 0 transparent;
@@ -63,6 +63,16 @@ dl dd {
   text-indent: -9999px;
   width: 27px;
   margin-right: 5px;
+}
+
+.d2d-server-vote-forbid-sign{
+  float: right;
+  margin-top: 6px;
+  background: url("../img/forbidden_vote.png") no-repeat scroll 0 0 transparent;
+  display: block;
+  height: 25px;
+  text-indent: -9999px;
+  width: 27px;
 }
 
 .backtoserver-button-link {

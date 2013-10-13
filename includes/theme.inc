@@ -111,11 +111,15 @@ function _d2d_server_list_table_row($ety_obj, $field_names) {
   $row[] = '<i value="' . $ety_obj->updated . '" ' . 'class="import-time">' . date('j-m-Y H:i:s (P)', $ety_obj->updated) . '</i>';
   $row[] = _d2d_server_get_voting_score($ety_obj->did);
   $voted = _d2d_server_check_whether_voted($ety_obj->did);
-  if ($voted) {
-    $row['d2d_server_voting_link'] = '<strong class="d2d-server-voted-sign">voted</strong>';
+  if ($voted === 1) {
+    $row['d2d_server_voting_link'] = l(t('undovote'), 'd2d/' . $ety_obj->did . '/undovote', array('attributes' => array('class' => "d2d-server-undovote-link d2d-server-undovote-link-$ety_obj->did", 'title' => "d2d-server-undovote-link-$ety_obj->did")));
+  }
+  elseif ($voted === 0) {
+    $row['d2d_server_voting_link'] = l(t('voting'), 'd2d/' . $ety_obj->did . '/voting', array('attributes' => array('class' => "d2d-server-voting-link d2d-server-voting-link-$ety_obj->did", 'title' => "d2d-server-voting-link-$ety_obj->did")));
   }
   else {
-    $row['d2d_server_voting_link'] = l(t('voting'), 'd2d/' . $ety_obj->did . '/voting', array('attributes' => array('class' => "d2d-server-voting-link d2d-server-voting-link-$ety_obj->did", 'title' => "d2d-server-voting-link-$ety_obj->did")));
+    //$row['d2d_server_voting_link'] = '<strong class="d2d-server-vote-forbid-sign">forbiden</strong>';
+    $row['d2d_server_voting_link'] = l(t('forbidden'), 'user/register', array('attributes' => array('class' => "d2d-server-vote-forbid-sign", 'title' => "Login or Register to Vote")));
   }
   return $row;
 }
@@ -129,12 +133,18 @@ function _d2d_server_back_like_button($did) {
   $backtoserver_link = "<strong>$backtoserver_link</strong>";
 
   $voted = _d2d_server_check_whether_voted($did);
-  if ($voted) {
-    $vote_s = '<strong class="d2d-server-voted-sign" id="d2d-server-view-page-vote">voted</strong>';
+  if ($voted === 1) {
+    $url = 'd2d/' . $did . '/undovote';
+    $vote_s = l(t('undovote'), $url, array('attributes' => array('class' => array('d2d-server-undovote-link', "d2d-server-undovote-link-$did"), 'title' => "d2d-server-undovote-link-$did", 'id' => array('d2d-server-view-page-vote'))));
   }
-  else {
+  elseif ($voted === 0) {
     $url = 'd2d/' . $did . '/voting';
     $vote_s = l(t('voting'), $url, array('attributes' => array('class' => array('d2d-server-voting-link', "d2d-server-voting-link-$did"), 'title' => "d2d-server-voting-link-$did", 'id' => array('d2d-server-view-page-vote'))));
+  }
+  else {
+    //$vote_s = '<strong class="d2d-server-vote-forbid-sign" id="d2d-server-view-page-vote" title="Login or Register to Vote">forbiden</strong>';
+    $url = 'user/register';
+    $vote_s = l(t('forbidden'), $url, array('attributes' => array('class' => array('d2d-server-vote-forbid-sign'), 'title' => "Login or Register to Vote", 'id' => array('d2d-server-view-page-vote'))));
   }
 
   return $backtoserver_link . $vote_s;
