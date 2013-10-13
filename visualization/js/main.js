@@ -1,22 +1,21 @@
 jQuery(document).ready(function() {
 ////////////////////////////////////////////
 //Activate Google Maps:
-    var map;
-    var mapOptions = {
-        zoom: 3,
-        center: new google.maps.LatLng(41.5,13.5),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    map = new google.maps.Map(document.getElementById('d2d-server-world-usage-map'), mapOptions);
+var map;
+var mapOptions = {
+    zoom: 3,
+    center: new google.maps.LatLng(41.5,13.5),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+};
+map = new google.maps.Map(document.getElementById('d2d-server-world-usage-map'), mapOptions);
 
 ////////////////////////////////////////////
-    var FROM;
 
-    var lines = [];
-    var timeLineStaysOnMap = 10000;
-    var colors = ['blue', 'red', 'green', 'yellow', 'purple', 'orange', 'pink'];
-    var delayBeforeUnsuccessfullSearch = 2000;
-    var delayBetween2DisplayedConnections = 2000;
+var lines = [];
+var timeLineStaysOnMap = 10000;
+var colors = ['blue', 'red', 'green', 'yellow', 'purple', 'orange', 'pink'];
+var delayBeforeUnsuccessfullSearch = 2000;
+var delayBetween2DisplayedConnections = 2000;
 
 
 
@@ -25,6 +24,7 @@ jQuery(document).ready(function() {
 //////////////////////////////////////////////////////////
 
 var POST_URL, BASE_PATH, CLEAN_URL;
+var FROM;
 BASE_PATH = Drupal.settings.basePath;
 CLEAN_URL = Drupal.settings.clean_url === "1";
 POST_URL = BASE_PATH  + (CLEAN_URL ? '' : '?q=') + 'd2d_server/get_actions';
@@ -52,23 +52,29 @@ POST_URL = BASE_PATH  + (CLEAN_URL ? '' : '?q=') + 'd2d_server/get_actions';
                 };
                 ///////////////////////////////////////////////////////////////////////////
                 if (data.success) {
-                    var iter;
+                    var iter, retrieveAndShowData;
 
                     if (data.actions.length === 0) {
                         setTimeout(getNewConnections, delayBeforeUnsuccessfullSearch);
                         return false;
                     }
-                    for (iter in data.actions) {
-                        setTimeout(function() {
 
-                            getUrlLocation(data.actions[iter].from, data.actions[iter].to, function(adr1, adr2) {
-                              var x,y;
-                              x = [adr1.latitude, adr1.longitude];
-                              y = [adr2.latitude, adr2.longitude];
-                              showNewConnection(x, y);
-                          });
-                        }, iter*delayBetween2DisplayedConnections);
+                    for (iter in data.actions) {
+
+
+                        setTimeout((function(i) {
+                            return function() {
+                                console.log(i);
+                                getUrlLocation(data.actions[i].from, data.actions[i].to, function(adr1, adr2) {
+                                    var x,y;
+                                    x = [adr1.latitude, adr1.longitude];
+                                    y = [adr2.latitude, adr2.longitude];
+                                    showNewConnection(x, y);
+                                });
+                            }
+                        })(iter), iter*delayBetween2DisplayedConnections);
                     }
+
                     setTimeout(getNewConnections, (iter+1)*delayBetween2DisplayedConnections);
                     console.log(data);
                 }
