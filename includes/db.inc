@@ -161,6 +161,8 @@ function d2d_server_set_tags_by_d2did($d2did, $tags) {
     }
   }
 
+  $tags_clean = array_unique($tags_clean);
+
   $tids = array();
   foreach ($tags_clean as $tag) {
     $tag_exist = FALSE;

@@ -6,12 +6,12 @@
 $(document).ready(function() {
 
   //voting link ajax.
-  $('body').delegate('.d2d-server-list-table a[class*="d2d-server-voting-link-"]', 'click', function () {
+  $('body').delegate('.d2d-server-list-table a[class*="d2d-server-undovote-link-"], .d2d-server-list-table a[class*="d2d-server-voting-link-"]', 'click', function () {
     var class_pid = $(this).attr('title');
     var link = $('.' + class_pid);
-    $(link).each(function() {
-      $(this).parent().children('.d2d-server-voting-link').addClass('d2d-server-voting-link-odd');
-    });
+    //$(link).each(function() {
+    //  $(this).parent().children('.d2d-server-voting-link').addClass('d2d-server-voting-link-odd');
+    //});
 
     var url = $(this).attr('href');
 
@@ -26,13 +26,13 @@ $(document).ready(function() {
         var link_parent = $(link).parent();
         //console.log(link_parent);
         $(link_parent).prev().html($score.text());
-        if ($vote.text() == 'voted'){
+        //if ($vote.text() == 'undovote'){
           $(link_parent).html($vote.wrap("<div></div>").parent().html());
-          $(link_parent).children('.d2d-server-voted-sign').addClass('d2d-server-voting-link-odd');
-        }
-        else {
-          $(link_parent).html($vote.wrap("<div></div>").parent().html());
-        }
+          //$(link_parent).children('.d2d-server-voted-sign').addClass('d2d-server-voting-link-odd');
+        //}
+        //else {
+        //  $(link_parent).html($vote.wrap("<div></div>").parent().html());
+        //}
       }
     });
     return false;

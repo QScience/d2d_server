@@ -114,6 +114,13 @@ function d2d_server_menu() {
     'page arguments' => array(1),
     'access arguments' => array('view d2d server'),
   );
+  $items['d2d/%/undovote'] = array(
+    'title' => 'd2d instance undo vote before',
+    'description' => 'd2d instance undo vote before',
+    'page callback' => '_d2d_server_undo_vote',
+    'page arguments' => array(1),
+    'access arguments' => array('view d2d server'),
+  );
 
   $items['d2d/category/%'] = array(
     'title' => 'all d2d instances in % category',
