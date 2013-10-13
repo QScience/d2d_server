@@ -1,66 +1,31 @@
-jQuery(document).ready(function() {
-////////////////////////////////////////////
-//Activate Google Maps:
-var map;
-var mapOptions = {
-    zoom: 3,
-    center: new google.maps.LatLng(41.5,13.5),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-};
-map = new google.maps.Map(document.getElementById('d2d-server-world-usage-map'), mapOptions);
+jQuery(document).ready(function () {
+    /* Activating Google Maps */
+    var map;
+    var mapOptions = {
+        zoom: 2,
+        center: new google.maps.LatLng(41.5, 13.5),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById('d2d-server-world-usage-map'), mapOptions);
 
-////////////////////////////////////////////
+    /* Condifuration */
+    var lines = [];
+    var timeLineStaysOnMap = 10000;
+    var colors = ['blue', 'red', 'green', 'yellow', 'purple', 'orange', 'pink'];
+    var delayBeforeUnsuccessfullSearch = 1000;
+    var delayBetween2DisplayedConnections = 1000;
+    var FROM = Math.floor(((new Date()).getTime() - 1200000) / 1000); // Setup initial from: 20 minutes ago;
+    var POST_URL = Drupal.settings.basePath + (Drupal.settings.clean_url === "1" ? '' : '?q=') + 'd2d_server/get_actions';
 
-var lines = [];
-var timeLineStaysOnMap = 10000;
-var colors = ['blue', 'red', 'green', 'yellow', 'purple', 'orange', 'pink'];
-var delayBeforeUnsuccessfullSearch = 1000;
-var delayBetween2DisplayedConnections = 1000;
-
-
-
-//////////////////////////////////////////////////////////
-//To Clean
-//////////////////////////////////////////////////////////
-
-var POST_URL, BASE_PATH, CLEAN_URL;
-var FROM;
-BASE_PATH = Drupal.settings.basePath;
-CLEAN_URL = Drupal.settings.clean_url === "1";
-POST_URL = BASE_PATH  + (CLEAN_URL ? '' : '?q=') + 'd2d_server/get_actions';
-
-    // Setup initial from: 20 minutes ago;
-    FROM = Math.floor(((new Date()).getTime() - 1200000) / 1000);
-
-    window.getNewConnections = function() {
-
+    /* Main function to be called */
+    window.getNewConnections = function () {
         jQuery.ajax({
             url: POST_URL,
-            data: { 'from': FROM },
+            data: {
+                'from': FROM
+            },
             type: 'POST',
-            success: function(data) {
-                ///////////////////////////////////////////////////////////////////////////
-                //Testing:
-                // data = {
-                //     success: true,
-                //     actions: [
-                //     {from_url: 'http://tooski.ch', to_url: 'facebook.com'},
-                //     {from_url: 'http://facebook.com', to_url: 'tooski.ch'},
-                //     {from_url: 'http://www.microsoft.com', to_url: 'drupal.org'},
-                //     {from_url: 'admin.com', to_url: 'facebook.com'},
-                //     {from_url: 'http://www.admin.ch', to_url: 'facebook.com'},
-                //     {from_url: 'http://google.com/asdfds/asfdas.php', to_url: 'microsoft.com'},
-                //     {from_url: 'http://google.ch/asdfasd', to_url: 'cbservice.ch'},
-                //     {from_url: 'http://google.fr/asdfasd', to_url: 'google.ch'},
-                //     {from_url: 'http://myspace.com', to_url: 'inn.ac'},
-                //     {from_url: 'http://evernote.com:7809', to_url: 'facebook.com'},
-                //     {from_url: 'http://whois.org', to_url: 'inn.ac'},
-                //     {from_url: 'http://seba1511.com', to_url: 'spotify.com'},
-                //     {from_url: 'http://russia.ru', to_url: 'facebook.com'},
-                //     {from_url: 'http://france.fr', to_url: 'google.cn'},
-                //     ]
-                // };
-                ///////////////////////////////////////////////////////////////////////////
+            success: function (data) {
                 if (data.success) {
                     var iter, retrieveAndShowData;
 
@@ -70,135 +35,136 @@ POST_URL = BASE_PATH  + (CLEAN_URL ? '' : '?q=') + 'd2d_server/get_actions';
                     }
 
                     for (iter in data.actions) {
-
-
-                        setTimeout((function(i) {
-                            return function() {
+                        setTimeout((function (i) {
+                            return function () {
                                 var cleanUrl1, cleanUrl2;
                                 cleanUrl1 = cleanUrl(data.actions[i].from_url);
                                 cleanUrl2 = cleanUrl(data.actions[i].to_url);
-                                getUrlLocation(cleanUrl1, cleanUrl2, function(adr1, adr2) {
-                                    var x,y;
+                                getUrlLocation(cleanUrl1, cleanUrl2, function (adr1, adr2) {
+                                    var x, y;
                                     x = [adr1.latitude, adr1.longitude];
                                     y = [adr2.latitude, adr2.longitude];
+                                    if (!x[0] || !x[1]) {
+                                        x[0] = getRandomInt(-70, 70);
+                                        x[1] = getRandomInt(-70, 70);
+                                    }
+                                    if (!y[0] || !y[1]) {
+                                        y[0] = getRandomInt(-70, 70);
+                                        y[1] = getRandomInt(-70, 70);
+                                    }
                                     showNewConnection(x, y);
                                 });
-                            }
-                        })(iter), iter*delayBetween2DisplayedConnections);
+                            };
+                        })(iter), iter * delayBetween2DisplayedConnections);
                     }
 
-                    setTimeout(getNewConnections, (iter)*delayBetween2DisplayedConnections);
-                }
-                else {
-                    alert('An error has occurred: ' + data.message);
+                    setTimeout(getNewConnections, (iter) * delayBetween2DisplayedConnections);
+                } else {
+                    console.log('An error has occurred: ' + data.message);
                 }
 
             },
-            error: function() {
-                alert('Generic failure');
+            error: function () {
+                console.log('Generic failure');
             }
         });
-};
+    };
 
-function cleanUrl(url) {
-    var index;
-    url = url.replace(/http:\/\//, '');
-    index = url.indexOf('/') === -1 ?url.length: url.indexOf('/');
-    url = url.substring(0,  index);
-    index = url.indexOf(':') === -1 ?url.length: url.indexOf('/');
-    url = url.substring(0, index);
-    return url;
-}
+    function cleanUrl(url) {
+        var index;
+        url = url.replace(/http:\/\//, '');
+        index = url.indexOf('/') === -1 ? url.length : url.indexOf('/');
+        url = url.substring(0, index);
+        index = url.indexOf(':') === -1 ? url.length : url.indexOf('/');
+        url = url.substring(0, index);
+        return url;
+    }
 
-    //////////////////////////////////////////////////////////////////////////////////
-
-    /*
-     * solve adresse with IP
-     */
-
-     function getRandomInt(min, max) {
+    function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
+    /*
+     * Problem: When doing a cross-domain request, can't handle a failure.
+     * -> Connection not displayed if freegeoip returns a not found.
+     */
     function getUrlLocation(url, url2, callback) {
-        jQuery.getJSON('http://freegeoip.net/json/' + url, {}, function(data1) {
-          jQuery.getJSON('http://freegeoip.net/json/' + url2, {}, function(data2) {
-              callback(data1, data2);
-          });
-      });
+        jQuery.get('http://freegeoip.net/json/' + url, {}, function (data1) {
+            jQuery.get('http://freegeoip.net/json/' + url2, {}, function (data2) {
+                callback(data1, data2);
+            });
+        });
     }
 
-    function showNewConnection (from, to) {
+    function showNewConnection(from, to) {
         var lineId, colorId;
-        from = new google.maps.LatLng(from[0],from[1]);
-        to = new google.maps.LatLng(to[0],to[1]);
+        from = new google.maps.LatLng(from[0], from[1]);
+        to = new google.maps.LatLng(to[0], to[1]);
         lineId = lines.length;
-        colorId = getRandomInt(0, colors.length-1);
+        colorId = getRandomInt(0, colors.length - 1);
         lines[lineId] = {};
         lines[lineId].m = new google.maps.Marker({
-          position: from,
-          map: map,
-          title: 'From',
-          animation: google.maps.Animation.DROP,
-          icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png'
-      });
+            position: from,
+            map: map,
+            title: 'From',
+            animation: google.maps.Animation.DROP,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png'
+        });
         lines[lineId].p = new google.maps.Marker({
-          position: to,
-          map: map,
-          title: 'To',
-          animation: google.maps.Animation.DROP,
-          icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png'
-      });
-        setTimeout(function() {
-          addArrow(from, to, lineId, colorId);
-      }, 333);
+            position: to,
+            map: map,
+            title: 'To',
+            animation: google.maps.Animation.DROP,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png'
+        });
+        setTimeout(function () {
+            addArrow(from, to, lineId, colorId);
+        }, 333);
     }
 
     function addArrow(from, to, lineId, colorId) {
         var lineCoordinates = [from, to];
-
         animateLine(lineCoordinates, 0, lineId, colorId);
     }
 
     function animateLine(coordinates, percent, lineId, colorId) {
+        setTimeout(function () {
+            if (percent >= 100) {
+                setTimeout(function () {
+                    lines[lineId].l.setMap(null);
+                    lines[lineId].p.setMap(null);
+                    lines[lineId].m.setMap(null);
+                }, timeLineStaysOnMap);
+                return false;
+            } else {
+                var line, newX, newY, newCoord;
+                percent += 10;
+                newX = coordinates[0].lb + (((coordinates[1].lb - coordinates[0].lb)) * percent / 100);
+                newY = coordinates[0].mb + (((coordinates[1].mb - coordinates[0].mb)) * percent / 100);
+                newCoord = new google.maps.LatLng(newX, newY);
+                newCoord = [coordinates[0], newCoord];
+                if (lines[lineId].l) {
+                    lines[lineId].l.setMap(null);
+                }
+                lines[lineId].l = new google.maps.Polyline({
+                    path: newCoord,
+                    map: map,
+                    strokeColor: colors[colorId],
+                    strokeOpacity: '' + percent / 100,
+                    strokeWeight: '2',
+                    geodesic: true,
+                    icons: [{
+                        icon: {
+                            path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
+                        },
+                        offset: '100%',
+                    }],
+                });
 
-        setTimeout(function() {
-          if (percent >= 100) {
-              setTimeout(function() {
-                 lines[lineId].l.setMap(null);
-                 lines[lineId].p.setMap(null);
-                 lines[lineId].m.setMap(null);
-             }, timeLineStaysOnMap);
-              return false;
-          }
-          else {
+                animateLine(coordinates, percent, lineId, colorId);
+            }
+        }, 100);
+    }
 
-              var line, newX, newY, newCoord;
-              percent += 10;
-              newX = coordinates[0].lb + (((coordinates[1].lb - coordinates[0].lb)) * percent/100);
-              newY = coordinates[0].mb + (((coordinates[1].mb - coordinates[0].mb)) * percent/100);
-              newCoord = new google.maps.LatLng(newX, newY);
-              newCoord = [coordinates[0], newCoord];
-              if (lines[lineId].l) {
-                 lines[lineId].l.setMap(null);
-             }
-             lines[lineId].l = new google.maps.Polyline({
-                 path: newCoord,
-                 map: map,
-                 strokeColor: colors[colorId],
-                 strokeOpacity: '' + percent/100,
-                 strokeWeight: '2',
-                 geodesic: true,
-                 icons: [{
-                     icon: {
-                        path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
-                    },
-                    offset: '100%',
-                }],
-            });
-
-             animateLine(coordinates, percent, lineId, colorId);
-         }
-     }, 100);
-}
+    window.getNewConnections();
 });
