@@ -14,8 +14,8 @@ map = new google.maps.Map(document.getElementById('d2d-server-world-usage-map'),
 var lines = [];
 var timeLineStaysOnMap = 10000;
 var colors = ['blue', 'red', 'green', 'yellow', 'purple', 'orange', 'pink'];
-var delayBeforeUnsuccessfullSearch = 2000;
-var delayBetween2DisplayedConnections = 2000;
+var delayBeforeUnsuccessfullSearch = 1000;
+var delayBetween2DisplayedConnections = 1000;
 
 
 
@@ -41,15 +41,25 @@ POST_URL = BASE_PATH  + (CLEAN_URL ? '' : '?q=') + 'd2d_server/get_actions';
             success: function(data) {
                 ///////////////////////////////////////////////////////////////////////////
                 //Testing:
-                data = {
-                    success: true,
-                    actions: [
-                    {from: 'tooski.ch', to: 'facebook.com'},
-                    {from: 'facebook.com', to: 'tooski.ch'},
-                    {from: 'microsoft.com', to: 'drupal.org'},
-                    {from: 'asdf.com', to: 'facebook.com'},
-                    ]
-                };
+                // data = {
+                //     success: true,
+                //     actions: [
+                //     {from_url: 'http://tooski.ch', to_url: 'facebook.com'},
+                //     {from_url: 'http://facebook.com', to_url: 'tooski.ch'},
+                //     {from_url: 'http://www.microsoft.com', to_url: 'drupal.org'},
+                //     {from_url: 'admin.com', to_url: 'facebook.com'},
+                //     {from_url: 'http://www.admin.ch', to_url: 'facebook.com'},
+                //     {from_url: 'http://google.com/asdfds/asfdas.php', to_url: 'microsoft.com'},
+                //     {from_url: 'http://google.ch/asdfasd', to_url: 'cbservice.ch'},
+                //     {from_url: 'http://google.fr/asdfasd', to_url: 'google.ch'},
+                //     {from_url: 'http://myspace.com', to_url: 'inn.ac'},
+                //     {from_url: 'http://evernote.com:7809', to_url: 'facebook.com'},
+                //     {from_url: 'http://whois.org', to_url: 'inn.ac'},
+                //     {from_url: 'http://seba1511.com', to_url: 'spotify.com'},
+                //     {from_url: 'http://russia.ru', to_url: 'facebook.com'},
+                //     {from_url: 'http://france.fr', to_url: 'google.cn'},
+                //     ]
+                // };
                 ///////////////////////////////////////////////////////////////////////////
                 if (data.success) {
                     var iter, retrieveAndShowData;
@@ -64,8 +74,10 @@ POST_URL = BASE_PATH  + (CLEAN_URL ? '' : '?q=') + 'd2d_server/get_actions';
 
                         setTimeout((function(i) {
                             return function() {
-                                console.log(i);
-                                getUrlLocation(data.actions[i].from, data.actions[i].to, function(adr1, adr2) {
+                                var cleanUrl1, cleanUrl2;
+                                cleanUrl1 = cleanUrl(data.actions[i].from_url);
+                                cleanUrl2 = cleanUrl(data.actions[i].to_url);
+                                getUrlLocation(cleanUrl1, cleanUrl2, function(adr1, adr2) {
                                     var x,y;
                                     x = [adr1.latitude, adr1.longitude];
                                     y = [adr2.latitude, adr2.longitude];
@@ -75,8 +87,7 @@ POST_URL = BASE_PATH  + (CLEAN_URL ? '' : '?q=') + 'd2d_server/get_actions';
                         })(iter), iter*delayBetween2DisplayedConnections);
                     }
 
-                    setTimeout(getNewConnections, (iter+1)*delayBetween2DisplayedConnections);
-                    console.log(data);
+                    setTimeout(getNewConnections, (iter)*delayBetween2DisplayedConnections);
                 }
                 else {
                     alert('An error has occurred: ' + data.message);
@@ -88,6 +99,16 @@ POST_URL = BASE_PATH  + (CLEAN_URL ? '' : '?q=') + 'd2d_server/get_actions';
             }
         });
 };
+
+function cleanUrl(url) {
+    var index;
+    url = url.replace(/http:\/\//, '');
+    index = url.indexOf('/') === -1 ?url.length: url.indexOf('/');
+    url = url.substring(0,  index);
+    index = url.indexOf(':') === -1 ?url.length: url.indexOf('/');
+    url = url.substring(0, index);
+    return url;
+}
 
     //////////////////////////////////////////////////////////////////////////////////
 
