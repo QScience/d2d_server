@@ -14,7 +14,7 @@ jQuery(document).ready(function () {
     var colors = ['blue', 'red', 'green', 'yellow', 'purple', 'orange', 'pink'];
     var delayBeforeUnsuccessfullSearch = 1000;
     var delayBetween2DisplayedConnections = 1000;
-    var FROM = Math.floor(((new Date()).getTime() - 1200000) / 1000); // Setup initial from: 20 minutes ago;
+    var FROM = 0; // Math.floor(((new Date()).getTime() - 1200000) / 1000); // Setup initial from: 20 minutes ago;
     var POST_URL = Drupal.settings.basePath + (Drupal.settings.clean_url === "1" ? '' : '?q=') + 'd2d_server/get_actions';
 
     /* Main function to be called */
@@ -30,7 +30,7 @@ jQuery(document).ready(function () {
                     var iter, retrieveAndShowData;
 
                     if (data.actions.length === 0) {
-                        setTimeout(getNewConnections, delayBeforeUnsuccessfullSearch);
+                        // setTimeout(getNewConnections, delayBeforeUnsuccessfullSearch);
                         return false;
                     }
 
@@ -39,16 +39,16 @@ jQuery(document).ready(function () {
                             return function () {
                                 var cleanUrl1, cleanUrl2;
                                 cleanUrl1 = cleanUrl(data.actions[i].from_url);
-                                cleanUrl2 = cleanUrl(data9.actions[i].to_url);
+                                cleanUrl2 = cleanUrl(data.actions[i].to_url);
                                 getUrlLocation(cleanUrl1, cleanUrl2, function (adr1, adr2) {
                                     var x, y;
                                     x = [adr1.latitude, adr1.longitude];
                                     y = [adr2.latitude, adr2.longitude];
-                                    if (x[0] === undefined || !x[1] === undefined || (X[0] == 0 && x[1] == 0)) {
+                                    if (x[0] === undefined || x[1] === undefined || (x[0] === 0 && x[1] === 0)) {
                                         x[0] = getRandomInt(-70, 70);
                                         x[1] = getRandomInt(-70, 70);
                                     }
-                                    if (y[0] === undefined || !y[1] === undefined || (y[0] == 0 && y[1] == 0)) {
+                                    if (y[0] === undefined || y[1] === undefined || (y[0] === 0 && y[1] === 0)) {
                                         y[0] = getRandomInt(-70, 70);
                                         y[1] = getRandomInt(-70, 70);
                                     }
@@ -56,9 +56,9 @@ jQuery(document).ready(function () {
                                 });
                             };
                         })(iter), iter * delayBetween2DisplayedConnections);
-                    }
+}
 
-                    setTimeout(getNewConnections, (iter) * delayBetween2DisplayedConnections);
+                    //setTimeout(getNewConnections, (iter) * delayBetween2DisplayedConnections);
                 } else {
                     console.log('An error has occurred: ' + data.message);
                 }
@@ -68,31 +68,68 @@ jQuery(document).ready(function () {
                 console.log('Generic failure');
             }
         });
-    };
+};
 
-    function cleanUrl(url) {
-        var index;
-        url = url.replace(/http:\/\//, '');
-        index = url.indexOf('/') === -1 ? url.length : url.indexOf('/');
-        url = url.substring(0, index);
-        index = url.indexOf(':') === -1 ? url.length : url.indexOf('/');
-        url = url.substring(0, index);
-        return url;
-    }
+function cleanUrl(url) {
+    var index;
+    url = url.replace(/http:\/\//, '');
+    index = url.indexOf('/') === -1 ? url.length : url.indexOf('/');
+    url = url.substring(0, index);
+    index = url.indexOf(':') === -1 ? url.length : url.indexOf('/');
+    url = url.substring(0, index);
+    return url;
+}
 
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1) + min);
-    }
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
     /*
      * Problem: When doing a cross-domain request, can't handle a failure.
      * -> Connection not displayed if freegeoip returns a not found.
      */
-    function getUrlLocation(url, url2, callback) {
-        jQuery.get('http://freegeoip.net/json/' + url, {}, function (data1) {
-            jQuery.get('http://freegeoip.net/json/' + url2, {}, function (data2) {
-                callback(data1, data2);
-            });
+     function getUrlLocation(url, url2, callback) {
+        var d1, d2, exec, timeoutId;
+        // create a timeOut here.
+        // see http://stackoverflow.com/questions/1434519/cancel-a-jquery-ajax-call-before-it-returns
+        jQuery.ajax({
+            url: 'http://freegeoip.net/json/' + url,
+            type: 'GET',
+            crossDomain: true,
+            success: function (data1) {
+                d1 = data1;
+                if (d2 && !exec) {
+                    exec = true;
+                    callback(d1, d2);
+                }
+            },
+            error: function (data1) {
+                d1 = {};
+                if (d2 && !exec) {
+                    exec = true;
+                    callback(d1, d2);
+                }
+            }
+        });
+
+        jQuery.ajax({
+            url: 'http://freegeoip.net/json/' + url2,
+            type: 'GET',
+            crossDomain: true,
+            success: function (data2) {
+                d2 = data2;
+                if (d1 && !exec) {
+                    exec = true;
+                    callback(d1, d2);
+                }
+            },
+            error: function (data2) {
+                d2 = {};
+                if (d1 && !exec) {
+                    exec = true;
+                    callback(d1, d2);
+                }
+            }
         });
     }
 
@@ -164,7 +201,7 @@ jQuery(document).ready(function () {
                 animateLine(coordinates, percent, lineId, colorId);
             }
         }, 100);
-    }
+}
 
-    window.getNewConnections();
+window.getNewConnections();
 });
