@@ -141,10 +141,7 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
 
   foreach ($d2dids as $d2did) {
     $return = _d2d_server_fetch_infotypes($d2did, $methods);
-    if ($return != 0) {
-      drupal_set_message(t('%d2did Fetch Informations Failed.', array('%d2did' => $d2did)), 'error');
-    }
-    else {
+    if ($return === 0) {
       drupal_set_message(t('%d2did Fetch Informations Successfully.', array('%d2did' => $d2did)));
     }
   }
