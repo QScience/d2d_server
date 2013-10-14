@@ -101,78 +101,48 @@ function d2d_fetchClientInfo_form_validate(&$form, &$form_state) {
  */
 function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
 
-  $ids = array();
-  $choose_d2d = 0;
-  $choose_type = 0;
-  $something_wrong = 0;
-  $something_right= 0;
+  $d2dids = array();
+  $methods = array();
 
   foreach ($form_state['values']['table'] as $key => $value) {
     if ($value === 0) {
       continue;
     }
-    $choose_d2d = 1;
-    if ($form_state['values']['infotype'][1] === '1') {
-      $result = _d2d_server_fetch_users_number($value);
-      if ($result !== 0) {
-        //drupal_set_message(t("Some errors happen on remote function call."), 'error');
-        $something_wrong = 1;
-        //return;
-      }
-      else {
-        $something_right = 1;
-        $choose_type = 1;
-      }
-    }
-    if ($form_state['values']['infotype'][2] === '2') {
-      $result = _d2d_server_fetch_nodes_number($value);
-      if ($result !== 0) {
-        //drupal_set_message(t("Some errors happen on remote function call."), 'error');
-        $something_wrong = 1;
-        //return;
-      }
-      else {
-        $something_right = 1;
-        $choose_type = 1;
-      }
-    }
-    if ($form_state['values']['infotype'][3] === '3') {
-      $result = _d2d_server_fetch_site_information($value);
-      if ($result !== 0) {
-        //drupal_set_message(t("Some errors happen on remote function call."), 'error');
-        $something_wrong = 1;
-        //return;
-      }
-      else {
-        $choose_type = 1;
-        $something_right = 1;
-      }
-    }
-    if ($form_state['values']['infotype'][4] === '4') {
-      $result = _d2d_server_fetch_tags($value);
-      if ($result !== 0) {
-        //drupal_set_message(t("Some errors happen on remote function call."), 'error');
-        $something_wrong = 1;
-        //return;
-      }
-      else {
-        $choose_type = 1;
-        $something_right = 1;
-      }
-    }
+    $d2dids[] = $value;
   }
-  if (!$choose_d2d) {
+  if (count($d2dids) === 0) {
     drupal_set_message(t("Please choose at least one d2d instance."), 'error');
     return;
   }
-  if (!$choose_type) {
+
+  foreach ($form_state['values']['infotype'] as $key => $value) {
+    if ("$key" === $value) {
+      switch ($key) {
+      case 1:
+        $methods['users_number'] = TRUE;
+        break;
+      case 2:
+        $methods['nodes_number'] = TRUE;
+        break;
+      case 3:
+        $methods['site_info'] = TRUE;
+        break;
+      case 4:
+        $methods['tags'] = TRUE;
+        break;
+      default:
+      }
+    }
+  }
+  if (count($methods) === 0) {
     drupal_set_message(t("Please choose at least one information type."), 'error');
     return;
   }
-  if ($something_wrong === 1 && $something_right === 1) {
-    drupal_set_message(t("Fetch Some Information Success."));
-  }
-  elseif ($something_right === 1) {
-    drupal_set_message(t("Fetch All Information Success."));
+
+  foreach ($d2dids as $d2did) {
+    $return = _d2d_server_fetch_infotypes($d2did, $methods);
+    if ($return === 0) {
+      drupal_set_message(t('%d2did Fetch Informations Successfully.', array('%d2did' => $d2did)));
+    }
   }
 }
