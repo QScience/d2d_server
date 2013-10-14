@@ -13,7 +13,7 @@ function d2d_server_d2d_secure_rpc() {
     'arguments' => array('info' => 'is_string'),
     'callback' => '_d2d_server_save_client_actions',
     'description' => 'Save the informations about client actions.',
-  );
+    );
   return $methods;
 }
 
@@ -192,27 +192,27 @@ function _d2d_server_save_client_actions($arguments, $rpc_info) {
       !isset($info['type']) || !isset($info['len']) ||
       !isset($info['from_url']) || !isset($info['to_url'])) {
       $error = 'Error. Information about Action is not complete.';
+  }
+  else {
+    $q = d2d_server_get_d2dentity_by_d2did($info['from']);
+    if ($q === FALSE) {
+      $error = 'Error. The instance carrying out the action is not imported to d2d server yet.';
     }
     else {
-      $q = d2d_server_get_d2dentity_by_d2did($info['from']);
-      if ($q === FALSE) {
-        $error = 'Error. The instance carrying out the action is not imported to d2d server yet.';
-      }
-      else {
-        if (function_exists('nodejs_enqueue_message')) {
-          $message = (object) array(
-            'data' => (object) $info,
+      if (function_exists('nodejs_enqueue_message')) {
+        $message = (object) array(
+          'data' => (object) $info,
             'channel' => 'nodejs_user_' . 1, // to root
             'callback' => 'displayRequest',
-          );
-          nodejs_enqueue_message($message);
-        }
-        d2d_server_save_actions_form_clients($info);
-        $return = TRUE;
+            );
+        nodejs_enqueue_message($message);
       }
+      d2d_server_save_actions_form_clients($info);
+      $return = TRUE;
     }
   }
-  return d2d_implode(array('return' => $return, 'error' => $error));
+}
+return d2d_implode(array('return' => $return, 'error' => $error));
 }
 
 
@@ -225,21 +225,20 @@ function _d2d_server_get_actions_service() {
   $from = FALSE;
   if (isset($_POST['from'])) {
     $from = check_plain($_POST['from']);
+    $actions = _d2d_server_get_actions_helper($from);
   }
 
   if ($from === FALSE) {
     drupal_json_output(array(
       'success' => FALSE,
       'message' => 'Invalid or missing FROM',
-    ));
+      ));
   }
-
-  $actions = _d2d_server_get_actions_helper($from);
 
   drupal_json_output(array(
     'success' => TRUE,
     'actions' => $actions,
-  ));
+    ));
 }
 
 
@@ -255,10 +254,9 @@ function _d2d_server_get_actions_service() {
 function _d2d_server_get_actions_helper($from) {
 
   $query = db_select('d2d_server_actions_from_clients', 'a')
-    ->fields('a')
-    ->condition('a.created', $from, '>')
-    ->orderBy('a.created', 'ASC');
+  ->fields('a')
+  ->condition('a.created', $from, '>')
+  ->orderBy('a.created', 'ASC');
 
   return $query->execute()->FetchAll();
 }
-

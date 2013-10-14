@@ -1,4 +1,4 @@
-jQuery(document).ready(function () {
+jQuery(document).ready(function() {
     /* Activating Google Maps */
     var map;
     var mapOptions = {
@@ -10,6 +10,7 @@ jQuery(document).ready(function () {
 
     /* Condifuration */
     var lines = [];
+    var allUrls = [];
     var timeLineStaysOnMap = 10000;
     var colors = ['blue', 'red', 'green', 'yellow', 'purple', 'orange', 'pink'];
     var delayBeforeUnsuccessfullSearch = 2000;
@@ -18,14 +19,15 @@ jQuery(document).ready(function () {
     var POST_URL = Drupal.settings.basePath + (Drupal.settings.clean_url === "1" ? '' : '?q=') + 'd2d_server/get_actions';
 
     /* Main function to be called */
-    window.getNewConnections = function () {
+    window.getNewConnections = function() {
         jQuery.ajax({
             url: POST_URL,
             data: {
                 'from': FROM
             },
             type: 'POST',
-            success: function (data) {
+            success: function(data) {
+                FROM = Math.floor(((new Date).getTime()) / 1000);
                 if (data.success) {
                     var iter, retrieveAndShowData;
 
@@ -35,17 +37,15 @@ jQuery(document).ready(function () {
                     }
 
                     for (iter in data.actions) {
-                        setTimeout((function (i) {
-                            return function () {
+                        setTimeout((function(i) {
+                            return function() {
                                 var cleanUrl1, cleanUrl2;
                                 cleanUrl1 = cleanUrl(data.actions[i].from_url);
                                 cleanUrl2 = cleanUrl(data.actions[i].to_url);
-                                getUrlLocation(cleanUrl1, cleanUrl2, function (adr1, adr2) {
+                                getUrlLocation(cleanUrl1, cleanUrl2, function(adr1, adr2) {
                                     var x, y;
                                     x = [adr1.latitude, adr1.longitude];
                                     y = [adr2.latitude, adr2.longitude];
-                                    console.log(cleanUrl1 + ' ' + cleanUrl2);
-                                    if (cleanUrl1 == 'www.spotify.com' || cleanUrl2 == 'www.spotify.com') {debugger;}
                                     if (x[0] === undefined || x[1] === undefined || (x[0] === 0 && x[1] === 0)) {
                                         x[0] = getRandomInt(-70, 70);
                                         x[1] = getRandomInt(-70, 70);
@@ -59,17 +59,16 @@ jQuery(document).ready(function () {
                             };
                         })(iter), iter * delayBetween2DisplayedConnections);
 }
+setTimeout(getNewConnections, iter * 2 * delayBetween2DisplayedConnections);
+} else {
+    console.log('An error has occurred: ' + data.message);
+}
 
-                    setTimeout(getNewConnections, iter * 2 * delayBetween2DisplayedConnections);
-                } else {
-                    console.log('An error has occurred: ' + data.message);
-                }
-
-            },
-            error: function () {
-                console.log('Generic failure');
-            }
-        });
+},
+error: function() {
+    console.log('Generic failure');
+}
+});
 };
 
 function cleanUrl(url) {
@@ -90,47 +89,68 @@ function getRandomInt(min, max) {
      * Problem: When doing a cross-domain request, can't handle a failure.
      * -> Connection not displayed if freegeoip returns a not found.
      */
+
      function getUrlLocation(url, url2, callback) {
         var d1, d2, exec;
-        jQuery.ajax({
-            url: 'http://freegeoip.net/json/' + url,
-            type: 'GET',
-            crossDomain: true,
-            success: function (data1) {
-                d1 = data1;
-                if (d2 && !exec) {
-                    exec = true;
-                    callback(d1, d2);
-                }
-            },
-            error: function (data1) {
-                d1 = {};
-                if (d2 && !exec) {
-                    exec = true;
-                    callback(d1, d2);
-                }
+        if (allUrls[url]) {
+            d1 = allUrls[url];
+            if (d2 && !exec) {
+                exec = true;
+                callback(d1, d2);
             }
-        });
+        } else {
+            jQuery.ajax({
+                url: 'http://freegeoip.net/json/' + url,
+                type: 'GET',
+                crossDomain: true,
+                success: function(data1) {
+                    d1 = data1;
+                    allUrls[url] = data1;
+                    if (d2 && !exec) {
+                        exec = true;
+                        callback(d1, d2);
+                    }
+                },
+                error: function(data1) {
+                    d1 = {};
+                    allUrls[url] = data1;
+                    if (d2 && !exec) {
+                        exec = true;
+                        callback(d1, d2);
+                    }
+                }
+            });
+        }
 
-        jQuery.ajax({
-            url: 'http://freegeoip.net/json/' + url2,
-            type: 'GET',
-            crossDomain: true,
-            success: function (data2) {
-                d2 = data2;
-                if (d1 && !exec) {
-                    exec = true;
-                    callback(d1, d2);
-                }
-            },
-            error: function (data2) {
-                d2 = {};
-                if (d1 && !exec) {
-                    exec = true;
-                    callback(d1, d2);
-                }
+        if (allUrls[url2]) {
+            d2 = allUrls[url2];
+            if (d1 && !exec) {
+                exec = true;
+                callback(d1, d2);
             }
-        });
+        } else {
+            jQuery.ajax({
+                url: 'http://freegeoip.net/json/' + url2,
+                type: 'GET',
+                crossDomain: true,
+                success: function(data2) {
+                    d2 = data2;
+                    allUrls[url2] = d2;
+                    if (d1 && !exec) {
+                        exec = true;
+                        callback(d1, d2);
+                    }
+                },
+                error: function(data2) {
+                    d2 = {};
+                    allUrls[url2] = d2;
+                    if (d1 && !exec) {
+                        exec = true;
+                        callback(d1, d2);
+                    }
+                }
+            });
+        }
     }
 
     function showNewConnection(from, to, urls) {
@@ -140,7 +160,9 @@ function getRandomInt(min, max) {
         lineId = lines.length;
         colorId = getRandomInt(0, colors.length - 1);
         lines[lineId] = {};
-        infoWindow = new google.maps.InfoWindow({content: '<h3>' + urls[0] + '</h3>'});
+        infoWindow = new google.maps.InfoWindow({
+            content: '<h3>' + urls[0] + '</h3>'
+        });
         lines[lineId].m = new google.maps.Marker({
             position: from,
             map: map,
@@ -152,7 +174,9 @@ function getRandomInt(min, max) {
         google.maps.event.addListener(lines[lineId].m, 'click', function() {
             infoWindow.open(map, lines[lineId].m);
         });
-        infoWindow2 = new google.maps.InfoWindow({content: '<h3>' + urls[1] + '</h3>'});
+        infoWindow2 = new google.maps.InfoWindow({
+            content: '<h3>' + urls[1] + '</h3>'
+        });
         lines[lineId].p = new google.maps.Marker({
             position: to,
             map: map,
@@ -164,7 +188,7 @@ function getRandomInt(min, max) {
         google.maps.event.addListener(lines[lineId].p, 'click', function() {
             infoWindow2.open(map, lines[lineId].p);
         });
-        setTimeout(function () {
+        setTimeout(function() {
             addArrow(from, to, lineId, colorId);
         }, 333);
     }
@@ -175,9 +199,9 @@ function getRandomInt(min, max) {
     }
 
     function animateLine(coordinates, percent, lineId, colorId) {
-        setTimeout(function () {
+        setTimeout(function() {
             if (percent >= 100) {
-                setTimeout(function () {
+                setTimeout(function() {
                     lines[lineId].l.setMap(null);
                     lines[lineId].p.setMap(null);
                     lines[lineId].m.setMap(null);
