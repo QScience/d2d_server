@@ -58,39 +58,39 @@ jQuery(document).ready(function() {
                                 });
                             };
                         })(iter), iter * delayBetween2DisplayedConnections);
-}
-setTimeout(getNewConnections, iter * 2 * delayBetween2DisplayedConnections);
-} else {
-    console.log('An error has occurred: ' + data.message);
-}
+                    }
+                    setTimeout(getNewConnections, iter * 2 * delayBetween2DisplayedConnections);
+                } else {
+                    console.log('An error has occurred: ' + data.message);
+                }
 
-},
-error: function() {
-    console.log('Generic failure');
-}
-});
-};
+            },
+            error: function() {
+                console.log('Generic failure');
+            }
+        });
+    };
 
-function cleanUrl(url) {
-    var index;
-    url = url.replace(/http:\/\//, '');
-    index = url.indexOf('/') === -1 ? url.length : url.indexOf('/');
-    url = url.substring(0, index);
-    index = url.indexOf(':') === -1 ? url.length : url.indexOf('/');
-    url = url.substring(0, index);
-    return url;
-}
+    function cleanUrl(url) {
+        var index;
+        url = url.replace(/http:\/\//, '');
+        index = url.indexOf('/') === -1 ? url.length : url.indexOf('/');
+        url = url.substring(0, index);
+        index = url.indexOf(':') === -1 ? url.length : url.indexOf('/');
+        url = url.substring(0, index);
+        return url;
+    }
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
 
     /*
      * Problem: When doing a cross-domain request, can't handle a failure.
      * -> Connection not displayed if freegeoip returns a not found.
      */
 
-     function getUrlLocation(url, url2, callback) {
+    function getUrlLocation(url, url2, callback) {
         var d1, d2, exec;
         if (allUrls[url]) {
             d1 = allUrls[url];
@@ -163,6 +163,9 @@ function getRandomInt(min, max) {
         infoWindow = new google.maps.InfoWindow({
             content: '<h3>' + urls[0] + '</h3>'
         });
+        infoWindow2 = new google.maps.InfoWindow({
+            content: '<h3>' + urls[1] + '</h3>'
+        });
         lines[lineId].m = new google.maps.Marker({
             position: from,
             map: map,
@@ -173,9 +176,10 @@ function getRandomInt(min, max) {
         });
         google.maps.event.addListener(lines[lineId].m, 'click', function() {
             infoWindow.open(map, lines[lineId].m);
-        });
-        infoWindow2 = new google.maps.InfoWindow({
-            content: '<h3>' + urls[1] + '</h3>'
+            lines[lineId].mOpen = true;
+            google.maps.event.addListener(infoWindow, 'closeclick', function() {
+                lines[lineId].mOpen = false;
+            });
         });
         lines[lineId].p = new google.maps.Marker({
             position: to,
@@ -187,6 +191,10 @@ function getRandomInt(min, max) {
         });
         google.maps.event.addListener(lines[lineId].p, 'click', function() {
             infoWindow2.open(map, lines[lineId].p);
+            lines[lineId].pOpen = true;
+            google.maps.event.addListener(infoWindow2, 'closeclick', function() {
+                lines[lineId].pOpen = false;
+            });
         });
         setTimeout(function() {
             addArrow(from, to, lineId, colorId);
@@ -202,9 +210,17 @@ function getRandomInt(min, max) {
         setTimeout(function() {
             if (percent >= 100) {
                 setTimeout(function() {
+                    if (!lines[lineId].mOpen) {
+                        lines[lineId].m.setMap(null);
+                    } else {
+                        animateLine(coordinates, percent, lineId, colorId);
+                    }
+                    if (!lines[lineId].pOpen) {
+                        lines[lineId].p.setMap(null);
+                    } else {
+                        animateLine(coordinates, percent, lineId, colorId);
+                    }
                     lines[lineId].l.setMap(null);
-                    lines[lineId].p.setMap(null);
-                    lines[lineId].m.setMap(null);
                 }, timeLineStaysOnMap);
                 return false;
             } else {
@@ -235,7 +251,7 @@ function getRandomInt(min, max) {
                 animateLine(coordinates, percent, lineId, colorId);
             }
         }, 100);
-}
+    }
 
-window.getNewConnections();
+    window.getNewConnections();
 });
