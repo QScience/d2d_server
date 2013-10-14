@@ -19,6 +19,54 @@ function d2d_server_d2d_secure_rpc() {
 
 /**
  * Performs a remote call to the d2d_passport using D2D in order
+ * to retrieve all kinds of informations.
+ */
+function _d2d_server_fetch_infotypes($d2did, $infotypes) {
+  global $user;
+
+  // Get the current server
+  $url = d2d_server_get_url_by_d2did($d2did);
+  if (!$url) {
+    return -1;
+  }
+  $friend = d2d_api_friend_get_by_url($url->url);
+
+  $post = array('infotypes' => d2d_implode($infotypes));
+
+  // Send the request. We explode the result in two different steps
+  $error_string = '';
+  $result = d2d_call_secure_rpc($friend, 'd2d_passport_get_informations', $post, $error_string);
+  $result = d2d_explode($result);
+
+  //dsm($result);
+
+  // Display communication errors if any
+  if (!$result) {
+    // Unknown error
+    drupal_set_message($d2did . ' - ' . t('Fetch Informations Error. Please make sure that the instance has granted you the permissions to perform the operation.'), 'error');
+    return -1;
+  }
+  elseif (!is_null($result['error'])) {
+    drupal_set_message(t('The d2d server returned this response: @response', array('@response' => $result['error'])), 'error');
+    return $result['error'];
+  }
+  else{
+    $return = d2d_explode($result['return']);
+    foreach ($return as $key => $value) {
+      $function = "d2d_server_set_" . $key . "_by_d2did"; 
+      if ($key === 'site_info') {
+        $value = d2d_explode($value);
+      }
+      $function($d2did, $value);
+    }
+    //d2d_server_set_users_number_by_d2did($d2did, $result['return']);
+    return 0;
+  }
+
+}
+
+/**
+ * Performs a remote call to the d2d_passport using D2D in order
  * to retrieve the users number.
  */
 function _d2d_server_fetch_users_number($d2did)  {
