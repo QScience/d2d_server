@@ -154,18 +154,19 @@ jQuery(document).ready(function() {
     }
 
     function showNewConnection(from, to, urls, action) {
-        var lineId, colorId, infoWindow, infoWindow2;
+        var lineId, colorId, infoWindow, infoWindow2, linkD2dId;
         from = new google.maps.LatLng(from[0], from[1]);
         to = new google.maps.LatLng(to[0], to[1]);
         action.created = new Date(+action.created*1000);
         lineId = lines.length;
         colorId = getRandomInt(0, colors.length - 1);
         lines[lineId] = {};
+        linkD2dId = Drupal.settings.basePath + (Drupal.settings.clean_url === "1" ? '' : '?q=') + 'd2d/';
         infoWindow = new google.maps.InfoWindow({
-            content: '<h2><a href="http://' + urls[0] + '" target="_blank">' + urls[0] + '</a></h2><p>asked <a href="http://' + urls[1] + '" target="_blank">' + urls[1] + '</a>  <br /> for <i>' + action.action_type + '</i>.<br /><span style="font-size:10px;">(' + action.action_length + ' bits, ' + action.created.getDate() + "/" + (action.created.getMonth() + 1) + "/" + action.created.getFullYear() + " at " + action.created.getHours() + ":" + action.created.getMinutes() + ":" + action.created.getSeconds() + ')</span></p>'
+            content: '<p style="max-width:200px;"><a href="' + linkD2dId + action.from_d2did + '" target="_blank">' + urls[0] + '</a> requested <i style="margin-right:3px;">' + action.action_type + '</i> on <a href="' + linkD2dId + action.to_d2did + '" target="_blank">' + urls[1] + '</a>.<br /><span style="font-size:10px;">(' + action.action_length + ' bits, ' + action.created.getDate() + "/" + (action.created.getMonth() + 1) + "/" + action.created.getFullYear() + " at " + action.created.getHours() + ":" + action.created.getMinutes() + ":" + action.created.getSeconds() + ')</span></p>'
         });
         infoWindow2 = new google.maps.InfoWindow({
-            content: '<p style="max-width:200px;"><a href="http://' + urls[1] + '" target="_blank">' + urls[1] + '</a> executed <i style="margin-right:3px;">' + action.action_type + '</i> for <a href="http://' + urls[0] + '">' + urls[0] + '</a>.<br /><span style="font-size:10px;">(' + action.action_length + ' bits, ' + action.created.getDate() + "/" + (action.created.getMonth() + 1) + "/" + action.created.getFullYear() + " at " + action.created.getHours() + ":" + action.created.getMinutes() + ":" + action.created.getSeconds() + ')</span></p>'
+            content: '<p style="max-width:200px;"><a href="' + linkD2dId + action.to_d2did + '" target="_blank">' + urls[1] + '</a> executed <i style="margin-right:3px;">' + action.action_type + '</i> for <a href="' + linkD2dId + action.from_d2did + '" target="_blank">' + urls[0] + '</a>.<br /><span style="font-size:10px;">(' + action.action_length + ' bits, ' + action.created.getDate() + "/" + (action.created.getMonth() + 1) + "/" + action.created.getFullYear() + " at " + action.created.getHours() + ":" + action.created.getMinutes() + ":" + action.created.getSeconds() + ')</span></p>'
         });
         lines[lineId].m = new google.maps.Marker({
             position: from,
