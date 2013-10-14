@@ -12,8 +12,8 @@ jQuery(document).ready(function () {
     var lines = [];
     var timeLineStaysOnMap = 10000;
     var colors = ['blue', 'red', 'green', 'yellow', 'purple', 'orange', 'pink'];
-    var delayBeforeUnsuccessfullSearch = 1000;
-    var delayBetween2DisplayedConnections = 1000;
+    var delayBeforeUnsuccessfullSearch = 2000;
+    var delayBetween2DisplayedConnections = 2000;
     var FROM = 0; // Math.floor(((new Date()).getTime() - 1200000) / 1000); // Setup initial from: 20 minutes ago;
     var POST_URL = Drupal.settings.basePath + (Drupal.settings.clean_url === "1" ? '' : '?q=') + 'd2d_server/get_actions';
 
@@ -30,7 +30,7 @@ jQuery(document).ready(function () {
                     var iter, retrieveAndShowData;
 
                     if (data.actions.length === 0) {
-                        // setTimeout(getNewConnections, delayBeforeUnsuccessfullSearch);
+                        setTimeout(getNewConnections, delayBeforeUnsuccessfullSearch);
                         return false;
                     }
 
@@ -44,6 +44,8 @@ jQuery(document).ready(function () {
                                     var x, y;
                                     x = [adr1.latitude, adr1.longitude];
                                     y = [adr2.latitude, adr2.longitude];
+                                    console.log(cleanUrl1 + ' ' + cleanUrl2);
+                                    if (cleanUrl1 == 'www.spotify.com' || cleanUrl2 == 'www.spotify.com') {debugger;}
                                     if (x[0] === undefined || x[1] === undefined || (x[0] === 0 && x[1] === 0)) {
                                         x[0] = getRandomInt(-70, 70);
                                         x[1] = getRandomInt(-70, 70);
@@ -52,13 +54,13 @@ jQuery(document).ready(function () {
                                         y[0] = getRandomInt(-70, 70);
                                         y[1] = getRandomInt(-70, 70);
                                     }
-                                    showNewConnection(x, y);
+                                    showNewConnection(x, y, [cleanUrl1, cleanUrl2]);
                                 });
                             };
                         })(iter), iter * delayBetween2DisplayedConnections);
 }
 
-                    //setTimeout(getNewConnections, (iter) * delayBetween2DisplayedConnections);
+                    setTimeout(getNewConnections, iter * 2 * delayBetween2DisplayedConnections);
                 } else {
                     console.log('An error has occurred: ' + data.message);
                 }
@@ -89,9 +91,7 @@ function getRandomInt(min, max) {
      * -> Connection not displayed if freegeoip returns a not found.
      */
      function getUrlLocation(url, url2, callback) {
-        var d1, d2, exec, timeoutId;
-        // create a timeOut here.
-        // see http://stackoverflow.com/questions/1434519/cancel-a-jquery-ajax-call-before-it-returns
+        var d1, d2, exec;
         jQuery.ajax({
             url: 'http://freegeoip.net/json/' + url,
             type: 'GET',
@@ -133,26 +133,36 @@ function getRandomInt(min, max) {
         });
     }
 
-    function showNewConnection(from, to) {
-        var lineId, colorId;
+    function showNewConnection(from, to, urls) {
+        var lineId, colorId, infoWindow, infoWindow2;
         from = new google.maps.LatLng(from[0], from[1]);
         to = new google.maps.LatLng(to[0], to[1]);
         lineId = lines.length;
         colorId = getRandomInt(0, colors.length - 1);
         lines[lineId] = {};
+        infoWindow = new google.maps.InfoWindow({content: '<h3>' + urls[0] + '</h3>'});
         lines[lineId].m = new google.maps.Marker({
             position: from,
             map: map,
             title: 'From',
             animation: google.maps.Animation.DROP,
-            icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png'
+            icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png',
+            title: urls[0]
         });
+        google.maps.event.addListener(lines[lineId].m, 'click', function() {
+            infoWindow.open(map, lines[lineId].m);
+        });
+        infoWindow2 = new google.maps.InfoWindow({content: '<h3>' + urls[1] + '</h3>'});
         lines[lineId].p = new google.maps.Marker({
             position: to,
             map: map,
             title: 'To',
             animation: google.maps.Animation.DROP,
-            icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png'
+            icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png',
+            title: urls[1]
+        });
+        google.maps.event.addListener(lines[lineId].p, 'click', function() {
+            infoWindow2.open(map, lines[lineId].p);
         });
         setTimeout(function () {
             addArrow(from, to, lineId, colorId);
