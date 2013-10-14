@@ -32,10 +32,12 @@ function _d2d_server_get_voting_score($did) {
  * only insert when the user is not anonymous and 
  * the user hasn't voted before.
  */
-function _d2d_server_voting($did) {
+function _d2d_server_voting($d2did) {
+  $de = d2d_server_get_d2dentity_by_d2did($d2did);
+  $did = $de->did;
   $voted = _d2d_server_check_whether_voted($did);
   if ($voted != 0) {
-    drupal_goto("d2d/$did");
+    drupal_goto("d2d/$d2did");
   }
   $votes = array(
     'entity_type' => 'd2d_entity',
@@ -46,7 +48,7 @@ function _d2d_server_voting($did) {
   votingapi_add_votes($votes);
   votingapi_recalculate_results('d2d_entity', $did);
 
-  drupal_goto("d2d/$did");
+  drupal_goto("d2d/$d2did");
 }
 
 /**
@@ -54,7 +56,9 @@ function _d2d_server_voting($did) {
  * don't care the votingapi's setting now, just delete the 
  * use's all votes on the d2d instance.
  */
-function _d2d_server_undo_vote($did) {
+function _d2d_server_undo_vote($d2did) {
+  $de = d2d_server_get_d2dentity_by_d2did($d2did);
+  $did = $de->did;
   Global $user;
   $votes = db_select('votingapi_vote')
     ->fields('votingapi_vote')
@@ -70,7 +74,7 @@ function _d2d_server_undo_vote($did) {
   }
   votingapi_delete_votes($vids);
   votingapi_recalculate_results('d2d_entity', $did);
-  drupal_goto("d2d/$did");
+  drupal_goto("d2d/$d2did");
 }
 
 /**

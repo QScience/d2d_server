@@ -84,7 +84,7 @@ function _d2d_server_list_table_row($ety_obj, $field_names) {
   $row = array();
 
   $row[] = l($ety_obj->category, 'd2d/category/' . $ety_obj->category);
-  $row[] = l($ety_obj->title, 'd2d/' . $ety_obj->did);
+  $row[] = l($ety_obj->title, 'd2d/' . $ety_obj->d2did);
 
   $tag_row = NULL;
   if ($field_names === FALSE) {
@@ -112,10 +112,10 @@ function _d2d_server_list_table_row($ety_obj, $field_names) {
   $row[] = _d2d_server_get_voting_score($ety_obj->did);
   $voted = _d2d_server_check_whether_voted($ety_obj->did);
   if ($voted === 1) {
-    $row['d2d_server_voting_link'] = l(t('undovote'), 'd2d/' . $ety_obj->did . '/undovote', array('attributes' => array('class' => "d2d-server-undovote-link d2d-server-undovote-link-$ety_obj->did", 'title' => "d2d-server-undovote-link-$ety_obj->did")));
+    $row['d2d_server_voting_link'] = l(t('undovote'), 'd2d/' . $ety_obj->d2did . '/undovote', array('attributes' => array('class' => "d2d-server-undovote-link d2d-server-undovote-link-$ety_obj->did", 'title' => "d2d-server-undovote-link-$ety_obj->did")));
   }
   elseif ($voted === 0) {
-    $row['d2d_server_voting_link'] = l(t('voting'), 'd2d/' . $ety_obj->did . '/voting', array('attributes' => array('class' => "d2d-server-voting-link d2d-server-voting-link-$ety_obj->did", 'title' => "d2d-server-voting-link-$ety_obj->did")));
+    $row['d2d_server_voting_link'] = l(t('voting'), 'd2d/' . $ety_obj->d2did . '/voting', array('attributes' => array('class' => "d2d-server-voting-link d2d-server-voting-link-$ety_obj->did", 'title' => "d2d-server-voting-link-$ety_obj->did")));
   }
   else {
     //$row['d2d_server_voting_link'] = '<strong class="d2d-server-vote-forbid-sign">forbiden</strong>';
@@ -127,18 +127,18 @@ function _d2d_server_list_table_row($ety_obj, $field_names) {
 /**
  * backtoserver button link and like lint in the view page.
  */
-function _d2d_server_back_like_button($did) {
+function _d2d_server_back_like_button($did, $d2did) {
   $url = 'd2d_server_homepage';
   $backtoserver_link = l(t('Back To Server'), $url, array('attributes' => array('class' => array('backtoserver-button-link'))));
   $backtoserver_link = "<strong>$backtoserver_link</strong>";
 
   $voted = _d2d_server_check_whether_voted($did);
   if ($voted === 1) {
-    $url = 'd2d/' . $did . '/undovote';
+    $url = 'd2d/' . $d2did . '/undovote';
     $vote_s = l(t('undovote'), $url, array('attributes' => array('class' => array('d2d-server-undovote-link', "d2d-server-undovote-link-$did"), 'title' => "d2d-server-undovote-link-$did", 'id' => array('d2d-server-view-page-vote'))));
   }
   elseif ($voted === 0) {
-    $url = 'd2d/' . $did . '/voting';
+    $url = 'd2d/' . $d2did . '/voting';
     $vote_s = l(t('voting'), $url, array('attributes' => array('class' => array('d2d-server-voting-link', "d2d-server-voting-link-$did"), 'title' => "d2d-server-voting-link-$did", 'id' => array('d2d-server-view-page-vote'))));
   }
   else {

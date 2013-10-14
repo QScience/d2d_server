@@ -220,8 +220,10 @@ function _d2d_server_all_list_page() {
 
 /**
  */
-function _d2d_instance_view_page($did) {
-  $de = entity_object_load($did, 'd2d_entity');
+function _d2d_instance_view_page($d2did) {
+  $de = d2d_server_get_d2dentity_by_d2did($d2did);
+  $did = $de->did;
+  
   if (!$de) {
     drupal_set_message(t("The d2d instance doesn't exist."), "error");
     drupal_goto('d2d_server_homepage');
@@ -231,13 +233,13 @@ function _d2d_instance_view_page($did) {
 
   drupal_add_css(drupal_get_path('module', 'd2d_server') . '/styles/css/viewpage.css');
 
-  $backtoserver_voting_link = _d2d_server_back_like_button($did);
+  $backtoserver_voting_link = _d2d_server_back_like_button($did, $d2did);
   $content = "<div id='one_d2d_instance'><fieldset><legend>$fieldset_title$backtoserver_voting_link</legend><div class='fieldset-wrapper'>";
 
   $content .= _d2d_instance_view_page_description($de);
 
   $content .= '</div></fieldset></div>';
-  $field_view = entity_view('d2d_entity', array($did => $de));
+  $field_view = entity_view('d2d_entity', array($did => $de), 'full', NULL, TRUE);
   $content .= drupal_render($field_view);
 
   return $content;
