@@ -175,6 +175,7 @@ function d2d_fetchClientInfo_form_all_submit(&$form, &$form_state) {
   $methods['nodes_number'] = TRUE;
   $methods['site_info'] = TRUE;
   $methods['tags'] = TRUE;
+//  $methods['friendship'] = TRUE;
 
   foreach ($d2dids as $d2did) {
     $return = _d2d_server_fetch_infotypes($d2did, $methods);

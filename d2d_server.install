@@ -97,6 +97,61 @@ function d2d_server_schema() {
     'primary key' => array('did'),
     'unique keys' => array('d2did' => array('d2did')),
   );
+  $schema['d2d_server_friendship'] = array(
+    'description' => 'save friendship of instance.',
+    'fields' => array(
+      'fid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique id',
+      ),
+      'd2did' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the d2did of the instance, this one is already in d2d server',
+      ),
+      'url' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the url of the instance, this one is already in d2d server',
+      ),
+      'friend_d2did' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the d2did of the friend instance',
+      ),
+      'friend_url' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'default' => 0,
+        'nut null' => TRUE,
+        'description' => 'the url of the friend instance',
+      ),
+      'alreadyinserver' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'unsigned' => TRUE,
+        'description' => '1 is already, 2 is not',
+        
+      ),
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'unsigned' => TRUE,
+        'description' => 'The Unix timestamp',
+      ),
+    ),
+    'primary key' => array('fid'),
+  );
   $schema['d2d_server_actions_from_clients'] = array(
     'description' => 'all d2d actions happens on clients.',
     'fields' => array(

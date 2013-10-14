@@ -84,6 +84,12 @@ function d2d_server_get_d2dentity_by_d2did($d2did) {
 }
 
 /**
+ * save friendship
+ */
+function d2d_server_set_friendship_by_d2did($d2did, $friendship) {
+}
+
+/**
  * set users_number by d2did.
  */
 function d2d_server_set_users_number_by_d2did($d2did, $users_number) {
