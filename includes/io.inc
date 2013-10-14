@@ -21,7 +21,15 @@ function d2d_server_d2d_secure_rpc() {
  * Performs a remote call to the d2d_passport using D2D in order
  * to retrieve all kinds of informations.
  */
-function _d2d_server_fetch_infotypes($d2did, $infotypes) {
+function _d2d_server_fetch_infotypes($d2did, $infotypes = FALSE) {
+  if ($infotypes === FALSE) {
+    $infotypes = array();
+    $infotypes['users_number'] = TRUE;
+    $infotypes['nodes_number'] = TRUE;
+    $infotypes['site_info'] = TRUE;
+    $infotypes['tags'] = TRUE;
+  }
+
   global $user;
 
   // Get the current server

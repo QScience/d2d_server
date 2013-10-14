@@ -77,18 +77,25 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
     '#type' => 'checkboxes',
     '#options' => $options,
     '#title' => t("Informations type need to fetch:"),
-    //'#attributes' => array('class' => array('container-inline')),
+    '#attributes' => array('class' => array('container-inline')),
   );
 
   $form['actions'] = array(
     '#type' => 'actions',
   );
-  $form['actions']['fetchall'] = array(
+  $form['actions']['fetchselected'] = array(
     '#type' => 'submit',
-    '#value' => 'Fetch All Informations',
-    '#submit' => array('d2d_fetchClientInfo_form_submit'),
+    '#value' => 'Fetch Selected Kinds of Informations',
+    '#submit' => array('d2d_fetchClientInfo_form_selected_submit'),
     '#weight' => 20,
   );
+  $form['actions']['fetchall'] = array(
+    '#type' => 'submit',
+    '#value' => 'Fetch All Kinds of Informations',
+    '#submit' => array('d2d_fetchClientInfo_form_all_submit'),
+    '#weight' => 21,
+  );
+  $form['#attached']['css'][] = drupal_get_path('module', 'd2d_server') . '/styles/css/fetch_form.css';
   return $form;
 }
 
@@ -99,7 +106,7 @@ function d2d_fetchClientInfo_form_validate(&$form, &$form_state) {
 
 /**
  */
-function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
+function d2d_fetchClientInfo_form_selected_submit(&$form, &$form_state) {
 
   $d2dids = array();
   $methods = array();
@@ -138,6 +145,36 @@ function d2d_fetchClientInfo_form_submit(&$form, &$form_state) {
     drupal_set_message(t("Please choose at least one information type."), 'error');
     return;
   }
+
+  foreach ($d2dids as $d2did) {
+    $return = _d2d_server_fetch_infotypes($d2did, $methods);
+    if ($return === 0) {
+      drupal_set_message(t('%d2did Fetch Informations Successfully.', array('%d2did' => $d2did)));
+    }
+  }
+}
+
+/**
+ */
+function d2d_fetchClientInfo_form_all_submit(&$form, &$form_state) {
+
+  $d2dids = array();
+  foreach ($form_state['values']['table'] as $key => $value) {
+    if ($value === 0) {
+      continue;
+    }
+    $d2dids[] = $value;
+  }
+  if (count($d2dids) === 0) {
+    drupal_set_message(t("Please choose at least one d2d instance."), 'error');
+    return;
+  }
+
+  $methods = array();
+  $methods['users_number'] = TRUE;
+  $methods['nodes_number'] = TRUE;
+  $methods['site_info'] = TRUE;
+  $methods['tags'] = TRUE;
 
   foreach ($d2dids as $d2did) {
     $return = _d2d_server_fetch_infotypes($d2did, $methods);
