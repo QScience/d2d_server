@@ -44,21 +44,21 @@ jQuery(document).ready(function () {
                                     var x, y;
                                     x = [adr1.latitude, adr1.longitude];
                                     y = [adr2.latitude, adr2.longitude];
-                                    if (!x[0] || !x[1]) {
-                                        x[0] = getRandomInt(-70, 70);
-                                        x[1] = getRandomInt(-70, 70);
-                                    }
-                                    if (!y[0] || !y[1]) {
-                                        y[0] = getRandomInt(-70, 70);
-                                        y[1] = getRandomInt(-70, 70);
-                                    }
+ //                                  if (!x[0] || !x[1]) {
+ //                                      x[0] = getRandomInt(-70, 70);
+ //                                      x[1] = getRandomInt(-70, 70);
+ //                                  }
+ //                                  if (!y[0] || !y[1]) {
+ //                                      y[0] = getRandomInt(-70, 70);
+ //                                      y[1] = getRandomInt(-70, 70);
+ //                                  }
                                     showNewConnection(x, y);
                                 });
                             };
                         })(iter), iter * delayBetween2DisplayedConnections);
                     }
 
-                    setTimeout(getNewConnections, (iter) * delayBetween2DisplayedConnections);
+                    //setTimeout(getNewConnections, (iter) * delayBetween2DisplayedConnections);
                 } else {
                     console.log('An error has occurred: ' + data.message);
                 }
@@ -89,10 +89,22 @@ jQuery(document).ready(function () {
      * -> Connection not displayed if freegeoip returns a not found.
      */
     function getUrlLocation(url, url2, callback) {
+        var d1, d2, exec, timeoutId;
+        // create a timeOut here.
+        // see http://stackoverflow.com/questions/1434519/cancel-a-jquery-ajax-call-before-it-returns
         jQuery.get('http://freegeoip.net/json/' + url, {}, function (data1) {
-            jQuery.get('http://freegeoip.net/json/' + url2, {}, function (data2) {
-                callback(data1, data2);
-            });
+            d1 = data1;
+            if (d2 && !exec) {
+                exec = true;
+                callback(d1, d2);
+            }
+        });
+        jQuery.get('http://freegeoip.net/json/' + url2, {}, function (data2) {
+            d2 = data2;
+            if (d1 && !exec) {
+                exec = true;
+                callback(d1, d2);
+            }
         });
     }
 
