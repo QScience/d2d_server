@@ -39,16 +39,16 @@ jQuery(document).ready(function () {
                             return function () {
                                 var cleanUrl1, cleanUrl2;
                                 cleanUrl1 = cleanUrl(data.actions[i].from_url);
-                                cleanUrl2 = cleanUrl(data.actions[i].to_url);
+                                cleanUrl2 = cleanUrl(data9.actions[i].to_url);
                                 getUrlLocation(cleanUrl1, cleanUrl2, function (adr1, adr2) {
                                     var x, y;
                                     x = [adr1.latitude, adr1.longitude];
                                     y = [adr2.latitude, adr2.longitude];
-                                    if (!x[0] || !x[1]) {
+                                    if (x[0] === undefined || !x[1] === undefined || (X[0] == 0 && x[1] == 0)) {
                                         x[0] = getRandomInt(-70, 70);
                                         x[1] = getRandomInt(-70, 70);
                                     }
-                                    if (!y[0] || !y[1]) {
+                                    if (y[0] === undefined || !y[1] === undefined || (y[0] == 0 && y[1] == 0)) {
                                         y[0] = getRandomInt(-70, 70);
                                         y[1] = getRandomInt(-70, 70);
                                     }
