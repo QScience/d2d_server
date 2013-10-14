@@ -54,7 +54,7 @@ jQuery(document).ready(function() {
                                         y[0] = getRandomInt(-70, 70);
                                         y[1] = getRandomInt(-70, 70);
                                     }
-                                    showNewConnection(x, y, [cleanUrl1, cleanUrl2]);
+                                    showNewConnection(x, y, [cleanUrl1, cleanUrl2], data.actions[i]);
                                 });
                             };
                         })(iter), iter * delayBetween2DisplayedConnections);
@@ -153,23 +153,23 @@ jQuery(document).ready(function() {
         }
     }
 
-    function showNewConnection(from, to, urls) {
+    function showNewConnection(from, to, urls, action) {
         var lineId, colorId, infoWindow, infoWindow2;
         from = new google.maps.LatLng(from[0], from[1]);
         to = new google.maps.LatLng(to[0], to[1]);
+        action.created = new Date(+action.created*1000);
         lineId = lines.length;
         colorId = getRandomInt(0, colors.length - 1);
         lines[lineId] = {};
         infoWindow = new google.maps.InfoWindow({
-            content: '<h3>' + urls[0] + '</h3>'
+            content: '<h2><a href="http://' + urls[0] + '" target="_blank">' + urls[0] + '</a></h2><p>asked <a href="http://' + urls[1] + '" target="_blank">' + urls[1] + '</a>  <br /> for <i>' + action.action_type + '</i>.<br /><span style="font-size:10px;">(' + action.action_length + ' bits, ' + action.created.getDate() + "/" + (action.created.getMonth() + 1) + "/" + action.created.getFullYear() + " at " + action.created.getHours() + ":" + action.created.getMinutes() + ":" + action.created.getSeconds() + ')</span></p>'
         });
         infoWindow2 = new google.maps.InfoWindow({
-            content: '<h3>' + urls[1] + '</h3>'
+            content: '<p style="max-width:200px;"><a href="http://' + urls[1] + '" target="_blank">' + urls[1] + '</a> executed <i style="margin-right:3px;">' + action.action_type + '</i> for <a href="http://' + urls[0] + '">' + urls[0] + '</a>.<br /><span style="font-size:10px;">(' + action.action_length + ' bits, ' + action.created.getDate() + "/" + (action.created.getMonth() + 1) + "/" + action.created.getFullYear() + " at " + action.created.getHours() + ":" + action.created.getMinutes() + ":" + action.created.getSeconds() + ')</span></p>'
         });
         lines[lineId].m = new google.maps.Marker({
             position: from,
             map: map,
-            title: 'From',
             animation: google.maps.Animation.DROP,
             icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png',
             title: urls[0]
@@ -184,7 +184,6 @@ jQuery(document).ready(function() {
         lines[lineId].p = new google.maps.Marker({
             position: to,
             map: map,
-            title: 'To',
             animation: google.maps.Animation.DROP,
             icon: 'http://maps.google.com/mapfiles/ms/icons/' + colors[colorId] + '-dot.png',
             title: urls[1]
