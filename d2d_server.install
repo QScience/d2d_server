@@ -161,6 +161,12 @@ function d2d_server_schema() {
         'not null' => TRUE,
         'description' => 'Primary Key: Unique id',
       ),
+      'from_name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'd2d instance name.',
+      ),
       'from_d2did' => array(
         'type' => 'varchar',
         'length' => 50,
@@ -174,6 +180,12 @@ function d2d_server_schema() {
         'default' => 0,
         'nut null' => TRUE,
         'description' => 'the url of the instance from which the action is executed',
+      ),
+      'to_name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'd2d instance name.',
       ),
       'to_d2did' => array(
         'type' => 'varchar',

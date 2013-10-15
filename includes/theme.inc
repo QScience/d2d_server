@@ -14,8 +14,8 @@ function _d2d_instance_view_page_description($de) {
   $content .= '<dt>d2d instance name</dt><dd>' . $de->title . '</dd>';
   //$name = l($de->site_name, $url);
   $url = substr($de->url, 0, -10);
-  $name = l($de->site_name, $url);
-  $content .= '<dt>website name</dt><dd>' . $name . '</dd>';
+  $name = l($url, $url);
+  $content .= '<dt>website url</dt><dd>' . $name . '</dd>';
   if (!empty($de->site_slogan)) {
     $content .= '<dt>website slogan</dt><dd>' . $de->site_slogan . '</dd>';
   }

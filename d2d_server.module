@@ -221,6 +221,9 @@ function _d2d_server_all_list_page() {
 /**
  */
 function _d2d_instance_view_page($d2did) {
+  //$a = d2d_api_own_instance_get();
+  //dsm($a);
+
   $de = d2d_server_get_d2dentity_by_d2did($d2did);
   $did = $de->did;
   
@@ -237,7 +240,6 @@ function _d2d_instance_view_page($d2did) {
   $content = "<div id='one_d2d_instance'><fieldset><legend>$fieldset_title$backtoserver_voting_link</legend><div class='fieldset-wrapper'>";
 
   $content .= _d2d_instance_view_page_description($de);
-
 
   $friends = d2d_server_get_friends_from_friendship($d2did);
   if ($friends != FALSE) {
