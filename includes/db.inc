@@ -157,6 +157,24 @@ function d2d_server_check_whether_friendship_exist($d2did, $d2did_f) {
 }
 
 /**
+ * get all friends of a instance
+ *
+ */
+function d2d_server_get_friends_from_friendship($d2did) {
+  $friends = db_select('d2d_server_friendship')
+    ->fields('d2d_server_friendship')
+    ->condition('d2did', $d2did)
+    ->execute()
+    ->fetchAll(PDO::FETCH_ASSOC);
+  if (count($friends) > 0) {
+    return $friends;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
  * set users_number by d2did.
  */
 function d2d_server_set_users_number_by_d2did($d2did, $users_number) {

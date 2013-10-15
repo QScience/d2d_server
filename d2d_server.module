@@ -238,7 +238,30 @@ function _d2d_instance_view_page($d2did) {
 
   $content .= _d2d_instance_view_page_description($de);
 
+
+  $friends = d2d_server_get_friends_from_friendship($d2did);
+  if ($friends != FALSE) {
+    $header = array(
+      t('Friend D2d Id'),
+      t('Friend Url'),
+    );
+    $rows = array();
+    foreach ($friends as $friend) {
+      $row = array();
+      if ($friend['alreadyinserver'] == 1) {
+        $row[] = l($friend['friend_d2did'], 'd2d/' . $friend['friend_d2did']);
+      }
+      else {
+        $row[] = $friend['friend_d2did'];
+      }
+      $row[] = $friend['friend_url'];
+      $rows[] = $row;
+    }
+    $content .= theme('table', array('header' => $header, 'rows' => $rows));
+  }
+
   $content .= '</div></fieldset></div>';
+
   $field_view = entity_view('d2d_entity', array($did => $de), 'full', NULL, TRUE);
   $content .= drupal_render($field_view);
 
