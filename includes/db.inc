@@ -87,10 +87,72 @@ function d2d_server_get_d2dentity_by_d2did($d2did) {
  * save friendship
  */
 function d2d_server_set_friendship_by_d2did($d2did, $friendship) {
+  $url = d2d_server_get_url_by_d2did($d2did);
   $friendship = d2d_explode($friendship);
   foreach ($friendship as $friend) {
     $friend = d2d_explode($friend);
-    dsm($friend);
+    $check = d2d_server_check_whether_friendship_exist($d2did, $friend['d2did']);
+    if ($check === FALSE) {
+      $de = d2d_server_get_d2dentity_by_d2did($friend['d2did']);
+      if ($de === FALSE) {
+        $de = 2;
+      }
+      else {
+        $de = 1;
+      }
+      db_insert('d2d_server_friendship')
+        ->fields(array(
+          'd2did' => $d2did,
+          'url' => $url->url,
+          'friend_d2did' => $friend['d2did'],
+          'friend_url' => $friend['url'],
+          'alreadyinserver' => $de,
+          'created' => REQUEST_TIME,
+          ))
+        ->execute();
+    }
+    else {
+      $de = d2d_server_get_d2dentity_by_d2did($friend['d2did']);
+      if ($de === FALSE && $check['alreadyinserver'] == 1) {
+        //update to 2
+        d2d_server_update_friendship_status($d2did, $friend['d2did'], 2);
+      }
+      elseif ($de != FALSE && $check['alreadyinserver'] == 2) {
+        //update to 1
+        d2d_server_update_friendship_status($d2did, $friend['d2did'], 1);
+      }
+    }
+  }
+}
+
+/**
+ * update d2d server friend's status
+ */
+function d2d_server_update_friendship_status($d2did, $d2did_f, $status) {
+  db_update("d2d_server_friendship")
+    ->fields( array(
+      'alreadyinserver' => $status,
+      ))
+    ->condition('d2did', $d2did)
+    ->condition('friend_d2did', $d2did_f)
+    ->execute();
+}
+
+/**
+ * check whether friendship already existed.
+ */
+function d2d_server_check_whether_friendship_exist($d2did, $d2did_f) {
+  $friends = db_select('d2d_server_friendship')
+    ->fields('d2d_server_friendship')
+    ->condition('d2did', $d2did)
+    ->condition('friend_d2did', $d2did_f)
+    ->execute()
+    ->fetchAll(PDO::FETCH_ASSOC);
+  if (count($friends) > 0) {
+    return $friends[0];
+  }
+  else {
+    return FALSE;
   }
 }
 
