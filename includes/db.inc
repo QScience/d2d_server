@@ -340,8 +340,10 @@ function d2d_server_save_actions_form_clients($action_a) {
     ->fields(array(
       'from_d2did' => $action_a['from'],
       'from_url' => $action_a['from_url'],
+      'from_name' => $action_a['from_name'],
       'to_d2did' => $action_a['to'],
       'to_url' => $action_a['to_url'],
+      'to_name' => $action_a['to_name'],
       'action_type' => $action_a['type'],
       'action_length' => $action_a['len'],
       'created' => REQUEST_TIME,
