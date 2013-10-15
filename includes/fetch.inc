@@ -81,6 +81,12 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
     '#attributes' => array('class' => array('container-inline')),
   );
 
+  $form['selectall'] = array(
+    '#prefix' => '<div id ="d2d-server-fetch-select-all">',
+    '#markup' => l(t('Select All'), 'admin/d2d_server/fetchClientInfo'),
+    '#suffix' => '</div>',
+  );
+
   $form['actions'] = array(
     '#type' => 'actions',
   );
@@ -97,6 +103,7 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
     '#weight' => 21,
   );
   $form['#attached']['css'][] = drupal_get_path('module', 'd2d_server') . '/styles/css/fetch_form.css';
+  $form['#attached']['js'][] = drupal_get_path('module', 'd2d_server') . '/styles/js/fetch_form.js';
   return $form;
 }
 

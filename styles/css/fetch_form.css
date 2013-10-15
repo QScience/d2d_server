@@ -1,3 +1,8 @@
 #d2d-fetchclientinfo-form #edit-infotype .form-type-checkbox {
 	padding-right: 20px;
 }
+
+#d2d-server-fetch-select-all {
+  margin-top: -20px;
+}
+
