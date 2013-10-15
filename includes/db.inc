@@ -87,6 +87,11 @@ function d2d_server_get_d2dentity_by_d2did($d2did) {
  * save friendship
  */
 function d2d_server_set_friendship_by_d2did($d2did, $friendship) {
+  $friendship = d2d_explode($friendship);
+  foreach ($friendship as $friend) {
+    $friend = d2d_explode($friend);
+    dsm($friend);
+  }
 }
 
 /**
@@ -106,6 +111,7 @@ function d2d_server_set_users_number_by_d2did($d2did, $users_number) {
  * set site title and site slogan by d2did.
  */
 function d2d_server_set_site_info_by_d2did($d2did, $site_info) {
+  $site_info = d2d_explode($site_info);
   db_update("d2d_entity")
     ->fields( array(
       'site_name' => $site_info['name'],

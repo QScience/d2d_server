@@ -170,15 +170,15 @@ function d2d_fetchClientInfo_form_all_submit(&$form, &$form_state) {
     return;
   }
 
-  $methods = array();
-  $methods['users_number'] = TRUE;
-  $methods['nodes_number'] = TRUE;
-  $methods['site_info'] = TRUE;
-  $methods['tags'] = TRUE;
+//  $methods = array();
+//  $methods['users_number'] = TRUE;
+//  $methods['nodes_number'] = TRUE;
+//  $methods['site_info'] = TRUE;
+//  $methods['tags'] = TRUE;
 //  $methods['friendship'] = TRUE;
 
   foreach ($d2dids as $d2did) {
-    $return = _d2d_server_fetch_infotypes($d2did, $methods);
+    $return = _d2d_server_fetch_infotypes($d2did);
     if ($return === 0) {
       drupal_set_message(t('%d2did Fetch Informations Successfully.', array('%d2did' => $d2did)));
     }

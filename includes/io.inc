@@ -47,7 +47,6 @@ function _d2d_server_fetch_infotypes($d2did, $infotypes = FALSE) {
   $result = d2d_call_secure_rpc($friend, 'd2d_passport_get_informations', $post, $error_string);
   $result = d2d_explode($result);
 
-  //dsm($result);
 
   // Display communication errors if any
   if (!$result) {
@@ -61,15 +60,8 @@ function _d2d_server_fetch_infotypes($d2did, $infotypes = FALSE) {
   }
   else{
     $return = d2d_explode($result['return']);
-        dsm($return);
     foreach ($return as $key => $value) {
       $function = "d2d_server_set_" . $key . "_by_d2did"; 
-      if ($key === 'site_info') {
-        $value = d2d_explode($value);
-      }
-      //if ($key === 'friendship') {
-        dsm($value);
-      //}
       $function($d2did, $value);
     }
     //d2d_server_set_users_number_by_d2did($d2did, $result['return']);
