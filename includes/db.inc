@@ -203,6 +203,19 @@ function d2d_server_set_site_info_by_d2did($d2did, $site_info) {
 }
 
 /**
+ * set description by d2did.
+ */
+function d2d_server_set_d2d_description_by_d2did($d2did, $d2d_description) {
+  db_update("d2d_entity")
+    ->fields( array(
+      'description' => $d2d_description,
+      'infofetched' => REQUEST_TIME,
+      ))
+    ->condition('d2did', $d2did)
+    ->execute();
+}
+
+/**
  * set nodes number by d2did.
  */
 function d2d_server_set_nodes_number_by_d2did($d2did, $nodes_number) {

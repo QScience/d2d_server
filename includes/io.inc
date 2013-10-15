@@ -29,6 +29,7 @@ function _d2d_server_fetch_infotypes($d2did, $infotypes = FALSE) {
     $infotypes['site_info'] = TRUE;
     $infotypes['tags'] = TRUE;
     $infotypes['friendship'] = TRUE;
+    $infotypes['d2d_description'] = TRUE;
   }
 
   global $user;
@@ -246,27 +247,27 @@ function _d2d_server_save_client_actions($arguments, $rpc_info) {
       !isset($info['from_url']) || !isset($info['to_url']) ||
       !isset($info['from_name']) || !isset($info['to_name'])) {
       $error = 'Error. Information about Action is not complete.';
-  }
-  else {
-    $q = d2d_server_get_d2dentity_by_d2did($info['from']);
-    if ($q === FALSE) {
-      $error = 'Error. The instance carrying out the action is not imported to d2d server yet.';
     }
     else {
-      if (function_exists('nodejs_enqueue_message')) {
-        $message = (object) array(
-          'data' => (object) $info,
-            'channel' => 'nodejs_user_' . 1, // to root
-            'callback' => 'displayRequest',
-            );
-        nodejs_enqueue_message($message);
+      $q = d2d_server_get_d2dentity_by_d2did($info['from']);
+      if ($q === FALSE) {
+        $error = 'Error. The instance carrying out the action is not imported to d2d server yet.';
       }
-      d2d_server_save_actions_form_clients($info);
-      $return = TRUE;
+      else {
+        if (function_exists('nodejs_enqueue_message')) {
+          $message = (object) array(
+            'data' => (object) $info,
+              'channel' => 'nodejs_user_' . 1, // to root
+              'callback' => 'displayRequest',
+              );
+          nodejs_enqueue_message($message);
+        }
+        d2d_server_save_actions_form_clients($info);
+        $return = TRUE;
+      }
     }
   }
-}
-return d2d_implode(array('return' => $return, 'error' => $error));
+  return d2d_implode(array('return' => $return, 'error' => $error));
 }
 
 

@@ -22,7 +22,6 @@ function _d2d_instance_view_page_description($de) {
   $content .= '<dt>d2d id</dt><dd>' . $de->d2did . '</dd>';
   $content .= '<dt>description</dt><dd>' . $de->description . '</dd>';
 
-
   $category_s = l($de->category, 'd2d/category/' . $de->category);
   $content .= '<dt>category</dt><dd>' . $category_s . '</dd>';
 

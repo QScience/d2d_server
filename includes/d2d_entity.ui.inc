@@ -87,13 +87,16 @@ class D2DEntityUIController extends EntityDefaultUIController {
 
     $ety_obj = entity_object_load($id, $this->entityType);
 
-    $row[] = array('data' => array(
-      '#theme' => 'entity_ui_overview_item',
-      '#label' => entity_label($this->entityType, $entity),
-      '#name' => !empty($this->entityInfo['exportable']) ? entity_id($this->entityType, $entity) : FALSE,
-      '#url' => $entity_uri ? $entity_uri : FALSE,
-      '#entity_type' => $this->entityType),
-    );
+    //$row[] = array('data' => array(
+    //  '#theme' => 'entity_ui_overview_item',
+    //  '#label' => entity_label($this->entityType, $entity),
+    //  '#name' => !empty($this->entityInfo['exportable']) ? entity_id($this->entityType, $entity) : FALSE,
+    //  //'#url' => 'd2d/' . $ety_obj->d2did,
+    //  '#url' => $entity_uri ? $entity_uri : FALSE,
+    //  '#entity_type' => $this->entityType),
+    //);
+    $row[] = l($ety_obj->title, 'd2d/' . $ety_obj->d2did);
+    //dsm($entity_uri);
 
     // Add in any passed additional cols.
     foreach ($additional_cols as $col) {
