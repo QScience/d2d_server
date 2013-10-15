@@ -1,3 +1,8 @@
 #d2d-server-world-usage-map {
 	height: 300px;
 }
+
+#d2d-server-search {
+  margin-top: 20px;
+  margin-left: 3px;
+}
