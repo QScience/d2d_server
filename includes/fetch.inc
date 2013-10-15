@@ -72,6 +72,7 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
     2 => 'Nodes Number',
     3 => 'Site Name&Slogan',
     4 => 'Tags',
+    5 => 'D2d Instance Description',
   );
   $form['infotype'] = array(
     '#type' => 'checkboxes',
@@ -136,6 +137,9 @@ function d2d_fetchClientInfo_form_selected_submit(&$form, &$form_state) {
         break;
       case 4:
         $methods['tags'] = TRUE;
+        break;
+      case 5:
+        $methods['d2d_description'] = TRUE;
         break;
       default:
       }
