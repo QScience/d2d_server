@@ -5,6 +5,50 @@
  */
 
 /**
+ * create d2d entity from the friends
+ *
+ * @param int $d2did
+ *   The d2did of the instance which will be saved into d2d_entity
+ *
+ * @return BOOL
+ *   return TRUE, when saved successfully.
+ *   return FALSE, when failed.
+ *
+ */
+function d2d_server_create_d2dentity($d2did) {
+  $di = db_select("d2d_instances", "di")
+    ->fields("di", array())
+    ->condition("friendship_state", 3)
+    ->condition("d2d_id", $d2did)
+    ->execute()
+    ->fetchAllAssoc('d2d_id');
+  if (count($di) == 0) {
+    return FALSE;
+  }
+  $alreadyimport = db_select("d2d_entity", 'de')
+    ->fields('de', array('d2did'))
+    ->condition("d2did", $d2did)
+    ->execute()
+    ->fetchAllAssoc('d2did');
+  if (count($alreadyimport) > 0) {
+    return FALSE;
+  }
+  //dsm($q);
+  $entity = entity_create('d2d_entity', array('type' => 'd2d_entity'));
+  $entity->d2did = $d2did;
+  $entity->title = $di[$d2did]->name;
+  $entity->description = $di[$d2did]->description;
+  $entity->url = $di[$d2did]->url;
+  $entity->site_name = "N/A";
+  $entity->site_slogan = "N/A";
+  $entity->category = 'default';
+  $entity->users_number = -1;
+  $entity->nodes_number= -1;
+  $entity->save();
+  return TRUE;
+}
+
+/**
  * get all new friends
  */
 function d2d_server_get_instances_newfriends() {
@@ -364,8 +408,3 @@ function d2d_server_save_actions_form_clients($action_a) {
     ->execute();
 }
 
-/**
- * create d2d entity from the friends
- */
-function d2d_server_create_d2dentity($d2did) {
-}

@@ -197,4 +197,6 @@ function d2d_entity_form_validate(&$form, &$form_state) {
  */
 function d2d_entity_form_submit(&$form, &$form_state) {
 
-  $d2d_entity = entity_ui_form_submit_build_entity($form, $form_state); $d2d_entity->save(); }
+  $d2d_entity = entity_ui_form_submit_build_entity($form, $form_state);
+  $d2d_entity->save();
+}

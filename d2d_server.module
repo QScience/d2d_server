@@ -221,6 +221,7 @@ function _d2d_server_all_list_page() {
 /**
  */
 function _d2d_instance_view_page($d2did) {
+  //$a = d2d_server_create_d2dentity($d2did);
   //$a = d2d_api_own_instance_get();
   //dsm($a);
 
