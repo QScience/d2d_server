@@ -183,6 +183,23 @@ function d2d_server_update_friendship_status($d2did, $d2did_f, $status) {
 }
 
 /**
+ * update d2d server friend's status immediately after adding or deleting an instance.
+ * used in d2d/add 
+ *
+ * status = 1,2
+ * 1 is add
+ * 2 is delete
+ */
+function d2d_server_update_friendship_status_after_addordelete($d2did_new, $status) {
+  db_update("d2d_server_friendship")
+    ->fields( array(
+      'alreadyinserver' => $status,
+      ))
+    ->condition('friend_d2did', $d2did_new)
+    ->execute();
+}
+
+/**
  * check whether friendship already existed.
  */
 function d2d_server_check_whether_friendship_exist($d2did, $d2did_f) {

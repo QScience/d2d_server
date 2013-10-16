@@ -236,10 +236,12 @@ function d2d_server_uninstall() {
   //clean all attached field.
   field_attach_delete_bundle('d2d_entity', 'd2d_entity');
 
+  //delete the table
   drupal_uninstall_schema('d2d_entity');
   drupal_uninstall_schema('d2d_server_actions_from_clients');
-  //delete the role.
-  //user_role_delete('patterns_server_user');
+  drupal_uninstall_schema('d2d_server_friendship');
+
+  //delete the d2d permissions
   db_delete('d2d_permissions')
     ->condition('method', 'd2d_server_save_client_actions')
     ->execute();
