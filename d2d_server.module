@@ -226,12 +226,12 @@ function _d2d_instance_view_page($d2did) {
   //dsm($a);
 
   $de = d2d_server_get_d2dentity_by_d2did($d2did);
-  $did = $de->did;
-  
   if (!$de) {
     drupal_set_message(t("The d2d instance doesn't exist."), "error");
     drupal_goto('d2d_server_homepage');
   }
+
+  $did = $de->did;
   drupal_set_title($de->title);
   $fieldset_title = $de->title;
 
