@@ -235,6 +235,7 @@ function _d2d_instance_view_page($d2did) {
   $fieldset_title = $de->title;
 
   drupal_add_css(drupal_get_path('module', 'd2d_server') . '/styles/css/viewpage.css');
+  drupal_add_js(drupal_get_path('module', 'd2d_server') . '/styles/js/viewpage.js');
 
   $backtoserver_voting_link = _d2d_server_back_like_button($did, $d2did);
   $content = "<div id='one_d2d_instance'><fieldset><legend>$fieldset_title$backtoserver_voting_link</legend><div class='fieldset-wrapper'>";
