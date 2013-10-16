@@ -240,4 +240,8 @@ function d2d_server_uninstall() {
   drupal_uninstall_schema('d2d_server_actions_from_clients');
   //delete the role.
   //user_role_delete('patterns_server_user');
+  db_delete('d2d_permissions')
+    ->condition('method', 'd2d_server_save_client_actions')
+    ->execute();
+
 }

@@ -363,3 +363,9 @@ function d2d_server_save_actions_form_clients($action_a) {
       ))
     ->execute();
 }
+
+/**
+ * create d2d entity from the friends
+ */
+function d2d_server_create_d2dentity($d2did) {
+}

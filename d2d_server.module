@@ -189,7 +189,7 @@ function _d2d_server_all_list_page() {
 
     //Most Recent Web Sites.
     $query->ordered_results = array_slice($ordered_results_backup, 0, 10, TRUE);
-    $fieldset_title = 'Most Recent Web Sites:';
+    $fieldset_title = 'Recently Added Web Sites:';
     $list .= _d2d_server_list_page($query, $fieldset_title);
 
     //Most Liked Web Sites.
@@ -244,8 +244,8 @@ function _d2d_instance_view_page($d2did) {
   $friends = d2d_server_get_friends_from_friendship($d2did);
   if ($friends != FALSE) {
     $header = array(
-      t('Friend D2d Id'),
-      t('Friend Url'),
+      t('Friend D2D ID'),
+      t('Friend URL'),
     );
     $rows = array();
     foreach ($friends as $friend) {
@@ -256,7 +256,8 @@ function _d2d_instance_view_page($d2did) {
       else {
         $row[] = $friend['friend_d2did'];
       }
-      $row[] = $friend['friend_url'];
+      $url = substr($friend['friend_url'], 0, -10);
+      $row[] = l($url, $url);
       $rows[] = $row;
     }
     $content .= theme('table', array('header' => $header, 'rows' => $rows));

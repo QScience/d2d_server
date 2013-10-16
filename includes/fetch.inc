@@ -77,7 +77,7 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
   $form['infotype'] = array(
     '#type' => 'checkboxes',
     '#options' => $options,
-    '#title' => t("Informations type need to fetch:"),
+    '#title' => t("Information to fetch:"),
     '#attributes' => array('class' => array('container-inline')),
   );
 
@@ -92,16 +92,16 @@ function d2d_fetchClientInfo_form($form, &$form_state) {
   );
   $form['actions']['fetchselected'] = array(
     '#type' => 'submit',
-    '#value' => 'Fetch Selected Kinds of Informations',
+    '#value' => 'Fetch Data',
     '#submit' => array('d2d_fetchClientInfo_form_selected_submit'),
     '#weight' => 20,
   );
-  $form['actions']['fetchall'] = array(
-    '#type' => 'submit',
-    '#value' => 'Fetch All Kinds of Informations',
-    '#submit' => array('d2d_fetchClientInfo_form_all_submit'),
-    '#weight' => 21,
-  );
+  //$form['actions']['fetchall'] = array(
+  //  '#type' => 'submit',
+  //  '#value' => 'Fetch All Kinds of Informations',
+  //  '#submit' => array('d2d_fetchClientInfo_form_all_submit'),
+  //  '#weight' => 21,
+  //);
   $form['#attached']['css'][] = drupal_get_path('module', 'd2d_server') . '/styles/css/fetch_form.css';
   $form['#attached']['js'][] = drupal_get_path('module', 'd2d_server') . '/styles/js/fetch_form.js';
   return $form;
@@ -153,7 +153,7 @@ function d2d_fetchClientInfo_form_selected_submit(&$form, &$form_state) {
     }
   }
   if (count($methods) === 0) {
-    drupal_set_message(t("Please choose at least one information type."), 'error');
+    drupal_set_message(t("Please select the type of information to fetch."), 'error');
     return;
   }
 
