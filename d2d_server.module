@@ -10,7 +10,8 @@ module_load_include('inc', 'd2d_server', 'includes/fetch');
 module_load_include('inc', 'd2d_server', 'includes/search');
 module_load_include('inc', 'd2d_server', 'includes/theme');
 module_load_include('inc', 'd2d_server', 'includes/votingapi');
-module_load_include('inc', 'd2d_server', 'includes/cron');
+module_load_include('inc', 'd2d_server', 'includes/cron')
+module_load_include('inc', 'd2d_server', 'includes/friendship');
 
 /**
  * Implements hook_entity_info().
