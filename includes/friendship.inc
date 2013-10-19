@@ -59,7 +59,6 @@ function d2d_server_friendship_incoming_preprocess($exploded_arguments, &$rpc_in
     $error_string = 'Error retrieving instance information. Friendship refused.';
     return FALSE;
   }
-  watchdog('d2d_server', 'ahah1');
   $exploded_res = d2d_explode($res);
   if ($exploded_res === FALSE || !d2d_check_array($exploded_res, array(
     'd2d_id' => 'd2d_check_d2d_id',
