@@ -209,7 +209,7 @@ function _d2d_server_all_list_page() {
   else {
     //drupal_add_js($path . '/styles/js/patterns_server.firstpage.js');
     $list .= "<div class='d2d-server-list-table-wrap'>";
-    $list .= "There is no d2d instances in database.</br>Go to check whether there are some ";
+    $list .= "There is no d2d instance in the database.</br>Check whether whether you can import some ";
     $url = 'admin/d2d_server/add';
     $list .= l(t('friends'), $url, array('attributes' => array('class' => array('add-button-link'))));
     $list .= '?</div>';
