@@ -15,22 +15,22 @@ function _d2d_instance_view_page_description($de, $friends = FALSE) {
   //$name = l($de->site_name, $url);
   $url = substr($de->url, 0, -10);
   $name = l($url, $url);
-  $content .= '<dt>Website url:</dt><dd>' . $name . '</dd>';
+  $content .= '<dt>Website:</dt><dd>' . $name . '</dd>';
   if (!empty($de->site_slogan)) {
     $content .= '<dt>Website slogan:</dt><dd>' . $de->site_slogan . '</dd>';
   }
   $content .= '<dt>D2D id:</dt><dd>' . $de->d2did . '</dd>';
-  $content .= '<dt>Description:</dt><dd>' . $de->description . '</dd>';
 
   $category_s = l($de->category, 'd2d/category/' . $de->category);
   $content .= '<dt>Category:</dt><dd>' . $category_s . '</dd>';
+  $content .= '<dt>Description:</dt><dd id="viewpage-category-dldtdd">' . $de->description . '</dd>';
 
   $score = _d2d_server_get_voting_score($de->did);
   $content .= '<dt>Score:</dt><dd id="d2d-server-view-page-score">' . $score . '</dd>';
-  $content .= '<dt>Users number:</dt><dd>' . $de->users_number . '</dd>';
-  $content .= '<dt>Nodes number:</dt><dd>' . $de->nodes_number . '</dd>';
+  $content .= '<dt>Users:</dt><dd>' . $de->users_number . '</dd>';
+  $content .= '<dt>Nodes:</dt><dd>' . $de->nodes_number . '</dd>';
   if ($friends != FALSE) {
-    $content .= '<dt>Friends number:</dt><dd>' . count($friends) . '</dd>';
+    $content .= '<dt>Friends:</dt><dd>' . count($friends) . '</dd>';
   }
 
   $content .= '</dl></div>';
