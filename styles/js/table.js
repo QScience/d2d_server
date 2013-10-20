@@ -68,8 +68,10 @@ $(document).ready(function() {
   }); 
 
   //for tag comma
-  $('.d2d-server-list-table td:eq(2) a:not(:last)').each(function () {
-	  $(this).after(',');
+  $('.d2d-server-list-table').each(function() {
+	  $(this).find('td:eq(2) a:not(:last)').each(function() {
+		  $(this).after(',');
+	  });
   });
 
 });
