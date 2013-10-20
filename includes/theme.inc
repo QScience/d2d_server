@@ -11,24 +11,24 @@ module_load_include('inc', 'd2d_server', 'includes/votingapi');
 function _d2d_instance_view_page_description($de) {
   $content = '<div id="d2d-instance-view-page-description"><dl class="dl-horizontal">';
 
-  $content .= '<dt>d2d instance name</dt><dd>' . $de->title . '</dd>';
+  $content .= '<dt>Name:</dt><dd>' . $de->title . '</dd>';
   //$name = l($de->site_name, $url);
   $url = substr($de->url, 0, -10);
   $name = l($url, $url);
-  $content .= '<dt>website url</dt><dd>' . $name . '</dd>';
+  $content .= '<dt>Website url:</dt><dd>' . $name . '</dd>';
   if (!empty($de->site_slogan)) {
-    $content .= '<dt>website slogan</dt><dd>' . $de->site_slogan . '</dd>';
+    $content .= '<dt>Website slogan:</dt><dd>' . $de->site_slogan . '</dd>';
   }
-  $content .= '<dt>d2d id</dt><dd>' . $de->d2did . '</dd>';
-  $content .= '<dt>description</dt><dd>' . $de->description . '</dd>';
+  $content .= '<dt>D2D id:</dt><dd>' . $de->d2did . '</dd>';
+  $content .= '<dt>Description:</dt><dd>' . $de->description . '</dd>';
 
   $category_s = l($de->category, 'd2d/category/' . $de->category);
-  $content .= '<dt>category</dt><dd>' . $category_s . '</dd>';
+  $content .= '<dt>Category:</dt><dd>' . $category_s . '</dd>';
 
   $score = _d2d_server_get_voting_score($de->did);
-  $content .= '<dt>score</dt><dd id="d2d-server-view-page-score">' . $score . '</dd>';
-  $content .= '<dt>users number</dt><dd>' . $de->users_number . '</dd>';
-  $content .= '<dt>nodes number</dt><dd>' . $de->nodes_number . '</dd>';
+  $content .= '<dt>Score:</dt><dd id="d2d-server-view-page-score">' . $score . '</dd>';
+  $content .= '<dt>Users number:</dt><dd>' . $de->users_number . '</dd>';
+  $content .= '<dt>Nodes number:</dt><dd>' . $de->nodes_number . '</dd>';
 
   $content .= '</dl></div>';
   return $content;
