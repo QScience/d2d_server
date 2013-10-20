@@ -67,6 +67,10 @@ $(document).ready(function() {
     return false;
   }); 
 
+  //for tag comma
+  $('.d2d-server-list-table td:eq(2) a:not(:last)').each(function () {
+	  $(this).after(',');
+  });
 
 });
 })(jQuery)
