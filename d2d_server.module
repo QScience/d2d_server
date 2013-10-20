@@ -74,6 +74,31 @@ function d2d_server_permission() {
 }
 
 /**
+ * Implements hook_block_info().
+ */
+function d2d_server_block_info() {
+  $blocks = array();
+  $blocks['d2d_server_description'] = array(
+    'info' => t('What is D2D?'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function d2d_server_block_view($delta='') {
+  $block = array();
+  switch ($delta) {
+    case 'd2d_server_description':
+      $block['subject'] = t('What is D2D:');
+      $block['content'] = _d2d_server_block();
+      break;
+  }
+  return $block;
+}
+
+/**
  */
 function d2d_server_menu() {
   $items['admin/d2d_server/fetchClientInfo'] = array(
@@ -347,4 +372,31 @@ function _d2d_server_list($property, $arg, $operate = '=', $showupload = TRUE) {
   else {
     return FALSE;
   }
+}
+
+
+/**
+ */
+function _d2d_server_block() {
+
+  $s = "<p><strong>";
+  $s .= "Welcome to Drupal 2 Drupal!";
+  $s .= "</strong></p>";
+
+  $s .= "<p>";
+  $s .= "Discover relevant ";
+  $s .= l("Drupal", "http://www.drupal.org");
+  $s .= " communities, by browsing the archive of registered web sites.";
+  $s .= "</p>";
+
+  $s .= "<p>";
+  $s .= "Add them as a friend, and start sharing content, updates, and much more!";
+  $s .= "</p>";
+
+  $s .= "<p>";
+  $s .= "Join the Drupal2Drupal network now(";
+  $s .= l("http://d2d.inn.ac/content/about", "http://d2d.inn.ac/content/about");
+  $s .= ").</p>";
+  
+  return $s;
 }
