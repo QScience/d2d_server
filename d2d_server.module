@@ -246,9 +246,10 @@ function _d2d_instance_view_page($d2did) {
   $backtoserver_voting_link = _d2d_server_back_like_button($did, $d2did);
   $content = "<div id='one_d2d_instance'><fieldset><legend>$fieldset_title$backtoserver_voting_link</legend><div class='fieldset-wrapper'>";
 
-  $content .= _d2d_instance_view_page_description($de);
 
   $friends = d2d_server_get_friends_from_friendship($d2did);
+
+  $content .= _d2d_instance_view_page_description($de, $friends);
   if ($friends != FALSE) {
     $header = array(
       t('Friend D2D ID'),

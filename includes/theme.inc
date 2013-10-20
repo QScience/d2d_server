@@ -8,7 +8,7 @@ module_load_include('inc', 'd2d_server', 'includes/votingapi');
 /**
  * theme d2d instance description part
  */
-function _d2d_instance_view_page_description($de) {
+function _d2d_instance_view_page_description($de, $friends = FALSE) {
   $content = '<div id="d2d-instance-view-page-description"><dl class="dl-horizontal">';
 
   $content .= '<dt>Name:</dt><dd>' . $de->title . '</dd>';
@@ -29,6 +29,9 @@ function _d2d_instance_view_page_description($de) {
   $content .= '<dt>Score:</dt><dd id="d2d-server-view-page-score">' . $score . '</dd>';
   $content .= '<dt>Users number:</dt><dd>' . $de->users_number . '</dd>';
   $content .= '<dt>Nodes number:</dt><dd>' . $de->nodes_number . '</dd>';
+  if ($friends != FALSE) {
+    $content .= '<dt>Friends number:</dt><dd>' . count($friends) . '</dd>';
+  }
 
   $content .= '</dl></div>';
   return $content;
