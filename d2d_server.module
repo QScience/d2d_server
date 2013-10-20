@@ -91,7 +91,7 @@ function d2d_server_block_view($delta='') {
   $block = array();
   switch ($delta) {
     case 'd2d_server_description':
-      $block['subject'] = t('What is D2D:');
+      $block['subject'] = t('What is D2D');
       $block['content'] = _d2d_server_block();
       break;
   }
@@ -394,9 +394,9 @@ function _d2d_server_block() {
   $s .= "</p>";
 
   $s .= "<p>";
-  $s .= "Join the Drupal2Drupal network now(";
-  $s .= l("http://d2d.inn.ac/content/about", "http://d2d.inn.ac/content/about");
-  $s .= ").</p>";
+  $s .= "Join the Drupal2Drupal network ";
+  $s .= l("now", "content/about");
+  $s .= ".</p>";
   
   return $s;
 }

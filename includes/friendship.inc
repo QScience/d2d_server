@@ -53,6 +53,11 @@ function d2d_server_d2d_handle_incoming_request_preprocess() {
  *   TRUE on success.
  */
 function d2d_server_friendship_incoming_preprocess($exploded_arguments, &$rpc_info, $encrypted_data, $signature, &$error_string) {
+
+  if ($exploded_arguments['state'] === 'FALSE' || empty($exploded_arguments['state'])) {
+    // Nothing to do.
+    return TRUE;
+  }
   // Fetch more info about the instance
   $res = xmlrpc($rpc_info['url'], array('d2d.getInstanceInformation' => array()));
   if ($res === FALSE) {
@@ -82,8 +87,12 @@ function d2d_server_friendship_incoming_preprocess($exploded_arguments, &$rpc_in
   ));
 
   if (!$ok) {
-    // Not a fatal error.
-    watchdog('d2d_server', t('Failing to update instance on d2d_server_friendship_incoming_preprocess hook.'));
+    watchdog('ahahse', $ok);
+    // Not a fatal error. It could be that there is nothing to update.
+    watchdog('d2d_server', t('Failing to update instance :id on d2d_server_friendship_incoming_preprocess hook.'),
+      array(
+        ':id' => $rpc_info['instance']['id'],
+      ));
   }
   else {
     $rpc_info['instance']['name'] = $exploded_res['name'];
