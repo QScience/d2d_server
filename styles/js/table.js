@@ -69,8 +69,10 @@ $(document).ready(function() {
 
   //for tag comma
   $('.d2d-server-list-table').each(function() {
-	  $(this).find('td:eq(2) a:not(:last)').each(function() {
-		  $(this).after(',');
+	  $(this).find('tr').each(function() {
+		  $(this).find('td:eq(2) a:not(:last)').each(function() {
+			  $(this).after(',');
+		  });
 	  });
   });
 
