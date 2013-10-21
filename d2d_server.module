@@ -353,7 +353,8 @@ function _d2d_server_list($property, $arg, $operate = '=', $showupload = TRUE) {
   switch ($property_sign) {
     case 'tag':
       $tax = taxonomy_term_load($arg);
-      $fieldset_title = "tag: " . $tax->name . " in $property field";
+      $fieldset_title = "tag: " . $tax->name;
+      //$fieldset_title = "tag: " . $tax->name . " in $property field";
       $query->fieldCondition($property, 'tid', $arg, '=');
       break;
 
