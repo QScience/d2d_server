@@ -46,8 +46,9 @@ function _d2d_server_list_page($query, $fieldset_title) {
   drupal_add_js(drupal_get_path('module', 'd2d_server') . '/styles/js/table.js');
 
   $header = array(
-    t('Category'),
+    //t('Category'),
     t('Name'),
+    t('Website'),
     t('Tags'),
     t('Updated'),
     t('Score'),
@@ -85,8 +86,10 @@ function _d2d_server_list_page($query, $fieldset_title) {
 function _d2d_server_list_table_row($ety_obj, $field_names) {
   $row = array();
 
-  $row[] = l($ety_obj->category, 'd2d/category/' . $ety_obj->category);
   $row[] = l($ety_obj->title, 'd2d/' . $ety_obj->d2did);
+  //$row[] = l($ety_obj->category, 'd2d/category/' . $ety_obj->category);
+  $url = substr($ety_obj->url, 0, -10);
+  $row[]= l($url, $url);
 
   $tag_row = NULL;
   if ($field_names === FALSE) {
