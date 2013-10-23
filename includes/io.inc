@@ -236,7 +236,7 @@ function _d2d_server_fetch_tags($d2did)  {
  */
 function _d2d_server_save_client_actions($arguments, $rpc_info) {
   $return = FALSE;
-  $error;
+  $error = '';
   if (empty($arguments) || !isset($arguments['info'])) {
     $error = 'Error. Empty request received.';
   }
